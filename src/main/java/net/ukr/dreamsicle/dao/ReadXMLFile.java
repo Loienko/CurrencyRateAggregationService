@@ -2,7 +2,6 @@ package net.ukr.dreamsicle.dao;
 
 
 import net.ukr.dreamsicle.model.Currency;
-import net.ukr.dreamsicle.service.CurrencyController;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,33 +20,36 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Read XML file
+ */
 @Controller
-public class XMLToJSON {
+public class ReadXMLFile implements ReadFile {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(XMLToJSON.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReadXMLFile.class);
 
-    public List<Currency> parseCurrencyXML(File file) {
+    @Override
+    public List<Currency> readFile(File fileName) {
         List<Currency> currencies = new ArrayList<>();
         try {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder documentBuilder = factory.newDocumentBuilder();
-            Document document = documentBuilder.parse(file);
+            DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            Document document = documentBuilder.parse(fileName);
             document.getDocumentElement().normalize();
             NodeList currency = document.getElementsByTagName("currency");
             for (int i = 0; i < currency.getLength(); i++) {
-                currencies.add(getCurrency(currency.item(i), FilenameUtils.removeExtension(file.getName())));
+                currencies.add(getCurrency(currency.item(i), FilenameUtils.removeExtension(fileName.getName())));
             }
         } catch (ParserConfigurationException | IOException | SAXException ex) {
-            LOGGER.error("Error", ex);
+            LOGGER.info("Error", ex);
         }
         return currencies;
     }
 
-    private Currency getCurrency(Node node, String name) {
+    private Currency getCurrency(Node node, String filesName) {
         Currency currency = new Currency();
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             Element element = (Element) node;
-            currency.setBankName(name);
+            currency.setBankName(filesName);
             currency.setCurrencyCode(getTagValue("currencyCode", element));
             currency.setPurchaseCurrency(getTagValue("purchaseCurrency", element));
             currency.setSaleOfCurrency(getTagValue("saleOfCurrency", element));

@@ -1,8 +1,8 @@
 package net.ukr.dreamsicle.service;
 
-import net.ukr.dreamsicle.dao.CSVToJSON;
+import net.ukr.dreamsicle.dao.ReadCSVFile;
 import net.ukr.dreamsicle.dao.ReadJSONFile;
-import net.ukr.dreamsicle.dao.XMLToJSON;
+import net.ukr.dreamsicle.dao.ReadXMLFile;
 import net.ukr.dreamsicle.model.Currency;
 import net.ukr.dreamsicle.model.ModelForOutData;
 import net.ukr.dreamsicle.repository.CurrencyRepository;
@@ -10,6 +10,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,12 +27,14 @@ public class CurrencyController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CurrencyController.class);
 
+    @Value("${upload.path}")
+    private String path;
     @Autowired
     private CurrencyRepository repository;
     @Autowired
-    private XMLToJSON xmlToJSON;
+    private ReadXMLFile readXmlFile;
     @Autowired
-    private CSVToJSON csvToJSON;
+    private ReadCSVFile readCsvFile;
     @Autowired
     private ReadJSONFile readJSONFile;
 
@@ -53,22 +56,22 @@ public class CurrencyController {
             try {
                 switch (FilenameUtils.getExtension(file.getOriginalFilename())) {
                     case "csv":
-                        File csv = new File("C://TMP//" + file.getOriginalFilename());
-                        csv.delete();
-                        file.transferTo(csv);
-                        currencies = csvToJSON.readCSVFile(csv);
+                        File csvFile = new File(path + file.getOriginalFilename());
+                        csvFile.delete();
+                        file.transferTo(csvFile);
+                        currencies = readCsvFile.readFile(csvFile);
                         break;
                     case "xml":
-                        File xml = new File("C://TMP//" + file.getOriginalFilename());
-                        xml.delete();
-                        file.transferTo(xml);
-                        currencies = xmlToJSON.parseCurrencyXML(xml);
+                        File xmlFile = new File(path + file.getOriginalFilename());
+                        xmlFile.delete();
+                        file.transferTo(xmlFile);
+                        currencies = readXmlFile.readFile(xmlFile);
                         break;
                     case "json":
-                        File json = new File("C://TMP//" + file.getOriginalFilename());
-                        json.delete();
-                        file.transferTo(json);
-                        currencies = readJSONFile.readJson(json.toString(), FilenameUtils.removeExtension(file.getOriginalFilename()));
+                        File jsonFile = new File(path + file.getOriginalFilename());
+                        jsonFile.delete();
+                        file.transferTo(jsonFile);
+                        currencies = readJSONFile.readFile(jsonFile);
                         break;
                     default:
                         break;
