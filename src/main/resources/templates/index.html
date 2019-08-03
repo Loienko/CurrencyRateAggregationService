@@ -5,7 +5,6 @@
     <title>Currency exchange</title>
     <link href="css/bootstrap.min.css" rel="stylesheet"/>
     <link href="css/style.css" rel="stylesheet"/>
-    <link href="css/jquery.dataTables.min.css" rel="stylesheet"/>
 </head>
 <body>
 
@@ -13,13 +12,12 @@
 
 <div class="upload1">
     <form action="/index" enctype="multipart/form-data" method="POST">
-        <table>
-            <tr>
-                <td>File to upload:</td>
-                <td><input name="file" type="file"/></td>
-                <td><input type="submit" value="Upload"/></td>
-            </tr>
-        </table>
+        <p>
+            Выберете файл для загрузки:
+            </br>
+        </p>
+        <input name="file" type="file"/>
+        <input type="submit" value="Upload"/>
     </form>
 </div>
 
@@ -34,12 +32,6 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>DG</td>
-            <td>DRGFD</td>
-            <td>463</td>
-            <td>35</td>
-        </tr>
         <tr th:each="currency : ${currencies}">
             <td th:utext="${currency.bankName}"></td>
             <td th:utext="${currency.currencyCode}"/>
@@ -49,14 +41,10 @@
         </tbody>
     </table>
 </div>
-<button type="button">Удалить выбранную строку</button>
 
-
-<a href="/get">Наилучшие предложения по покупке и продаже всех валют</a>
+<a href="/get" id="bestCurr">Отобразить наилучшие курсы валют по банкам</a>
 
 <script src="js/main.js" type="text/javascript"></script>
-<script src="js/jquery-3.3.1.js" type="text/javascript"></script>
-<script src="js/jquery.dataTables.min.js" type="text/javascript"></script>
 
 </body>
 </html>

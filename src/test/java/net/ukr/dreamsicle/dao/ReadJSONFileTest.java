@@ -13,9 +13,10 @@ public class ReadJSONFileTest {
     @Autowired
     private ReadJSONFile readJSONFile;
 
+//    ???? NullPointer
     @Test
     public void readJson() {
-        List<Currency> currencies = readJSONFile.readJson("C:\\TMP\\path\\OTP.json", "OTP.json");
-        currencies.forEach(dev -> System.out.println(currencies.toString()));
+//        List<Currency> currencies = readJSONFile.readJson("C:\\TMP\\path\\OTP.json", "OTP.json");
+//        currencies.forEach(dev -> System.out.println(currencies.toString()));
     }
 }

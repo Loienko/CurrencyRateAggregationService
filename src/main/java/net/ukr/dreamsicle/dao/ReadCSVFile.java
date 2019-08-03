@@ -1,6 +1,8 @@
 package net.ukr.dreamsicle.dao;
 
 import net.ukr.dreamsicle.model.Currency;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
 import java.io.BufferedReader;
@@ -11,16 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-public class CSVToJSON {
-    public static void main(String[] args) {
-        CSVToJSON csvToJSON = new CSVToJSON();
-        List<Currency> currencies = csvToJSON.readCSVFile(new File("C://TMP//path//Unicredit.csv"));
-        for (Currency currency : currencies) {
-            System.out.println(currency.toString());
-        }
-    }
+public class ReadCSVFile implements ReadFile {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReadCSVFile.class);
 
-    public List<Currency> readCSVFile(File file) {
+    @Override
+    public List<Currency> readFile(File file) {
         List<Currency> list = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
@@ -38,7 +35,7 @@ public class CSVToJSON {
                 ));
             }
         } catch (IOException ex) {
-            ex.printStackTrace();
+            LOGGER.info("Error", ex);
         }
         return list;
     }

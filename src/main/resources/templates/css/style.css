@@ -1,5 +1,5 @@
 h1 {
-    color: #7e0f98;
+    color: #261acc;
     text-align: center;
     font-size: 200%;
     height: 100px;
@@ -21,7 +21,7 @@ table th, table td {
 }
 
 .upload1 {
-    color: #20c997;
+    color: #124a39;
     margin-bottom: 3%;
 }
 
@@ -29,7 +29,7 @@ table th, table td {
     background: #f5ffff;
     border-collapse: collapse;
     text-align: center;
-    margin: auto;
+    margin: auto auto 75px;
 }
 
 .table_blur th {
@@ -86,20 +86,6 @@ table th, table td {
     text-shadow: none;
 }
 
-/* наша HTML таблица */
-/*table.sort {
-    border-spacing: 0.1em;
-    margin-bottom: 1em;
-    margin-top: 1em
-}*/
-
-/*!* ячейки таблицы *!
-table.sort td {
-    border: 1px solid #CCCCCC;
-    padding: 0.3em 1em
-}*/
-
-/* заголовки таблицы */
 table.sort thead td {
     cursor: pointer;
     cursor: hand;
@@ -108,75 +94,8 @@ table.sort thead td {
     vertical-align: middle
 }
 
-/* заголовок отсортированного столбца */
-/*table.sort thead td.curcol {
-    background-color: #999999;
-    color: #FFFFFF
-}*/
-
-ul {
-    width: 180px; /* Ширина меню */
-    list-style: none; /* Для списка убираем маркеры */
-    margin: 0; /* Нет отступов вокруг */
-    padding: 0; /* Убираем поля вокруг текста */
-    font-family: Arial, sans-serif; /* Рубленый шрифт для текста меню */
-    font-size: 10pt; /* Размер названий в пункте меню */
-}
-
-li {
-    list-style-type: none;
-}
-
-li ul {
-    position: absolute; /* Подменю позиционируются абсолютно */
-    display: none; /* Скрываем подменю */
-    margin-left: 165px; /* Сдвигаем подменю вправо */
-    margin-top: -2em; /* Сдвигаем подменю вверх */
-}
-
 button #change, #changes {
     color: #666; /* Цвет текста */
     border: 1px solid #ccc; /* Рамка вокруг пунктов меню */
     background-color: #f0f0f0; /* Цвет фона */
 }
-
-li a {
-    display: block; /* Ссылка как блочный элемент */
-    padding: 5px; /* Поля вокруг надписи */
-    text-decoration: none; /* Подчеркивание у ссылок убираем */
-    /*color: #666; !* Цвет текста *!*!
-    !*border: 1px solid #ccc; !* Рамка вокруг пунктов меню *!*!
-    !*background-color: #f0f0f0; !* Цвет фона *!*!
-    border-bottom: none; !* Границу снизу не проводим *!
-}
-
-!*li a:hover {
-    color: #ffe; !* Цвет текста активного пункта *!
-    background-color: #5488af; !* Цвет фона активного пункта *!
-}*!
-
-!*li:hover ul {
-    display: block; !* При выделении пункта курсором мыши отображается подменю *!
-}*!
-
-.brd {
-    border-bottom: 1px solid #ccc; !* Линия снизу */
-}
-
-tr:hover ul {
-    display: block;
-}
-
-
-.dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-}
-
-.dropdown-content a:hover {background-color: #ddd;}
-
-.dropdown:hover .dropdown-content {display: block;}
-
-.dropdown:hover .dropbtn {background-color: #3e8e41;}
