@@ -51,3 +51,7 @@ EUR 30.1 Банк 3 31.0 Банк 3
 самостоятельно сделать допущение, но при этом задокументировать и
 прислать все допущения вместе с выполненным заданием.
 12. Оптимальный срок выполнения задания - от 2-3 дня.
+
+Instruction for start application
+1. You should to create DB. For this action go to db-dump.sql and push Ctrl+Enter
+2. For start this one go to Application.class and push Run
