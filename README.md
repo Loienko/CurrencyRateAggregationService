@@ -51,3 +51,14 @@ EUR 30.1 Банк 3 31.0 Банк 3
 самостоятельно сделать допущение, но при этом задокументировать и
 прислать все допущения вместе с выполненным заданием.
 12. Оптимальный срок выполнения задания - от 2-3 дня.
+
+Instruction for start application
+1. You should to create DB. For this action go to:
+    a. In the Database tool window (View | Tool Windows | Database), click the data source.
+    b. Open F4 or create (Ctrl+Shift+F10 | New Console) a database console.
+    c. Type or paste the statement that you want to execute depending on the base you are using. 
+    d. Input user, password for your DB and press 'Test Connection'
+    e. Go to file createDBScripts.sql       
+    f. Press Ctrl+Enter. Alternatively, click the Execute icon 'Run' on the toolbar.
+2. You should to create Table. For this action go to createDbTableScripts.sql and repeat command 'Execute'. Example item 'f'
+3. For start this one go to Application.class and press Run
