@@ -1,5 +1,6 @@
 package net.ukr.dreamsicle.service;
 
+import lombok.extern.java.Log;
 import net.ukr.dreamsicle.dao.ReadCSVFile;
 import net.ukr.dreamsicle.dao.ReadJSONFile;
 import net.ukr.dreamsicle.dao.ReadXMLFile;
@@ -7,8 +8,6 @@ import net.ukr.dreamsicle.model.Currency;
 import net.ukr.dreamsicle.model.ModelForOutData;
 import net.ukr.dreamsicle.repository.CurrencyRepository;
 import org.apache.commons.io.FilenameUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,75 +16,71 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
+@Log
 public class CurrencyService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CurrencyService.class);
-
-    @Value("${upload.path}")
-    private String path;
+    private static final String CSV_FORMAT = "csv";
+    private static final String XML_FORMAT = "xml";
+    private static final String JSON_FORMAT = "json";
 
     private final ReadXMLFile readXmlFile;
-
     private final ReadCSVFile readCsvFile;
-
-    private final ReadJSONFile readJSONFile;
-
+    private final ReadJSONFile readJsonFile;
     private final CurrencyRepository repository;
 
+    @Value("${upload.path}")
+    private String PATH;
+
     @Autowired
-    public CurrencyService(ReadXMLFile readXmlFile, ReadCSVFile readCsvFile, ReadJSONFile readJSONFile, CurrencyRepository repository) {
+    public CurrencyService(ReadXMLFile readXmlFile, ReadCSVFile readCsvFile, ReadJSONFile readJsonFile, CurrencyRepository repository) {
         this.readXmlFile = readXmlFile;
         this.readCsvFile = readCsvFile;
-        this.readJSONFile = readJSONFile;
+        this.readJsonFile = readJsonFile;
         this.repository = repository;
     }
 
-    public Iterable<Currency> getCurrenciesDataFromUploadingFile(@RequestParam("file") MultipartFile file) {
-        List<Currency> currencies = null;
+    public void getCurrenciesDataFromUploadingFile(@RequestParam("file") MultipartFile file) {
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             try {
                 switch (FilenameUtils.getExtension(file.getOriginalFilename())) {
-                    case "csv":
-                        File csvFile = new File(path + file.getOriginalFilename());
-                        csvFile.delete();
+                    case CSV_FORMAT:
+                        File csvFile = new File(PATH + file.getOriginalFilename());
                         file.transferTo(csvFile);
-                        currencies = readCsvFile.readFile(csvFile);
+                        repository.saveAll(readCsvFile.readFile(csvFile));
                         break;
-                    case "xml":
-                        File xmlFile = new File(path + file.getOriginalFilename());
-                        xmlFile.delete();
+                    case XML_FORMAT:
+                        File xmlFile = new File(PATH + file.getOriginalFilename());
                         file.transferTo(xmlFile);
-                        currencies = readXmlFile.readFile(xmlFile);
+                        repository.saveAll(readXmlFile.readFile(xmlFile));
                         break;
-                    case "json":
-                        File jsonFile = new File(path + file.getOriginalFilename());
-                        jsonFile.delete();
+                    case JSON_FORMAT:
+                        File jsonFile = new File(PATH + file.getOriginalFilename());
                         file.transferTo(jsonFile);
-                        currencies = readJSONFile.readFile(jsonFile);
+                        repository.saveAll(readJsonFile.readFile(jsonFile));
                         break;
                     default:
                         break;
                 }
             } catch (IOException e) {
-                LOGGER.info("Error read/get file", e);
+                log.info("Error read/get file \t" + e.getMessage());
             }
         }
-
-        repository.saveAll(currencies);
-        return repository.findAll();
     }
 
     public List<ModelForOutData> getModelForOutData() {
-        Iterator<Currency> iteratorForAllDataForGetUniqueCurrencyCode = repository.findAll().iterator();
-        Set<String> set = new HashSet<>();
-
-        iteratorForAllDataForGetUniqueCurrencyCode.forEachRemaining(currency -> set.add(currency.getCurrencyCode()));
+        Set<String> currencyCodes = StreamSupport.stream(repository.findAll().spliterator(), false)
+                .map(Currency::toString)
+                .collect(Collectors.toSet());
 
         List<ModelForOutData> dates = new ArrayList<>();
-        set.forEach(currencyCode -> {
+        currencyCodes.forEach(currencyCode -> {
             String maxPurchaseCurrency = repository.findMaxPurchaseCurrency(currencyCode);
             String minSaleOfCurrency = repository.findMinSaleOfCurrency(currencyCode);
             String byBankNameForPurchaseCurrency = repository.findByBankNameForPurchaseCurrency(currencyCode, maxPurchaseCurrency);
@@ -101,5 +96,9 @@ public class CurrencyService {
             );
         });
         return dates;
+    }
+
+    public Iterable<Currency> getCurrenciesAllData() {
+        return repository.findAll();
     }
 }
