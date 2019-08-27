@@ -21,10 +21,10 @@ public class CurrencyRepositoryDAOImpl implements CurrencyRepositoryDAO {
     private final String CURRENCY_CODE = "currencyCode";
     private final String PURCHASE_CURRENCY = "purchaseCurrency";
     private final String SALE_OF_CURRENCY = "saleOfCurrency";
+    private final BeanPropertyRowMapper<Currency> BEAN_PROPERTY_ROW_MAPPER = new BeanPropertyRowMapper<>(Currency.class);
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    private final BeanPropertyRowMapper<Currency> beanPropertyRowMapper = new BeanPropertyRowMapper<>(Currency.class);
 
     @Autowired
     public CurrencyRepositoryDAOImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
@@ -40,7 +40,7 @@ public class CurrencyRepositoryDAOImpl implements CurrencyRepositoryDAO {
 
     @Override
     public List<Currency> getFindAllCurrency() {
-        return namedParameterJdbcTemplate.query("SELECT * FROM currency", beanPropertyRowMapper);
+        return namedParameterJdbcTemplate.query("SELECT * FROM currency", BEAN_PROPERTY_ROW_MAPPER);
     }
 
     @Override
