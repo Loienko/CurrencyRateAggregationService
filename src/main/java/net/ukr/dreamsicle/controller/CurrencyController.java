@@ -1,4 +1,4 @@
-package net.ukr.dreamsicle.service;
+package net.ukr.dreamsicle.controller;
 
 import net.ukr.dreamsicle.dao.ReadCSVFile;
 import net.ukr.dreamsicle.dao.ReadJSONFile;
