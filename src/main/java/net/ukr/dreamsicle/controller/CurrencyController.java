@@ -1,7 +1,5 @@
 package net.ukr.dreamsicle.controller;
 
-import net.ukr.dreamsicle.model.Currency;
-import net.ukr.dreamsicle.repository.CurrencyRepository;
 import net.ukr.dreamsicle.service.CurrencyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,25 +12,23 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 public class CurrencyController {
 
-    @Autowired
-    private CurrencyService currencyService;
+    private final CurrencyService currencyService;
 
     @Autowired
-    private CurrencyRepository repository;
+    public CurrencyController(CurrencyService currencyService) {
+        this.currencyService = currencyService;
+    }
 
     @GetMapping("/index")
     public String index(Model model) {
-        Iterable<Currency> currenciesDataForStartingApp = repository.findAll();
-        model.addAttribute("currencies", currenciesDataForStartingApp);
+        model.addAttribute("currencies", currencyService.getCurrenciesAllData());
         return "index";
     }
 
     @PostMapping("/index")
     public String add(
-            @RequestParam("file") MultipartFile file,
-            Model model) {
-        Iterable<Currency> currenciesDataFromUploadingFile = currencyService.getCurrenciesDataFromUploadingFile(file);
-        model.addAttribute("currencies", currenciesDataFromUploadingFile);
+            @RequestParam("file") MultipartFile file) {
+        currencyService.getCurrenciesDataFromUploadingFile(file);
         return "index";
     }
 
