@@ -2,6 +2,7 @@ package net.ukr.dreamsicle.service;
 
 import lombok.extern.java.Log;
 import net.ukr.dreamsicle.dao.ReadCSVFile;
+import net.ukr.dreamsicle.dao.ReadFile;
 import net.ukr.dreamsicle.dao.ReadJSONFile;
 import net.ukr.dreamsicle.dao.ReadXMLFile;
 import net.ukr.dreamsicle.model.Currency;
@@ -35,6 +36,14 @@ public class CurrencyService {
     private final ReadJSONFile readJsonFile;
     private final CurrencyRepository repository;
 
+    private String maxPurchaseCurrency;
+    private String minSaleOfCurrency;
+    private String byBankNameForPurchaseCurrency;
+    private String byBankNameForSaleOfCurrency;
+
+    private final ModelForOutData modelForOutData;
+
+
     @Value("${upload.path}")
     private String PATH;
 
@@ -44,26 +53,21 @@ public class CurrencyService {
         this.readCsvFile = readCsvFile;
         this.readJsonFile = readJsonFile;
         this.repository = repository;
+        this.modelForOutData = new ModelForOutData();
     }
 
-    public void getCurrenciesDataFromUploadingFile(@RequestParam("file") MultipartFile file) {
-        if (file != null && !file.getOriginalFilename().isEmpty()) {
+    public void getCurrenciesDataFromUploadingFile(@RequestParam("file") MultipartFile downloadFile) {
+        if (downloadFile != null && !downloadFile.getOriginalFilename().isEmpty()) {
             try {
-                switch (FilenameUtils.getExtension(file.getOriginalFilename())) {
+                switch (FilenameUtils.getExtension(downloadFile.getOriginalFilename())) {
                     case CSV_FORMAT:
-                        File csvFile = new File(PATH + file.getOriginalFilename());
-                        file.transferTo(csvFile);
-                        repository.saveAll(readCsvFile.readFile(csvFile));
+                        getReadAndSaveFileToDB(downloadFile, readCsvFile);
                         break;
                     case XML_FORMAT:
-                        File xmlFile = new File(PATH + file.getOriginalFilename());
-                        file.transferTo(xmlFile);
-                        repository.saveAll(readXmlFile.readFile(xmlFile));
+                        getReadAndSaveFileToDB(downloadFile, readXmlFile);
                         break;
                     case JSON_FORMAT:
-                        File jsonFile = new File(PATH + file.getOriginalFilename());
-                        file.transferTo(jsonFile);
-                        repository.saveAll(readJsonFile.readFile(jsonFile));
+                        getReadAndSaveFileToDB(downloadFile, readJsonFile);
                         break;
                     default:
                         break;
@@ -74,28 +78,35 @@ public class CurrencyService {
         }
     }
 
+    private void getReadAndSaveFileToDB(@RequestParam("file") MultipartFile file, ReadFile readFile) throws IOException {
+        File downloadFile = new File(PATH + file.getOriginalFilename());
+        file.transferTo(downloadFile);
+        repository.saveAll(readFile.readFile(downloadFile));
+    }
+
     public List<ModelForOutData> getModelForOutData() {
         Set<String> currencyCodes = StreamSupport.stream(repository.findAll().spliterator(), false)
-                .map(Currency::toString)
+                .map(Currency::getCurrencyCode)
                 .collect(Collectors.toSet());
 
-        List<ModelForOutData> dates = new ArrayList<>();
-        currencyCodes.forEach(currencyCode -> {
-            String maxPurchaseCurrency = repository.findMaxPurchaseCurrency(currencyCode);
-            String minSaleOfCurrency = repository.findMinSaleOfCurrency(currencyCode);
-            String byBankNameForPurchaseCurrency = repository.findByBankNameForPurchaseCurrency(currencyCode, maxPurchaseCurrency);
-            String byBankNameForSaleOfCurrency = repository.findByBankNameForSaleOfCurrency(currencyCode, minSaleOfCurrency);
+        List<ModelForOutData> dataForView = new ArrayList<>();
 
-            dates.add(new ModelForOutData(
-                            currencyCode,
-                            maxPurchaseCurrency,
-                            byBankNameForPurchaseCurrency,
-                            minSaleOfCurrency,
-                            byBankNameForSaleOfCurrency
-                    )
-            );
+        currencyCodes.forEach(currencyCode -> {
+            maxPurchaseCurrency = repository.findMaxPurchaseCurrency(currencyCode);
+            minSaleOfCurrency = repository.findMinSaleOfCurrency(currencyCode);
+            byBankNameForPurchaseCurrency = repository.findByBankNameForPurchaseCurrency(currencyCode, maxPurchaseCurrency);
+            byBankNameForSaleOfCurrency = repository.findByBankNameForSaleOfCurrency(currencyCode, minSaleOfCurrency);
+
+            modelForOutData.setCode(currencyCode);
+            modelForOutData.setCurrencyPurchase(maxPurchaseCurrency);
+            modelForOutData.setBankCurrencyPurchase(byBankNameForPurchaseCurrency);
+            modelForOutData.setSaleOfCurrency(minSaleOfCurrency);
+            modelForOutData.setBankSaleOfCurrency(byBankNameForSaleOfCurrency);
+
+            dataForView.add(modelForOutData);
         });
-        return dates;
+
+        return dataForView;
     }
 
     public Iterable<Currency> getCurrenciesAllData() {
