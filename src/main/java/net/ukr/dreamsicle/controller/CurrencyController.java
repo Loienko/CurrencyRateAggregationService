@@ -21,20 +21,20 @@ public class CurrencyController {
 
     @GetMapping("/index")
     public String index(Model model) {
-        model.addAttribute("currencies", currencyService.getCurrenciesAllData());
+        model.addAttribute("currencies", currencyService.getAllCurrenciesData());
         return "index";
     }
 
     @PostMapping("/index")
     public String add(
             @RequestParam("file") MultipartFile file) {
-        currencyService.getCurrenciesDataFromUploadingFile(file);
+//        currencyService.getCurrenciesDataFromUploadingFile(file);
         return "index";
     }
 
     @GetMapping("/get")
     public String getBestDealsOnExchangeRates(Model model) {
-        model.addAttribute("dates", currencyService.getModelForOutData());
+//        model.addAttribute("dates", currencyService.getModelForOutData());
         return "get";
     }
 }
