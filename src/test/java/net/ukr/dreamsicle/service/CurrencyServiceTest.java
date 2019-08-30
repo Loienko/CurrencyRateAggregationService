@@ -2,52 +2,73 @@ package net.ukr.dreamsicle.service;
 
 import net.ukr.dreamsicle.model.Currency;
 import net.ukr.dreamsicle.repository.CurrencyRepositoryDAO;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.test.context.transaction.BeforeTransaction;
 
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 class CurrencyServiceTest {
 
-    /*@Mock
-    private CurrencyRepositoryDAO currencyRepositoryDAO;
-    @Mock
-    private List<Currency> list;
-    @Mock
-    private Currency currency;*/
+    @InjectMocks
+    private CurrencyService currencyService;
 
-    private CurrencyRepositoryDAO currencyRepositoryDAO = mock(CurrencyRepositoryDAO.class);
-    private List list = mock(List.class);
-    private Currency currency = mock(Currency.class);
+    @Mock
+    private CurrencyRepositoryDAO currencyRepositoryDAO;
+
+    @Mock
+    private Currency currency;
+
+    @Mock
+    private List<Currency> currencies;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.initMocks(this);
+
+        currency.setId(1);
+        currency.setBankName("PUMB");
+        currency.setCurrencyCode("USD");
+        currency.setPurchaseCurrency("25.12");
+        currency.setSaleOfCurrency("25.30");
+
+        currencies.add(currency);
+    }
 
     @Test
     void testGetAllCurrenciesData() {
-        list.add(currency);
-        verify(list).add(currency);
-        assertEquals(0, list.size());
-        when(currencyRepositoryDAO.getFindAllCurrency()).thenReturn(list);
+        when(currencyRepositoryDAO.getFindAllCurrency()).thenReturn(currencies);
+
+        List<Currency> allCurrenciesData = currencyService.getAllCurrenciesData();
+
+        verify(currencyRepositoryDAO).getFindAllCurrency();
+        assertEquals(0, allCurrenciesData.size());
+        assertNotNull(allCurrenciesData);
     }
 
     @Test
     void testGetFindCurrencyById() {
-        when(currencyRepositoryDAO.getFindCurrencyById(anyInt())).thenReturn(currency);
-    }
+        int id = 1;
+        when(currencyRepositoryDAO.getFindCurrencyById(id)).thenReturn(currency);
 
-    @Before
-    public void init() {
-        MockitoAnnotations.initMocks(this);
-       list.add(new Currency("PrivatBank", "USD", "25.10", "25.25"));
-       list.add(new Currency("PUMB", "USD", "25.12", "25.30"));
+        Currency currencyById = currencyService.getFindCurrencyById(id);
+
+        verify(currencyRepositoryDAO).getFindCurrencyById(id);
+        assertEquals(currency, currencyById);
+        assertNotNull(currencyById);
+        assertEquals(currency.getId(), currencyById.getId());
+        assertEquals(currency.getBankName(), currencyById.getBankName());
+        assertEquals(currency.getCurrencyCode(), currencyById.getCurrencyCode());
+        assertEquals(currency.getPurchaseCurrency(), currencyById.getPurchaseCurrency());
+        assertEquals(currency.getSaleOfCurrency(), currencyById.getSaleOfCurrency());
     }
 }
