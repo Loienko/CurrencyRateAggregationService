@@ -30,4 +30,12 @@ public class Currency implements Serializable {
         this.purchaseCurrency = purchaseCurrency;
         this.saleOfCurrency = saleOfCurrency;
     }
+
+    public Currency(int id, String bankName, String currencyCode, String purchaseCurrency, String saleOfCurrency) {
+        this.id = id;
+        this.bankName = bankName;
+        this.currencyCode = currencyCode;
+        this.purchaseCurrency = purchaseCurrency;
+        this.saleOfCurrency = saleOfCurrency;
+    }
 }
