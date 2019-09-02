@@ -33,8 +33,8 @@ class CurrencyServiceTest {
 
     @Test
     void testGetAllCurrenciesData() {
-        int index = 1;
-        List<Currency> currencies = Arrays.asList(CurrencyProvider.getCurrencyProvider(index), CurrencyProvider.getCurrencyProvider(++index));
+        int id = 1;
+        List<Currency> currencies = Arrays.asList(CurrencyProvider.getCurrencyProvider(id), CurrencyProvider.getCurrencyProvider(++id));
         when(currencyRepositoryDAO.getFindAllCurrency()).thenReturn(currencies);
 
         List<Currency> allCurrenciesData = currencyService.getAllCurrenciesData();
@@ -47,13 +47,13 @@ class CurrencyServiceTest {
 
     @Test
     void testGetFindCurrencyById() {
-        int index = 1;
-        Currency currency = CurrencyProvider.getCurrencyProvider(index);
-        when(currencyRepositoryDAO.getFindCurrencyById(index)).thenReturn(currency);
+        int id = 1;
+        Currency currency = CurrencyProvider.getCurrencyProvider(id);
+        when(currencyRepositoryDAO.getFindCurrencyById(id)).thenReturn(currency);
 
-        Currency actualCurrency = currencyService.getFindCurrencyById(index);
+        Currency actualCurrency = currencyService.getFindCurrencyById(id);
 
-        verify(currencyRepositoryDAO).getFindCurrencyById(index);
+        verify(currencyRepositoryDAO).getFindCurrencyById(id);
         assertEquals(currency, actualCurrency);
         assertNotNull(actualCurrency);
         assertEquals(currency.getId(), actualCurrency.getId());
