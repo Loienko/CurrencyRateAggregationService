@@ -1,6 +1,8 @@
 package net.ukr.dreamsicle.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +12,8 @@ import java.io.Serializable;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Currency implements Serializable {
 
     @Id
@@ -21,18 +25,7 @@ public class Currency implements Serializable {
     private String purchaseCurrency;
     private String saleOfCurrency;
 
-    public Currency() {
-    }
-
     public Currency(String bankName, String currencyCode, String purchaseCurrency, String saleOfCurrency) {
-        this.bankName = bankName;
-        this.currencyCode = currencyCode;
-        this.purchaseCurrency = purchaseCurrency;
-        this.saleOfCurrency = saleOfCurrency;
-    }
-
-    public Currency(int id, String bankName, String currencyCode, String purchaseCurrency, String saleOfCurrency) {
-        this.id = id;
         this.bankName = bankName;
         this.currencyCode = currencyCode;
         this.purchaseCurrency = purchaseCurrency;
