@@ -33,7 +33,8 @@ class CurrencyServiceTest {
 
     @Test
     void testGetAllCurrenciesData() {
-        List<Currency> currencies = Arrays.asList(CurrencyProvider.getCurrencyProvider(), CurrencyProvider.getCurrencyProvider());
+        int index = 1;
+        List<Currency> currencies = Arrays.asList(CurrencyProvider.getCurrencyProvider(index), CurrencyProvider.getCurrencyProvider(++index));
         when(currencyRepositoryDAO.getFindAllCurrency()).thenReturn(currencies);
 
         List<Currency> allCurrenciesData = currencyService.getAllCurrenciesData();
@@ -46,8 +47,8 @@ class CurrencyServiceTest {
 
     @Test
     void testGetFindCurrencyById() {
-        int index = CurrencyProvider.getCurrencyIndex();
-        Currency currency = CurrencyProvider.getCurrencyProvider();
+        int index = 1;
+        Currency currency = CurrencyProvider.getCurrencyProvider(index);
         when(currencyRepositoryDAO.getFindCurrencyById(index)).thenReturn(currency);
 
         Currency actualCurrency = currencyService.getFindCurrencyById(index);
