@@ -12,4 +12,8 @@ public class CurrencyProvider {
     public static Currency getCurrencyProvider() {
         return new Currency(ID, BANK_NAME, CURRENCY_CODE, PURCHASE_CURRENCY, SALE_OF_CURRENCY);
     }
+
+    public static int getCurrencyIndex(){
+        return ID;
+    }
 }

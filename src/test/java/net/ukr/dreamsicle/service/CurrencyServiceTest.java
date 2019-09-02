@@ -46,19 +46,19 @@ class CurrencyServiceTest {
 
     @Test
     void testGetFindCurrencyById() {
-        int id = 1;
-        Currency currencyProvider = CurrencyProvider.getCurrencyProvider();
-        when(currencyRepositoryDAO.getFindCurrencyById(id)).thenReturn(currencyProvider);
+        int index = CurrencyProvider.getCurrencyIndex();
+        Currency currency = CurrencyProvider.getCurrencyProvider();
+        when(currencyRepositoryDAO.getFindCurrencyById(index)).thenReturn(currency);
 
-        Currency currencyById = currencyService.getFindCurrencyById(id);
+        Currency actualCurrency = currencyService.getFindCurrencyById(index);
 
-        verify(currencyRepositoryDAO).getFindCurrencyById(id);
-        assertEquals(currencyProvider, currencyById);
-        assertNotNull(currencyById);
-        assertEquals(currencyProvider.getId(), currencyById.getId());
-        assertEquals(currencyProvider.getBankName(), currencyById.getBankName());
-        assertEquals(currencyProvider.getCurrencyCode(), currencyById.getCurrencyCode());
-        assertEquals(currencyProvider.getPurchaseCurrency(), currencyById.getPurchaseCurrency());
-        assertEquals(currencyProvider.getSaleOfCurrency(), currencyById.getSaleOfCurrency());
+        verify(currencyRepositoryDAO).getFindCurrencyById(index);
+        assertEquals(currency, actualCurrency);
+        assertNotNull(actualCurrency);
+        assertEquals(currency.getId(), actualCurrency.getId());
+        assertEquals(currency.getBankName(), actualCurrency.getBankName());
+        assertEquals(currency.getCurrencyCode(), actualCurrency.getCurrencyCode());
+        assertEquals(currency.getPurchaseCurrency(), actualCurrency.getPurchaseCurrency());
+        assertEquals(currency.getSaleOfCurrency(), actualCurrency.getSaleOfCurrency());
     }
 }
