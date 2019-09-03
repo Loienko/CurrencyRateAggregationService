@@ -21,8 +21,6 @@ class CurrencyServiceTest {
 
     @Captor
     ArgumentCaptor<Currency> captor;
-    @Spy
-    List<Currency> currencies = new ArrayList<>();
     @InjectMocks
     private CurrencyService currencyService;
     @Mock
@@ -68,28 +66,22 @@ class CurrencyServiceTest {
     @Test
     void testGetCreateCurrency() {
         int id = 1;
-        int items = 0;
-
         Currency currency = CurrencyProvider.getCurrencyProvider(id);
-        currencies.add(currency);
 
         doNothing().when(currencyRepositoryDAO).getCreateCurrency(eq(currency));
-        currencyService.getCreateCurrency(currencies.get(items));
+        currencyService.getCreateCurrency(currency);
 
-        verify(currencyRepositoryDAO, times(++items)).getCreateCurrency(captor.capture());
+        verify(currencyRepositoryDAO).getCreateCurrency(captor.capture());
         assertEquals(captor.getValue().getBankName(), currency.getBankName());
-
-        assertEquals(items, currencies.size());
-        verify(currencies, times(items)).add(currency);
     }
 
     @Test
     void testGetDeleteCurrencyById() {
         int id = 1;
 
-        doNothing().doThrow(RuntimeException.class).when(currencyRepositoryDAO).getDeleteCurrencyById(eq(id));
+        doNothing().when(currencyRepositoryDAO).getDeleteCurrencyById(eq(id));
         currencyService.getDeleteCurrencyById(id);
-        verify(currencyRepositoryDAO, times(1)).getDeleteCurrencyById(id);
+
         verify(currencyRepositoryDAO).getDeleteCurrencyById(id);
     }
 
@@ -97,15 +89,10 @@ class CurrencyServiceTest {
     void testGetUpdateCurrency() {
         int id = 1;
         int idForUpdate = 2;
-
-        Currency currency = CurrencyProvider.getCurrencyProvider(id);
         Currency currencyForUpdate = CurrencyProvider.getCurrencyProvider(idForUpdate);
-        currencies.add(currency);
 
-        doNothing().when(currencyRepositoryDAO).getUpdateCurrency(id, currencyForUpdate);
         currencyService.getUpdateCurrency(id, currencyForUpdate);
-
-        doThrow(new RuntimeException()).when(currencyRepositoryDAO).getUpdateCurrency(eq(id), captor.capture());
+        doNothing().when(currencyRepositoryDAO).getUpdateCurrency(eq(id), captor.capture());
 
         verify(currencyRepositoryDAO).getUpdateCurrency(eq(id), captor.capture());
         assertEquals(captor.getValue().getBankName(), currencyForUpdate.getBankName());
