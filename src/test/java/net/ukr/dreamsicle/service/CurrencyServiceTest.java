@@ -6,21 +6,21 @@ import net.ukr.dreamsicle.util.CurrencyProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 class CurrencyServiceTest {
 
+    @Captor
+    ArgumentCaptor<Currency> captor;
     @InjectMocks
     private CurrencyService currencyService;
     @Mock
@@ -40,7 +40,7 @@ class CurrencyServiceTest {
         List<Currency> allCurrenciesData = currencyService.getAllCurrenciesData();
 
         verify(currencyRepositoryDAO).getFindAllCurrency();
-        assertEquals(2, allCurrenciesData.size());
+        assertEquals(id, allCurrenciesData.size());
         assertNotNull(allCurrenciesData);
         assertSame(currencies, allCurrenciesData);
     }
@@ -61,5 +61,40 @@ class CurrencyServiceTest {
         assertEquals(currency.getCurrencyCode(), actualCurrency.getCurrencyCode());
         assertEquals(currency.getPurchaseCurrency(), actualCurrency.getPurchaseCurrency());
         assertEquals(currency.getSaleOfCurrency(), actualCurrency.getSaleOfCurrency());
+    }
+
+    @Test
+    void testGetCreateCurrency() {
+        int id = 1;
+        Currency currency = CurrencyProvider.getCurrencyProvider(id);
+        doNothing().when(currencyRepositoryDAO).getCreateCurrency(eq(currency));
+
+        currencyService.getCreateCurrency(currency);
+
+        verify(currencyRepositoryDAO).getCreateCurrency(captor.capture());
+        assertEquals(captor.getValue().getBankName(), currency.getBankName());
+    }
+
+    @Test
+    void testGetDeleteCurrencyById() {
+        int id = 1;
+        doNothing().when(currencyRepositoryDAO).getDeleteCurrencyById(eq(id));
+
+        currencyService.getDeleteCurrencyById(id);
+
+        verify(currencyRepositoryDAO).getDeleteCurrencyById(id);
+    }
+
+    @Test
+    void testGetUpdateCurrency() {
+        int id = 1;
+        int idForUpdate = 2;
+        Currency currencyForUpdate = CurrencyProvider.getCurrencyProvider(idForUpdate);
+        doNothing().when(currencyRepositoryDAO).getUpdateCurrency(eq(id), any());
+
+        currencyService.getUpdateCurrency(id, currencyForUpdate);
+
+        verify(currencyRepositoryDAO).getUpdateCurrency(eq(id), captor.capture());
+        assertEquals(captor.getValue().getBankName(), currencyForUpdate.getBankName());
     }
 }
