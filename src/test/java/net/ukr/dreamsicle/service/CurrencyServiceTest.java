@@ -67,8 +67,8 @@ class CurrencyServiceTest {
     void testGetCreateCurrency() {
         int id = 1;
         Currency currency = CurrencyProvider.getCurrencyProvider(id);
-
         doNothing().when(currencyRepositoryDAO).getCreateCurrency(eq(currency));
+
         currencyService.getCreateCurrency(currency);
 
         verify(currencyRepositoryDAO).getCreateCurrency(captor.capture());
@@ -78,8 +78,8 @@ class CurrencyServiceTest {
     @Test
     void testGetDeleteCurrencyById() {
         int id = 1;
-
         doNothing().when(currencyRepositoryDAO).getDeleteCurrencyById(eq(id));
+
         currencyService.getDeleteCurrencyById(id);
 
         verify(currencyRepositoryDAO).getDeleteCurrencyById(id);
@@ -90,9 +90,9 @@ class CurrencyServiceTest {
         int id = 1;
         int idForUpdate = 2;
         Currency currencyForUpdate = CurrencyProvider.getCurrencyProvider(idForUpdate);
+        doNothing().when(currencyRepositoryDAO).getUpdateCurrency(eq(id), any());
 
         currencyService.getUpdateCurrency(id, currencyForUpdate);
-        doNothing().when(currencyRepositoryDAO).getUpdateCurrency(eq(id), captor.capture());
 
         verify(currencyRepositoryDAO).getUpdateCurrency(eq(id), captor.capture());
         assertEquals(captor.getValue().getBankName(), currencyForUpdate.getBankName());
