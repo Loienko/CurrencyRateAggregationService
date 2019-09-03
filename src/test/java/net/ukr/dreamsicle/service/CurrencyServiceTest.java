@@ -9,7 +9,6 @@ import org.junit.runner.RunWith;
 import org.mockito.*;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,28 +31,28 @@ class CurrencyServiceTest {
     }
 
     @Test
-    void testGetAllCurrenciesData() {
+    void testAllCurrenciesData() {
         int id = 1;
         List<Currency> currencies = Arrays.asList(CurrencyProvider.getCurrencyProvider(id), CurrencyProvider.getCurrencyProvider(++id));
-        when(currencyRepositoryDAO.getFindAllCurrency()).thenReturn(currencies);
+        when(currencyRepositoryDAO.findAllCurrency()).thenReturn(currencies);
 
-        List<Currency> allCurrenciesData = currencyService.getAllCurrenciesData();
+        List<Currency> allCurrenciesData = currencyService.allCurrenciesData();
 
-        verify(currencyRepositoryDAO).getFindAllCurrency();
+        verify(currencyRepositoryDAO).findAllCurrency();
         assertEquals(id, allCurrenciesData.size());
         assertNotNull(allCurrenciesData);
         assertSame(currencies, allCurrenciesData);
     }
 
     @Test
-    void testGetFindCurrencyById() {
+    void testFindCurrencyById() {
         int id = 1;
         Currency currency = CurrencyProvider.getCurrencyProvider(id);
-        when(currencyRepositoryDAO.getFindCurrencyById(id)).thenReturn(currency);
+        when(currencyRepositoryDAO.findCurrencyById(id)).thenReturn(currency);
 
-        Currency actualCurrency = currencyService.getFindCurrencyById(id);
+        Currency actualCurrency = currencyService.findCurrencyById(id);
 
-        verify(currencyRepositoryDAO).getFindCurrencyById(id);
+        verify(currencyRepositoryDAO).findCurrencyById(id);
         assertEquals(currency, actualCurrency);
         assertNotNull(actualCurrency);
         assertEquals(currency.getId(), actualCurrency.getId());
@@ -64,37 +63,37 @@ class CurrencyServiceTest {
     }
 
     @Test
-    void testGetCreateCurrency() {
+    void testCreateCurrency() {
         int id = 1;
         Currency currency = CurrencyProvider.getCurrencyProvider(id);
-        doNothing().when(currencyRepositoryDAO).getCreateCurrency(eq(currency));
+        doNothing().when(currencyRepositoryDAO).createCurrency(eq(currency));
 
-        currencyService.getCreateCurrency(currency);
+        currencyService.createCurrency(currency);
 
-        verify(currencyRepositoryDAO).getCreateCurrency(captor.capture());
+        verify(currencyRepositoryDAO).createCurrency(captor.capture());
         assertEquals(captor.getValue().getBankName(), currency.getBankName());
     }
 
     @Test
-    void testGetDeleteCurrencyById() {
+    void testDeleteCurrencyById() {
         int id = 1;
-        doNothing().when(currencyRepositoryDAO).getDeleteCurrencyById(eq(id));
+        doNothing().when(currencyRepositoryDAO).deleteCurrencyById(eq(id));
 
-        currencyService.getDeleteCurrencyById(id);
+        currencyService.deleteCurrencyById(id);
 
-        verify(currencyRepositoryDAO).getDeleteCurrencyById(id);
+        verify(currencyRepositoryDAO).deleteCurrencyById(id);
     }
 
     @Test
-    void testGetUpdateCurrency() {
+    void testUpdateCurrency() {
         int id = 1;
         int idForUpdate = 2;
         Currency currencyForUpdate = CurrencyProvider.getCurrencyProvider(idForUpdate);
-        doNothing().when(currencyRepositoryDAO).getUpdateCurrency(eq(id), any());
+        doNothing().when(currencyRepositoryDAO).updateCurrency(eq(id), any());
 
-        currencyService.getUpdateCurrency(id, currencyForUpdate);
+        currencyService.updateCurrency(id, currencyForUpdate);
 
-        verify(currencyRepositoryDAO).getUpdateCurrency(eq(id), captor.capture());
+        verify(currencyRepositoryDAO).updateCurrency(eq(id), captor.capture());
         assertEquals(captor.getValue().getBankName(), currencyForUpdate.getBankName());
     }
 }

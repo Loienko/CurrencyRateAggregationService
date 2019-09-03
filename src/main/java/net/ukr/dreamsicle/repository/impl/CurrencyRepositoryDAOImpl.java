@@ -16,15 +16,14 @@ import java.util.Map;
 @Repository
 public class CurrencyRepositoryDAOImpl implements CurrencyRepositoryDAO {
 
-    private final String ID = "id";
-    private final String BANK_NAME = "bankName";
-    private final String CURRENCY_CODE = "currencyCode";
-    private final String PURCHASE_CURRENCY = "purchaseCurrency";
-    private final String SALE_OF_CURRENCY = "saleOfCurrency";
-    private final BeanPropertyRowMapper<Currency> BEAN_PROPERTY_ROW_MAPPER = new BeanPropertyRowMapper<>(Currency.class);
+    private static final String ID = "id";
+    private static final String BANK_NAME = "bankName";
+    private static final String CURRENCY_CODE = "currencyCode";
+    private static final String PURCHASE_CURRENCY = "purchaseCurrency";
+    private static final String SALE_OF_CURRENCY = "saleOfCurrency";
+    private final BeanPropertyRowMapper<Currency> beanPropertyRowMapper = new BeanPropertyRowMapper<>(Currency.class);
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
 
     @Autowired
     public CurrencyRepositoryDAOImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
@@ -32,26 +31,26 @@ public class CurrencyRepositoryDAOImpl implements CurrencyRepositoryDAO {
     }
 
     @Override
-    public Currency getFindCurrencyById(int searchIdParam) {
+    public Currency findCurrencyById(int searchIdParam) {
         String sqlQuery = "SELECT * FROM currency WHERE id = :id";
         SqlParameterSource namedParameters = new MapSqlParameterSource(ID, searchIdParam);
         return namedParameterJdbcTemplate.queryForObject(sqlQuery, namedParameters, Currency.class);
     }
 
     @Override
-    public List<Currency> getFindAllCurrency() {
-        return namedParameterJdbcTemplate.query("SELECT * FROM currency", BEAN_PROPERTY_ROW_MAPPER);
+    public List<Currency> findAllCurrency() {
+        return namedParameterJdbcTemplate.query("SELECT * FROM currency", beanPropertyRowMapper);
     }
 
     @Override
-    public void getDeleteCurrencyById(int searchIdParam) {
+    public void deleteCurrencyById(int searchIdParam) {
         String sqlQuery = "delete FROM currency WHERE id = :id";
         SqlParameterSource namedParameters = new MapSqlParameterSource(ID, searchIdParam);
         namedParameterJdbcTemplate.queryForObject(sqlQuery, namedParameters, Currency.class);
     }
 
     @Override
-    public void getCreateCurrency(Currency currency) {
+    public void createCurrency(Currency currency) {
         String sqlQuery = "insert into currency (id, bank_name, currency_code,purchase_currency, sale_of_currency) " +
                 "values(:id, :bankName, :currencyCode, :purchaseCurrency, :saleOfCurrency)";
 
@@ -66,7 +65,7 @@ public class CurrencyRepositoryDAOImpl implements CurrencyRepositoryDAO {
     }
 
     @Override
-    public void getUpdateCurrency(int searchIdParam, Currency currency) {
+    public void updateCurrency(int searchIdParam, Currency currency) {
         String sqlQuery = "update currency " +
                 "set bank_name = :bankName, currency_code = :currencyCode, purchase_currency = :purchaseCurrency, sale_of_currency = :saleOfCurrency " +
                 "where id = :id";

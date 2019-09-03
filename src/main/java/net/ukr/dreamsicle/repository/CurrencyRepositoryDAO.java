@@ -5,14 +5,14 @@ import net.ukr.dreamsicle.model.Currency;
 import java.util.List;
 
 public interface CurrencyRepositoryDAO {
-    Currency getFindCurrencyById(int id);
 
-    List<Currency> getFindAllCurrency();
+    Currency findCurrencyById(int id);
 
-    void getDeleteCurrencyById(int id);
+    List<Currency> findAllCurrency();
 
-    void getCreateCurrency(Currency currency);
+    void deleteCurrencyById(int id);
 
-    void getUpdateCurrency(int id, Currency currency);
+    void createCurrency(Currency currency);
 
+    void updateCurrency(int id, Currency currency);
 }
