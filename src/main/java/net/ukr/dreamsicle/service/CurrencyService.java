@@ -20,22 +20,22 @@ public class CurrencyService {
     }
 
     public List<Currency> allCurrenciesData() {
-        return currencyRepositoryDAO.findAllCurrency();
+        return currencyRepositoryDAO.findAllCurrencies();
     }
 
     Currency findCurrencyById(int id) {
         return currencyRepositoryDAO.findCurrencyById(id);
     }
 
-    void deleteCurrencyById(int id) {
+    public void deleteCurrencyById(int id) {
         currencyRepositoryDAO.deleteCurrencyById(id);
     }
 
-    void createCurrency(Currency currency) {
+    public void createCurrency(Currency currency) {
         currencyRepositoryDAO.createCurrency(currency);
     }
 
-    void updateCurrency(int id, Currency currency) {
+    public void updateCurrency(int id, Currency currency) {
         currencyRepositoryDAO.updateCurrency(id, currency);
     }
 }

@@ -31,21 +31,21 @@ public class CurrencyRepositoryDAOImpl implements CurrencyRepositoryDAO {
     }
 
     @Override
-    public Currency findCurrencyById(int searchIdParam) {
+    public Currency findCurrencyById(int id) {
         String sqlQuery = "SELECT * FROM currency WHERE id = :id";
-        SqlParameterSource namedParameters = new MapSqlParameterSource(ID, searchIdParam);
+        SqlParameterSource namedParameters = new MapSqlParameterSource(ID, id);
         return namedParameterJdbcTemplate.queryForObject(sqlQuery, namedParameters, Currency.class);
     }
 
     @Override
-    public List<Currency> findAllCurrency() {
+    public List<Currency> findAllCurrencies() {
         return namedParameterJdbcTemplate.query("SELECT * FROM currency", beanPropertyRowMapper);
     }
 
     @Override
-    public void deleteCurrencyById(int searchIdParam) {
+    public void deleteCurrencyById(int id) {
         String sqlQuery = "delete FROM currency WHERE id = :id";
-        SqlParameterSource namedParameters = new MapSqlParameterSource(ID, searchIdParam);
+        SqlParameterSource namedParameters = new MapSqlParameterSource(ID, id);
         namedParameterJdbcTemplate.queryForObject(sqlQuery, namedParameters, Currency.class);
     }
 
@@ -65,7 +65,7 @@ public class CurrencyRepositoryDAOImpl implements CurrencyRepositoryDAO {
     }
 
     @Override
-    public void updateCurrency(int searchIdParam, Currency currency) {
+    public void updateCurrency(int id, Currency currency) {
         String sqlQuery = "update currency " +
                 "set bank_name = :bankName, currency_code = :currencyCode, purchase_currency = :purchaseCurrency, sale_of_currency = :saleOfCurrency " +
                 "where id = :id";
@@ -75,7 +75,7 @@ public class CurrencyRepositoryDAOImpl implements CurrencyRepositoryDAO {
         currencyParameters.put(CURRENCY_CODE, currency.getCurrencyCode());
         currencyParameters.put(PURCHASE_CURRENCY, currency.getPurchaseCurrency());
         currencyParameters.put(SALE_OF_CURRENCY, currency.getSaleOfCurrency());
-        currencyParameters.put(ID, searchIdParam);
+        currencyParameters.put(ID, id);
 
         namedParameterJdbcTemplate.update(sqlQuery, currencyParameters);
     }

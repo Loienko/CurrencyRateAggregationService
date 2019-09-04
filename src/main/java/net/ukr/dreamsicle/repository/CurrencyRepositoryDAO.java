@@ -8,7 +8,7 @@ public interface CurrencyRepositoryDAO {
 
     Currency findCurrencyById(int id);
 
-    List<Currency> findAllCurrency();
+    List<Currency> findAllCurrencies();
 
     void deleteCurrencyById(int id);
 
