@@ -23,7 +23,7 @@ public class CurrencyService {
         return currencyRepositoryDAO.findAllCurrencies();
     }
 
-    Currency findCurrencyById(int id) {
+    public Currency findCurrencyById(int id) {
         return currencyRepositoryDAO.findCurrencyById(id);
     }
 
