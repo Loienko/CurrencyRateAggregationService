@@ -9,6 +9,7 @@ import java.util.List;
 @Mapper
 @Service
 public interface CurrencyMapper {
+
     CurrencyDTO toCurrencyDto(Currency currency);
 
     List<CurrencyDTO> toCurrencyDTOs(List<Currency> currencies);

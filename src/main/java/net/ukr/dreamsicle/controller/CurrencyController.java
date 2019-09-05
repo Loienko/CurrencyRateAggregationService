@@ -1,63 +1,71 @@
 package net.ukr.dreamsicle.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.ukr.dreamsicle.dto.CurrencyDTO;
 import net.ukr.dreamsicle.dto.CurrencyMapper;
+import net.ukr.dreamsicle.exception.NotFoundException;
 import net.ukr.dreamsicle.model.Currency;
 import net.ukr.dreamsicle.service.CurrencyService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
 import java.util.List;
 
 @RestController
 @Slf4j
 @RequestMapping("/currencies")
+@RequiredArgsConstructor
 public class CurrencyController {
 
     private final CurrencyMapper currencyMapper;
     private final CurrencyService currencyService;
 
-    @Autowired
-    public CurrencyController(CurrencyMapper currencyMapper, CurrencyService currencyService) {
-        this.currencyMapper = currencyMapper;
-        this.currencyService = currencyService;
-    }
-
     @GetMapping
-    public ResponseEntity<List<CurrencyDTO>> findAll() {
-        return ResponseEntity.ok(currencyMapper.toCurrencyDTOs(currencyService.allCurrenciesData()));
+    public List<CurrencyDTO> findAll() {
+        List<CurrencyDTO> currencyDTOS = currencyMapper.toCurrencyDTOs(currencyService.allCurrenciesData());
+        if (currencyDTOS == null) {
+            throw new NotFoundException();
+        }
+        return currencyDTOS;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CurrencyDTO> findById(@PathVariable int id) {
+    public CurrencyDTO findById(@PathVariable @Min(1) @Positive int id) {
         Currency currencyById = currencyService.findCurrencyById(id);
+        CurrencyDTO currencyDTO = currencyMapper.toCurrencyDto(currencyById);
 
-        return ResponseEntity.ok(currencyMapper.toCurrencyDto(currencyById));
+        if (currencyDTO == null) {
+            throw new NotFoundException();
+        }
+        return currencyDTO;
     }
 
     @PostMapping
-    public ResponseEntity<CurrencyDTO> create(@RequestBody CurrencyDTO currencyDTO) {
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public void create(@Validated @RequestBody CurrencyDTO currencyDTO) {
         currencyService.createCurrency(currencyMapper.toCurrency(currencyDTO));
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(currencyDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CurrencyDTO> update(@PathVariable int id, @RequestBody CurrencyDTO currencyDTO) {
+    @ResponseStatus(code = HttpStatus.ACCEPTED)
+    public void update(@PathVariable @Min(1) @Positive int id, @Validated @RequestBody CurrencyDTO currencyDTO) {
+        Currency currencyById = currencyService.findCurrencyById(id);
+        if (currencyById == null){
+            throw new NotFoundException();
+        }
+
         Currency currency = currencyMapper.toCurrency(currencyDTO);
         currency.setId(id);
         currencyService.updateCurrency(id, currency);
-
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(currencyDTO);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable int id) {
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable @Min(1) @Positive int id) {
         currencyService.deleteCurrencyById(id);
-
-        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 }
