@@ -34,6 +34,11 @@ public class CurrencyRepositoryDAOImpl implements CurrencyRepositoryDAO {
     }
 
     @Override
+    public List<Currency> findAllCurrencies() {
+        return namedParameterJdbcTemplate.query("SELECT * FROM currency", beanPropertyRowMapper);
+    }
+
+    @Override
     public Currency findCurrencyById(int id) {
         String sqlQuery = "SELECT * FROM currency WHERE id = :id";
         SqlParameterSource namedParameters = new MapSqlParameterSource(ID, id);
@@ -43,11 +48,6 @@ public class CurrencyRepositoryDAOImpl implements CurrencyRepositoryDAO {
         } catch (EmptyResultDataAccessException e) {
             throw new NotFoundException();
         }
-    }
-
-    @Override
-    public List<Currency> findAllCurrencies() {
-        return namedParameterJdbcTemplate.query("SELECT * FROM currency", beanPropertyRowMapper);
     }
 
     @Override
