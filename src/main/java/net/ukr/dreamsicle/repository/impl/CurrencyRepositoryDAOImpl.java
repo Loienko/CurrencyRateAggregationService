@@ -61,7 +61,7 @@ public class CurrencyRepositoryDAOImpl implements CurrencyRepositoryDAO {
     public Integer createCurrency(Currency currency) {
         GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
 
-        String sqlQuery = "insert into currency (bank_name, currency_code,purchase_currency, sale_of_currency) " +
+        String sqlQuery = "insert into currency (bank_name, currency_code, purchase_currency, sale_of_currency) " +
                 "values(:bankName, :currencyCode, :purchaseCurrency, :saleOfCurrency)";
 
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();

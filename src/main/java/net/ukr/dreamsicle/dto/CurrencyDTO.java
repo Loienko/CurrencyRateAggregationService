@@ -21,11 +21,11 @@ public class CurrencyDTO {
     private String currencyCode;
 
     @NotNull
-    @Size(min = 1, message="Purchase Currency should have at least 1 characters - '00.00'")
+    @Size(min = 1, message="Purchase Currency should have at least 1 characters")
     @Digits(integer = Integer.MAX_VALUE, fraction = 3)
     private String purchaseCurrency;
 
     @NotNull
-    @Size(min = 1, message="Sale Of Currency should have at least 1 characters - '00.00'")
+    @Size(min = 1, message="Sale Of Currency should have at least 1 characters")
     private String saleOfCurrency;
 }

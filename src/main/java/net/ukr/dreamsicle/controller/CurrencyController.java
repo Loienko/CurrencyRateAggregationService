@@ -47,9 +47,9 @@ public class CurrencyController {
     @PutMapping
     @ResponseStatus(code = HttpStatus.CREATED, value = HttpStatus.CREATED)
     public CurrencyDTO create(@Validated @RequestBody CurrencyDTO currencyDTO) {
-        Integer currency = currencyService.createCurrency(currencyMapper.toCurrency(currencyDTO));
+        Integer id = currencyService.createCurrency(currencyMapper.toCurrency(currencyDTO));
 
-        return currencyMapper.toCurrencyDto(currencyService.findCurrencyById(currency));
+        return currencyMapper.toCurrencyDto(currencyService.findCurrencyById(id));
     }
 
     @PutMapping("/{id}")
@@ -58,7 +58,7 @@ public class CurrencyController {
 
         Currency currencyById = currencyService.findCurrencyById(id);
 
-        if (currencyById == null){
+        if (currencyById == null) {
             throw new NotFoundException();
         }
 
