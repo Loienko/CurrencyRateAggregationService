@@ -3,9 +3,6 @@ package net.ukr.dreamsicle.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.ukr.dreamsicle.dto.CurrencyDTO;
-import net.ukr.dreamsicle.dto.CurrencyMapper;
-import net.ukr.dreamsicle.exception.NotFoundException;
-import net.ukr.dreamsicle.model.Currency;
 import net.ukr.dreamsicle.service.CurrencyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -21,52 +18,28 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CurrencyController {
 
-    private final CurrencyMapper currencyMapper;
     private final CurrencyService currencyService;
 
     @GetMapping
     public List<CurrencyDTO> findAll() {
-        List<CurrencyDTO> currencyDTOS = currencyMapper.toCurrencyDTOs(currencyService.allCurrenciesData());
-        if (currencyDTOS == null) {
-            throw new NotFoundException();
-        }
-        return currencyDTOS;
+        return currencyService.allCurrencies();
     }
 
     @GetMapping("/{id}")
     public CurrencyDTO findById(@PathVariable @Min(1) @Positive int id) {
-        Currency currencyById = currencyService.findCurrencyById(id);
-        CurrencyDTO currencyDTO = currencyMapper.toCurrencyDto(currencyById);
-
-        if (currencyDTO == null) {
-            throw new NotFoundException();
-        }
-        return currencyDTO;
+        return currencyService.findCurrencyById(id);
     }
 
     @PutMapping
     @ResponseStatus(code = HttpStatus.CREATED, value = HttpStatus.CREATED)
     public CurrencyDTO create(@Validated @RequestBody CurrencyDTO currencyDTO) {
-        Integer id = currencyService.createCurrency(currencyMapper.toCurrency(currencyDTO));
-
-        return currencyMapper.toCurrencyDto(currencyService.findCurrencyById(id));
+        return currencyService.createCurrency(currencyDTO);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
     public CurrencyDTO update(@PathVariable @Min(1) @Positive Integer id, @Validated @RequestBody CurrencyDTO currencyDTO) {
-
-        Currency currencyById = currencyService.findCurrencyById(id);
-
-        if (currencyById == null) {
-            throw new NotFoundException();
-        }
-
-        Currency currency = currencyMapper.toCurrency(currencyDTO);
-        currency.setId(id);
-        currencyService.updateCurrency(id, currency);
-
-        return currencyMapper.toCurrencyDto(currencyService.findCurrencyById(id));
+        return currencyService.updateCurrency(id, currencyDTO);
     }
 
     @DeleteMapping("/{id}")
