@@ -5,19 +5,16 @@
 -- Dumped from database version 11.5
 -- Dumped by pg_dump version 11.1
 
-CREATE TABLE public.currency (
-                                id integer NOT NULL,
-                                bank_name character varying(50),
-                                currency_code character varying(15),
-                                purchase_currency character varying(15),
-                                sale_of_currency character varying(15)
-)
-WITH (oids = false);
+create table currency (
+    id serial not null,
+    bank_name varchar(50) not null,
+    currency_code varchar(15) not null,
+    purchase_currency varchar(15) not null,
+    sale_of_currency varchar(15) not null
+);
 
-CREATE INDEX currency_seq ON public.currency USING btree (id);
+create unique index table_name_id_uindex on currency (id);
 
-ALTER TABLE ONLY currency
-  ADD CONSTRAINT currency_pkey
-PRIMARY KEY (id);
-
-COMMENT ON SCHEMA public IS 'standard public schema';
+alter table currency
+    add constraint table_name_pk
+        primary key (id);
