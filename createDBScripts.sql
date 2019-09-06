@@ -11,4 +11,9 @@ SET search_path = public, pg_catalog;
 
 CREATE DATABASE currency;
 
-CREATE SCHEMA public;
+SET search_path to currency;
+
+CREATE SCHEMA currency.public;
+
+SET SCHEMA 'currency.public';
+

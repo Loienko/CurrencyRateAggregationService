@@ -31,8 +31,8 @@ public class CurrencyService {
         currencyRepositoryDAO.deleteCurrencyById(id);
     }
 
-    public void createCurrency(Currency currency) {
-        currencyRepositoryDAO.createCurrency(currency);
+    public Integer createCurrency(Currency currency) {
+        return currencyRepositoryDAO.createCurrency(currency);
     }
 
     public void updateCurrency(int id, Currency currency) {

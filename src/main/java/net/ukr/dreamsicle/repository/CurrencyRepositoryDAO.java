@@ -12,7 +12,7 @@ public interface CurrencyRepositoryDAO {
 
     void deleteCurrencyById(int id);
 
-    void createCurrency(Currency currency);
+    Integer createCurrency(Currency currency);
 
     void updateCurrency(int id, Currency currency);
 }

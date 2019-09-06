@@ -1,12 +1,15 @@
 package net.ukr.dreamsicle.repository.impl;
 
+import net.ukr.dreamsicle.exception.NotFoundException;
 import net.ukr.dreamsicle.model.Currency;
 import net.ukr.dreamsicle.repository.CurrencyRepositoryDAO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -34,7 +37,12 @@ public class CurrencyRepositoryDAOImpl implements CurrencyRepositoryDAO {
     public Currency findCurrencyById(int id) {
         String sqlQuery = "SELECT * FROM currency WHERE id = :id";
         SqlParameterSource namedParameters = new MapSqlParameterSource(ID, id);
-        return namedParameterJdbcTemplate.queryForObject(sqlQuery, namedParameters, Currency.class);
+
+        try {
+            return namedParameterJdbcTemplate.queryForObject(sqlQuery, namedParameters, beanPropertyRowMapper);
+        } catch (EmptyResultDataAccessException e) {
+            throw new NotFoundException();
+        }
     }
 
     @Override
@@ -46,22 +54,25 @@ public class CurrencyRepositoryDAOImpl implements CurrencyRepositoryDAO {
     public void deleteCurrencyById(int id) {
         String sqlQuery = "delete FROM currency WHERE id = :id";
         SqlParameterSource namedParameters = new MapSqlParameterSource(ID, id);
-        namedParameterJdbcTemplate.queryForObject(sqlQuery, namedParameters, Currency.class);
+        namedParameterJdbcTemplate.update(sqlQuery, namedParameters);
     }
 
     @Override
-    public void createCurrency(Currency currency) {
-        String sqlQuery = "insert into currency (id, bank_name, currency_code,purchase_currency, sale_of_currency) " +
-                "values(:id, :bankName, :currencyCode, :purchaseCurrency, :saleOfCurrency)";
+    public Integer createCurrency(Currency currency) {
+        GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
 
-        Map<String, Object> currencyParameters = new HashMap<>();
-        currencyParameters.put(ID, currency.getId());
-        currencyParameters.put(BANK_NAME, currency.getBankName());
-        currencyParameters.put(CURRENCY_CODE, currency.getCurrencyCode());
-        currencyParameters.put(PURCHASE_CURRENCY, currency.getPurchaseCurrency());
-        currencyParameters.put(SALE_OF_CURRENCY, currency.getSaleOfCurrency());
+        String sqlQuery = "insert into currency (bank_name, currency_code,purchase_currency, sale_of_currency) " +
+                "values(:bankName, :currencyCode, :purchaseCurrency, :saleOfCurrency)";
 
-        namedParameterJdbcTemplate.update(sqlQuery, currencyParameters);
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+
+        mapSqlParameterSource.addValue(BANK_NAME, currency.getBankName());
+        mapSqlParameterSource.addValue(CURRENCY_CODE, currency.getCurrencyCode());
+        mapSqlParameterSource.addValue(PURCHASE_CURRENCY, currency.getPurchaseCurrency());
+        mapSqlParameterSource.addValue(SALE_OF_CURRENCY, currency.getSaleOfCurrency());
+
+        namedParameterJdbcTemplate.update(sqlQuery, mapSqlParameterSource, generatedKeyHolder);
+        return (Integer) generatedKeyHolder.getKeys().get(ID);
     }
 
     @Override
