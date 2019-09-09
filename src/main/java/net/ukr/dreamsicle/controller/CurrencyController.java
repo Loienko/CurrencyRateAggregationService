@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.ukr.dreamsicle.dto.CurrencyDTO;
 import net.ukr.dreamsicle.dto.CurrencyMapper;
-import net.ukr.dreamsicle.exception.NotFoundException;
+import net.ukr.dreamsicle.exception.ResourceNotFoundException;
 import net.ukr.dreamsicle.model.Currency;
 import net.ukr.dreamsicle.service.CurrencyService;
 import org.springframework.http.HttpStatus;
@@ -28,7 +28,7 @@ public class CurrencyController {
     public List<CurrencyDTO> findAll() {
         List<CurrencyDTO> currencyDTOS = currencyMapper.toCurrencyDTOs(currencyService.allCurrenciesData());
         if (currencyDTOS == null) {
-            throw new NotFoundException();
+            throw new ResourceNotFoundException();
         }
         return currencyDTOS;
     }
@@ -39,13 +39,13 @@ public class CurrencyController {
         CurrencyDTO currencyDTO = currencyMapper.toCurrencyDto(currencyById);
 
         if (currencyDTO == null) {
-            throw new NotFoundException();
+            throw new ResourceNotFoundException();
         }
         return currencyDTO;
     }
 
     @PutMapping
-    @ResponseStatus(code = HttpStatus.CREATED, value = HttpStatus.CREATED)
+    @ResponseStatus(code = HttpStatus.CREATED)
     public CurrencyDTO create(@Validated @RequestBody CurrencyDTO currencyDTO) {
         Integer id = currencyService.createCurrency(currencyMapper.toCurrency(currencyDTO));
 
@@ -59,7 +59,7 @@ public class CurrencyController {
         Currency currencyById = currencyService.findCurrencyById(id);
 
         if (currencyById == null) {
-            throw new NotFoundException();
+            throw new ResourceNotFoundException();
         }
 
         Currency currency = currencyMapper.toCurrency(currencyDTO);
