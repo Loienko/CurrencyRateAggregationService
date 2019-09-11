@@ -1,64 +1,36 @@
 # CurrencyRateAggregationService
 
-Сервис агрегации курсов валют
+**Technical task**
+1. The application should be able to download exchange rates from text files that banks provide. 
+2. Each bank provides one file with all exchange rates
+3. Files can be of three formats: CSV, XML, JSON 
+4. The file name (before the extension) is the name of the bank and should be further used by the system in this form
+5. The list of currencies may be specific to each bank
+6. Return the purchase rate of the specified currency by all banks
+7. It should be possible to sort the results in descending / ascending order
+8. Return the selling rate of the specified currency by all banks
+9. Provide the ability to update the purchase or sale rate of the specified currency for a single bank
+10. In particular, it should be possible to establish / remove a ban on the purchase or sale of a certain currency
+11. Delete all offers for the purchase / sale of currency for a particular bank
+12. Create a report with the best offers on the purchase and sale of all currencies
+13. The service must be implemented using JDK 8 or later
+14. Code coverage by unit tests
 
-1. Приложение должно иметь возможность загружать курсы валют из текстовых
-файлов, которые предоставляют банки. Каждый банк предоставляет один файл
-со всеми курсами валют.
-2. Файлы могут быть трех форматов: CSV, XML, JSON. Имя файла (до расширения)
-является названием банка и должно далее использоваться системой в этом
-виде.
-3. Каждый файл содержит следующую информацию:
-Код валюты Покупка Продажа
-USD 25.90 26.10
-EUR 30.00 31.00
-CHF 26.00 -
-... ... ...
-4. Список валют может быть специфичен для каждого банка. Например, не все
-банки могут работать с CHF или RUB.
-5. Некоторые банки могут осуществлять только покупку определённойgвалюты
-или только продажу. Например, в таблице выше банк ввел запрет на продажу
-CHF.
-6. Сервис должен:
-• Предоставлять возможность загрузить файл в систему (с помощью
-RESTful API)
-• Возвращать курс покупки указанной валюты всеми банками. Должна
-быть возможность сортировки результатов по убыванию/возрастанию.
-• Возвращать курс продажи указанной валюты всеми банками. Должна
-быть возможность сортировки результатов по убыванию/возрастанию.
-• Предоставлять возможность обновить курс покупки или продажи
-указанной валюты для отдельно взятого банка. В том числе должна быть
-возможность установить/снять запрет на покупку или продажу
-определенной валюты.
-• Удалить все предложения по покупке/продаже валюты для
-определенного банка.
-• Создавать отчет с наилучшими предложениями по покупке и продаже
-всех валют, который в какой-то форме содержит следующую
-информацию:
-Код валюты Покупка Продажа
-Курс Банк Курс Банк
-USD 26.7 Банк 1 27.2 Банк 2
-EUR 30.1 Банк 3 31.0 Банк 3
-... ... ... ... ...
 
-7. Сервис должен предоставлять RESTful API для доступа к своему функционалу.
 
-8. Сервис должен быть реализован с использованием JDK 8 или более поздних
-версий.
-9. Использование других фрэймворков и библиотек на усмотрение кандидата.
-10. Покрытие кода unit test-ами на усмотрение кандидата.
-11. Если возникает вопрос, ответа на который нет в задании то кандидат может
-самостоятельно сделать допущение, но при этом задокументировать и
-прислать все допущения вместе с выполненным заданием.
-12. Оптимальный срок выполнения задания - от 2-3 дня.
-
-Instruction for start application
+**Instruction for start application**
 1. You should to create DB. For this action go to:
-    a. In the Database tool window (View | Tool Windows | Database), click the data source.
-    b. Open F4 or create (Ctrl+Shift+F10 | New Console) a database console.
-    c. Type or paste the statement that you want to execute depending on the base you are using. 
+
+     a. In the Database tool window (View | Tool Windows | Database), click the data source.
+    
+     b. Open F4 or create (Ctrl+Shift+F10 | New Console) a database console.
+    
+    c. Type or paste the statement that you want to execute depending on the base you are using.
+     
     d. Input user, password for your DB and press 'Test Connection'
+    
     e. Go to file createDBScripts.sql       
+    
     f. Press Ctrl+Enter. Alternatively, click the Execute icon 'Run' on the toolbar.
 2. You should to create Table. For this action go to createDbTableScripts.sql and repeat command 'Execute'. Example item 'f'
 3. For start this one go to Application.class and press Run
