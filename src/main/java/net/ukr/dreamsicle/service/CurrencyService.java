@@ -21,12 +21,7 @@ public class CurrencyService {
     }
 
     public List<Currency> allCurrenciesData() {
-        List<Currency> allCurrencies = currencyRepositoryDAO.findAllCurrencies();
-        if (allCurrencies == null) {
-            throw new ResourceNotFoundException();
-        }
-
-        return allCurrencies;
+        return currencyRepositoryDAO.findAllCurrencies();
     }
 
     public Currency findCurrencyById(int id) {
