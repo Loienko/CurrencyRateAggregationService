@@ -22,10 +22,6 @@ public class ValidCurrencyCodeValidator implements ConstraintValidator<ValidCurr
 
         Set<Currency> currencies = Currency.getAvailableCurrencies();
 
-        if (value.isEmpty()){
-            throw new NullPointerException();
-        }
-
         return Strings.isNullOrEmpty(value) ? isOptional : currencies.contains(Currency.getInstance(value));
     }
 }

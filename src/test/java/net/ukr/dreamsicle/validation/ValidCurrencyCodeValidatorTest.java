@@ -2,17 +2,20 @@ package net.ukr.dreamsicle.validation;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 
+@RunWith(MockitoJUnitRunner.class)
 class ValidCurrencyCodeValidatorTest {
 
     @InjectMocks
-    ValidCurrencyCodeValidator validCurrencyCodeValidator;
+    private ValidCurrencyCodeValidator validCurrencyCodeValidator;
 
     @BeforeEach
     void setUp() {
@@ -20,7 +23,7 @@ class ValidCurrencyCodeValidatorTest {
     }
 
     @Test
-    void testIsValid() {
+    void testIsValidPositive() {
         String value = "UAH";
 
         boolean valid = validCurrencyCodeValidator.isValid(value, any());
@@ -29,16 +32,21 @@ class ValidCurrencyCodeValidatorTest {
     }
 
     @Test
-    void testIsValidEmptyValueField(){
+    void testIsValidEmptyInputValueField() {
         String value = "";
 
         assertThrows(NullPointerException.class, () -> validCurrencyCodeValidator.isValid(value, any()));
     }
 
     @Test
-    void testIsValidNullValueField(){
-        String value = null;
+    void testIsValidNullInputValueField() {
+        assertThrows(NullPointerException.class, () -> validCurrencyCodeValidator.isValid(null, any()));
+    }
 
-        assertThrows(NullPointerException.class, () -> validCurrencyCodeValidator.isValid(value, any()));
+    @Test
+    void testIsValidNotCorrectInputValueField() {
+        String value = "UAH1";
+
+        assertThrows(IllegalArgumentException.class, () -> validCurrencyCodeValidator.isValid(value, any()));
     }
 }
