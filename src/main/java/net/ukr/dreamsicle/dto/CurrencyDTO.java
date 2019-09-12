@@ -3,29 +3,27 @@ package net.ukr.dreamsicle.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.ukr.dreamsicle.validation.ValidCurrencyCode;
 
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class CurrencyDTO {
     @NotNull
-    @Size(min = 1, message="Bank name should have at least 1 characters")
+    @Pattern(regexp = "^[a-zA-Zа-яёА-ЯЁ\\s\\-]+$")
     private String bankName;
 
     @NotNull
-    @Size(min = 1, message="Currency Code should have at least 1 characters")
+    @ValidCurrencyCode
     private String currencyCode;
 
     @NotNull
-    @Size(min = 1, message="Purchase Currency should have at least 1 characters")
-    @Digits(integer = Integer.MAX_VALUE, fraction = 3)
+    @Pattern(regexp = "^[+-]?[0-9]{1,3}(?:,?[0-9]{3})*\\.[0-9]{1,5}$")
     private String purchaseCurrency;
 
     @NotNull
-    @Size(min = 1, message="Sale Of Currency should have at least 1 characters")
+    @Pattern(regexp = "^[+-]?[0-9]{1,3}(?:,?[0-9]{3})*\\.[0-9]{1,5}$")
     private String saleOfCurrency;
 }
