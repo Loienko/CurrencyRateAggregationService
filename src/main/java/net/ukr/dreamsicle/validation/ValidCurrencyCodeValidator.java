@@ -19,16 +19,13 @@ public class ValidCurrencyCodeValidator implements ConstraintValidator<ValidCurr
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
-        boolean containsIsoCode = false;
 
         Set<Currency> currencies = Currency.getAvailableCurrencies();
 
-        try {
-            containsIsoCode = currencies.contains(Currency.getInstance(value));
-        } catch (IllegalArgumentException e) {
-            e.getStackTrace();
+        if (value.isEmpty()){
+            throw new NullPointerException();
         }
 
-        return Boolean.TRUE.equals(isOptional) ? (containsIsoCode || (Strings.isNullOrEmpty(value))) : containsIsoCode;
+        return Strings.isNullOrEmpty(value) ? isOptional : currencies.contains(Currency.getInstance(value));
     }
 }
