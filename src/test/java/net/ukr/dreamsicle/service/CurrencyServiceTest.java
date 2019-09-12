@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.*;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
+@ActiveProfiles("test")
 @RunWith(MockitoJUnitRunner.class)
 class CurrencyServiceTest {
 
@@ -41,7 +43,7 @@ class CurrencyServiceTest {
         List<Currency> allCurrenciesData = currencyService.allCurrenciesData();
 
         verify(currencyRepositoryDAO).findAllCurrencies();
-        assertEquals(ID+1, allCurrenciesData.size());
+        assertEquals(ID + 1, allCurrenciesData.size());
         assertNotNull(allCurrenciesData);
         assertSame(currencies, allCurrenciesData);
     }
@@ -66,12 +68,17 @@ class CurrencyServiceTest {
     @Test
     void testCreateCurrency() {
         Currency currency = CurrencyProvider.getCurrencyProvider(ID);
-        doNothing().when(currencyRepositoryDAO).createCurrency(eq(currency));
+        when(currencyRepositoryDAO.createCurrency(eq(currency))).thenReturn(ID);
 
-        currencyService.createCurrency(currency);
+        int id = currencyService.createCurrency(currency);
 
         verify(currencyRepositoryDAO).createCurrency(captor.capture());
+        assertNotNull(id);
+        assertEquals(captor.getValue().getId(), id);
         assertEquals(captor.getValue().getBankName(), currency.getBankName());
+        assertEquals(captor.getValue().getCurrencyCode(), currency.getCurrencyCode());
+        assertEquals(captor.getValue().getPurchaseCurrency(), currency.getPurchaseCurrency());
+        assertEquals(captor.getValue().getSaleOfCurrency(), currency.getSaleOfCurrency());
     }
 
     @Test
