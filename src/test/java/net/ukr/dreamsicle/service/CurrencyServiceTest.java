@@ -1,8 +1,8 @@
 package net.ukr.dreamsicle.service;
 
-import javassist.NotFoundException;
 import net.ukr.dreamsicle.dto.CurrencyDTO;
 import net.ukr.dreamsicle.dto.CurrencyMapper;
+import net.ukr.dreamsicle.exception.ResourceNotFoundException;
 import net.ukr.dreamsicle.model.Currency;
 import net.ukr.dreamsicle.repository.CurrencyRepositoryDAO;
 import net.ukr.dreamsicle.util.CurrencyProvider;
@@ -78,7 +78,7 @@ class CurrencyServiceTest {
     void testFindCurrencyByIdNotPresentInDb() {
         when(currencyRepositoryDAO.findCurrencyById(ID)).thenReturn(null);
 
-        assertThrows(NotFoundException.class, () -> currencyService.findCurrencyById(ID));
+        assertThrows(ResourceNotFoundException.class, () -> currencyService.findCurrencyById(ID));
     }
 
     @Test
@@ -96,7 +96,7 @@ class CurrencyServiceTest {
     void testDeleteCurrencyByIdNotPresentCurrencyInDb() {
         when(currencyRepositoryDAO.findCurrencyById(ID)).thenReturn(null);
 
-        assertThrows(NotFoundException.class, () -> currencyService.deleteCurrencyById(ID));
+        assertThrows(ResourceNotFoundException.class, () -> currencyService.deleteCurrencyById(ID));
     }
 
     @Test
@@ -125,7 +125,7 @@ class CurrencyServiceTest {
         when(currencyMapper.toCurrency(currencyDto)).thenReturn(currency);
         when(currencyRepositoryDAO.createCurrency(any())).thenReturn(null);
 
-        assertThrows(NotFoundException.class, () -> currencyService.createCurrency(currencyDto));
+        assertThrows(ResourceNotFoundException.class, () -> currencyService.createCurrency(currencyDto));
     }
 
     @Test
@@ -153,6 +153,6 @@ class CurrencyServiceTest {
         CurrencyDTO currencyDto = CurrencyProvider.getCurrencyProvider();
         when(currencyRepositoryDAO.findCurrencyById(ID)).thenReturn(null);
 
-        assertThrows(NotFoundException.class, () -> currencyService.updateCurrency(ID, currencyDto));
+        assertThrows(ResourceNotFoundException.class, () -> currencyService.updateCurrency(ID, currencyDto));
     }
 }
