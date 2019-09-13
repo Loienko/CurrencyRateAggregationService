@@ -4,18 +4,24 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import javax.validation.ConstraintValidatorContext;
+
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 
 @RunWith(MockitoJUnitRunner.class)
 class ValidCurrencyCodeValidatorTest {
 
     @InjectMocks
     private ValidCurrencyCodeValidator validCurrencyCodeValidator;
+
+    @Mock
+    private ConstraintValidatorContext constraintValidatorContext;
 
     @BeforeEach
     void setUp() {
@@ -26,7 +32,7 @@ class ValidCurrencyCodeValidatorTest {
     void testIsValidPositive() {
         String value = "UAH";
 
-        boolean valid = validCurrencyCodeValidator.isValid(value, any());
+        boolean valid = validCurrencyCodeValidator.isValid(value, constraintValidatorContext);
 
         assertTrue(valid);
     }
@@ -35,18 +41,23 @@ class ValidCurrencyCodeValidatorTest {
     void testIsValidEmptyInputValueField() {
         String value = "";
 
-        assertThrows(NullPointerException.class, () -> validCurrencyCodeValidator.isValid(value, any()));
+        boolean valid = validCurrencyCodeValidator.isValid(value, constraintValidatorContext);
+
+        assertFalse(valid);
     }
 
     @Test
     void testIsValidNullInputValueField() {
-        assertThrows(NullPointerException.class, () -> validCurrencyCodeValidator.isValid(null, any()));
+
+        boolean valid = validCurrencyCodeValidator.isValid(null, constraintValidatorContext);
+
+        assertFalse(valid);
     }
 
     @Test
     void testIsValidNotCorrectInputValueField() {
         String value = "UAH1";
 
-        assertThrows(IllegalArgumentException.class, () -> validCurrencyCodeValidator.isValid(value, any()));
+        assertThrows(IllegalArgumentException.class, () -> validCurrencyCodeValidator.isValid(value, constraintValidatorContext));
     }
 }

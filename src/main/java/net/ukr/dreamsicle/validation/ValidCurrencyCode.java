@@ -21,5 +21,4 @@ public @interface ValidCurrencyCode {
 
     Class<? extends Payload>[] payload() default {};
 
-    boolean optional() default false;
 }
