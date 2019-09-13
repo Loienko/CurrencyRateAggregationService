@@ -3,16 +3,19 @@ package net.ukr.dreamsicle.service;
 import lombok.RequiredArgsConstructor;
 import net.ukr.dreamsicle.dto.CurrencyDTO;
 import net.ukr.dreamsicle.dto.CurrencyMapper;
-import net.ukr.dreamsicle.exception.ResourceNotFoundException;
 import net.ukr.dreamsicle.exception.ResourceIsStale;
+import net.ukr.dreamsicle.exception.ResourceNotFoundException;
 import net.ukr.dreamsicle.model.Currency;
 import net.ukr.dreamsicle.repository.CurrencyRepositoryDAO;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(isolation = Isolation.SERIALIZABLE)
 public class CurrencyService {
 
     private final CurrencyRepositoryDAO currencyRepositoryDAO;
@@ -32,6 +35,7 @@ public class CurrencyService {
         return currencyMapper.toCurrencyDto(currencyById);
     }
 
+    @Transactional
     public void deleteCurrencyById(int id) {
         Currency currencyById = currencyRepositoryDAO.findCurrencyById(id);
 
@@ -41,11 +45,12 @@ public class CurrencyService {
 
         Integer checkStateDelete = currencyRepositoryDAO.deleteCurrencyById(id);
 
-        if (checkStateDelete != 1){
+        if (checkStateDelete != 1) {
             throw new ResourceIsStale();
         }
     }
 
+    @Transactional
     public CurrencyDTO createCurrency(CurrencyDTO currencyDTO) {
         Currency currency = currencyMapper.toCurrency(currencyDTO);
         Integer id = currencyRepositoryDAO.createCurrency(currency);
@@ -58,6 +63,7 @@ public class CurrencyService {
         return currencyMapper.toCurrencyDto(currencyById);
     }
 
+    @Transactional
     public CurrencyDTO updateCurrency(int id, CurrencyDTO currencyDTO) {
         Currency currencyById = currencyRepositoryDAO.findCurrencyById(id);
 
