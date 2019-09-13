@@ -1,6 +1,6 @@
 package net.ukr.dreamsicle.repository.impl;
 
-import net.ukr.dreamsicle.exception.NotFoundException;
+import net.ukr.dreamsicle.exception.ResourceNotFoundException;
 import net.ukr.dreamsicle.model.Currency;
 import net.ukr.dreamsicle.repository.CurrencyRepositoryDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +46,7 @@ public class CurrencyRepositoryDAOImpl implements CurrencyRepositoryDAO {
         try {
             return namedParameterJdbcTemplate.queryForObject(sqlQuery, namedParameters, beanPropertyRowMapper);
         } catch (EmptyResultDataAccessException e) {
-            throw new NotFoundException();
+            throw new ResourceNotFoundException();
         }
     }
 

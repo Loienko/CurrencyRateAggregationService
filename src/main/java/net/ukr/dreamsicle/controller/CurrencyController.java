@@ -31,7 +31,7 @@ public class CurrencyController {
     }
 
     @PutMapping
-    @ResponseStatus(code = HttpStatus.CREATED, value = HttpStatus.CREATED)
+    @ResponseStatus(code = HttpStatus.CREATED)
     public CurrencyDTO create(@Validated @RequestBody CurrencyDTO currencyDTO) {
         return currencyService.createCurrency(currencyDTO);
     }

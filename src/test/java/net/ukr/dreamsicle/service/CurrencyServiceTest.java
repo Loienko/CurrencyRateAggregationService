@@ -1,8 +1,8 @@
 package net.ukr.dreamsicle.service;
 
+import javassist.NotFoundException;
 import net.ukr.dreamsicle.dto.CurrencyDTO;
 import net.ukr.dreamsicle.dto.CurrencyMapper;
-import net.ukr.dreamsicle.exception.NotFoundException;
 import net.ukr.dreamsicle.model.Currency;
 import net.ukr.dreamsicle.repository.CurrencyRepositoryDAO;
 import net.ukr.dreamsicle.util.CurrencyProvider;
@@ -13,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,6 +22,7 @@ import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
+@ActiveProfiles("test")
 @RunWith(MockitoJUnitRunner.class)
 class CurrencyServiceTest {
 
@@ -117,7 +119,7 @@ class CurrencyServiceTest {
     }
 
     @Test
-    void testCreateCurrencyFailedNotReturnCreatedCurrency(){
+    void testCreateCurrencyFailedNotReturnCreatedCurrency() {
         Currency currency = CurrencyProvider.getCurrencyProvider(ID);
         CurrencyDTO currencyDto = CurrencyProvider.getCurrencyProvider();
         when(currencyMapper.toCurrency(currencyDto)).thenReturn(currency);
