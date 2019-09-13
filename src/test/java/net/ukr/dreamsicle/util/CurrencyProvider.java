@@ -1,5 +1,6 @@
 package net.ukr.dreamsicle.util;
 
+import net.ukr.dreamsicle.dto.CurrencyDTO;
 import net.ukr.dreamsicle.model.Currency;
 
 public class CurrencyProvider {
@@ -10,5 +11,9 @@ public class CurrencyProvider {
 
     public static Currency getCurrencyProvider(int id) {
         return new Currency(id, BANK_NAME, CURRENCY_CODE, PURCHASE_CURRENCY, SALE_OF_CURRENCY);
+    }
+
+    public static CurrencyDTO getCurrencyProvider() {
+        return new CurrencyDTO(BANK_NAME, CURRENCY_CODE, PURCHASE_CURRENCY, SALE_OF_CURRENCY);
     }
 }

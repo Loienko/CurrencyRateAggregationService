@@ -3,8 +3,6 @@ package net.ukr.dreamsicle.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.ukr.dreamsicle.dto.CurrencyDTO;
-import net.ukr.dreamsicle.dto.CurrencyMapper;
-import net.ukr.dreamsicle.model.Currency;
 import net.ukr.dreamsicle.service.CurrencyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -20,38 +18,28 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CurrencyController {
 
-    private final CurrencyMapper currencyMapper;
     private final CurrencyService currencyService;
 
     @GetMapping
     public List<CurrencyDTO> findAll() {
-        return currencyMapper.toCurrencyDTOs(currencyService.allCurrenciesData());
+        return currencyService.allCurrencies();
     }
 
     @GetMapping("/{id}")
     public CurrencyDTO findById(@PathVariable @Min(1) @Positive int id) {
-        return currencyMapper.toCurrencyDto(currencyService.findCurrencyById(id));
+        return currencyService.findCurrencyById(id);
     }
 
     @PutMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public CurrencyDTO create(@Validated @RequestBody CurrencyDTO currencyDTO) {
-        Integer id = currencyService.createCurrency(currencyMapper.toCurrency(currencyDTO));
-
-        return currencyMapper.toCurrencyDto(currencyService.findCurrencyById(id));
+        return currencyService.createCurrency(currencyDTO);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
     public CurrencyDTO update(@PathVariable @Min(1) @Positive Integer id, @Validated @RequestBody CurrencyDTO currencyDTO) {
-
-        currencyService.findCurrencyById(id);
-
-        Currency currency = currencyMapper.toCurrency(currencyDTO);
-        currency.setId(id);
-        currencyService.updateCurrency(id, currency);
-
-        return currencyMapper.toCurrencyDto(currencyService.findCurrencyById(id));
+        return currencyService.updateCurrency(id, currencyDTO);
     }
 
     @DeleteMapping("/{id}")
