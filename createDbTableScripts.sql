@@ -10,7 +10,8 @@ create table currency (
     bank_name varchar(50) not null,
     currency_code varchar(15) not null,
     purchase_currency varchar(15) not null,
-    sale_of_currency varchar(15) not null
+    sale_of_currency varchar(15) not null,
+    version int default 0
 );
 
 create unique index table_name_id_uindex on currency (id);

@@ -2,6 +2,7 @@ package net.ukr.dreamsicle.exception;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,5 +36,20 @@ public class ExceptionHandlerControllerAdvice {
     ExceptionResponse databaseError(final Exception exception,
                                     final HttpServletRequest request) {
         return new ExceptionResponse(exception.getMessage(), request.getRequestURI());
+    }
+
+    @ExceptionHandler({ResourceIsStale.class, IllegalStateException.class})
+    @ResponseStatus(value = HttpStatus.UPGRADE_REQUIRED)
+    public @ResponseBody
+    ExceptionResponse handleResourceIsStale(final Exception exception,
+                                            final HttpServletRequest request) {
+        return new ExceptionResponse(exception.getMessage(), request.getRequestURI());
+    }
+
+    @ExceptionHandler({ArgumentNotValidException.class, MethodArgumentNotValidException.class})
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public @ResponseBody
+    ExceptionResponse validationError(final HttpServletRequest request) {
+        return new ExceptionResponse("Not valid Data", request.getRequestURI());
     }
 }
