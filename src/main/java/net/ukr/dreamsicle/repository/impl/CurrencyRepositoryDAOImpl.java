@@ -51,10 +51,10 @@ public class CurrencyRepositoryDAOImpl implements CurrencyRepositoryDAO {
     }
 
     @Override
-    public Integer deleteCurrencyById(int id) {
+    public boolean deleteCurrencyById(int id) {
         String sqlQuery = "delete FROM currency WHERE id = :id";
         SqlParameterSource namedParameters = new MapSqlParameterSource(ID, id);
-        return namedParameterJdbcTemplate.update(sqlQuery, namedParameters);
+        return verificationOfSuccess(namedParameterJdbcTemplate.update(sqlQuery, namedParameters));
     }
 
     @Override
@@ -74,7 +74,7 @@ public class CurrencyRepositoryDAOImpl implements CurrencyRepositoryDAO {
     }
 
     @Override
-    public Integer updateCurrency(int id, Currency currency) {
+    public boolean updateCurrency(int id, Currency currency) {
         String sqlQuery = "update currency " +
                 "set bank_name = :bankName, currency_code = :currencyCode, purchase_currency = :purchaseCurrency, sale_of_currency = :saleOfCurrency, version = (:version + 1) " +
                 "where version = :version and id = :id";
@@ -87,6 +87,10 @@ public class CurrencyRepositoryDAOImpl implements CurrencyRepositoryDAO {
         currencyParameters.addValue(VERSION, currency.getVersion());
         currencyParameters.addValue(ID, id);
 
-        return namedParameterJdbcTemplate.update(sqlQuery, currencyParameters, generatedKeyHolder);
+        return verificationOfSuccess(namedParameterJdbcTemplate.update(sqlQuery, currencyParameters, generatedKeyHolder));
+    }
+
+    private boolean verificationOfSuccess(int update) {
+        return update == 1;
     }
 }

@@ -4,7 +4,7 @@ import net.ukr.dreamsicle.dto.CurrencyDTO;
 import net.ukr.dreamsicle.model.Currency;
 
 public class CurrencyProvider {
-    public static final Integer ZERO_ID = 0;
+
     public static final Integer POSITIVE_ID = 1;
     private static final String BANK_NAME = "PUMB";
     private static final String CURRENCY_CODE = "USD";

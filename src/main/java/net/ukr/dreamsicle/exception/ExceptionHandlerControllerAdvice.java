@@ -38,8 +38,8 @@ public class ExceptionHandlerControllerAdvice {
         return new ExceptionResponse(exception.getMessage(), request.getRequestURI());
     }
 
-    @ExceptionHandler({ResourceIsStale.class, IllegalStateException.class})
-    @ResponseStatus(value = HttpStatus.UPGRADE_REQUIRED)
+    @ExceptionHandler({ResourceIsStaleException.class, IllegalStateException.class})
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public @ResponseBody
     ExceptionResponse handleResourceIsStale(final Exception exception,
                                             final HttpServletRequest request) {

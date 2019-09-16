@@ -2,7 +2,7 @@ package net.ukr.dreamsicle.service;
 
 import net.ukr.dreamsicle.dto.CurrencyDTO;
 import net.ukr.dreamsicle.dto.CurrencyMapper;
-import net.ukr.dreamsicle.exception.ResourceIsStale;
+import net.ukr.dreamsicle.exception.ResourceIsStaleException;
 import net.ukr.dreamsicle.exception.ResourceNotFoundException;
 import net.ukr.dreamsicle.model.Currency;
 import net.ukr.dreamsicle.repository.CurrencyRepositoryDAO;
@@ -84,7 +84,7 @@ class CurrencyServiceTest {
     void testDeleteCurrencyByIdPositive() {
         Currency currency = getCurrencyProvider(POSITIVE_ID);
         when(currencyRepositoryDAO.findCurrencyById(POSITIVE_ID)).thenReturn(currency);
-        when(currencyRepositoryDAO.deleteCurrencyById(POSITIVE_ID)).thenReturn(POSITIVE_ID);
+        when(currencyRepositoryDAO.deleteCurrencyById(POSITIVE_ID)).thenReturn(true);
 
         currencyService.deleteCurrencyById(POSITIVE_ID);
 
@@ -102,9 +102,9 @@ class CurrencyServiceTest {
     void testDeleteCurrencyByIdDeleteNotPossibleResourceIsStale() {
         Currency currency = getCurrencyProvider(POSITIVE_ID);
         when(currencyRepositoryDAO.findCurrencyById(POSITIVE_ID)).thenReturn(currency);
-        when(currencyRepositoryDAO.deleteCurrencyById(POSITIVE_ID)).thenReturn(ZERO_ID);
+        when(currencyRepositoryDAO.deleteCurrencyById(POSITIVE_ID)).thenReturn(false);
 
-        assertThrows(ResourceIsStale.class, () -> currencyService.deleteCurrencyById(POSITIVE_ID));
+        assertThrows(ResourceIsStaleException.class, () -> currencyService.deleteCurrencyById(POSITIVE_ID));
     }
 
     @Test
@@ -142,7 +142,7 @@ class CurrencyServiceTest {
         CurrencyDTO currencyDto = getCurrencyProvider();
         when(currencyRepositoryDAO.findCurrencyById(POSITIVE_ID)).thenReturn(currencyForUpdate);
         when(currencyMapper.toCurrency(currencyDto)).thenReturn(currencyForUpdate);
-        when(currencyRepositoryDAO.updateCurrency(POSITIVE_ID, currencyForUpdate)).thenReturn(POSITIVE_ID);
+        when(currencyRepositoryDAO.updateCurrency(POSITIVE_ID, currencyForUpdate)).thenReturn(true);
         when(currencyRepositoryDAO.findCurrencyById(POSITIVE_ID)).thenReturn(currencyForUpdate);
         when(currencyMapper.toCurrencyDto(currencyForUpdate)).thenReturn(currencyDto);
 
@@ -170,8 +170,8 @@ class CurrencyServiceTest {
         CurrencyDTO currencyDto = getCurrencyProvider();
         when(currencyRepositoryDAO.findCurrencyById(POSITIVE_ID)).thenReturn(currencyForUpdate);
         when(currencyMapper.toCurrency(currencyDto)).thenReturn(currencyForUpdate);
-        when(currencyRepositoryDAO.updateCurrency(POSITIVE_ID, currencyForUpdate)).thenReturn(ZERO_ID);
+        when(currencyRepositoryDAO.updateCurrency(POSITIVE_ID, currencyForUpdate)).thenReturn(false);
 
-        assertThrows(ResourceIsStale.class, () -> currencyService.updateCurrency(POSITIVE_ID, currencyDto));
+        assertThrows(ResourceIsStaleException.class, () -> currencyService.updateCurrency(POSITIVE_ID, currencyDto));
     }
 }

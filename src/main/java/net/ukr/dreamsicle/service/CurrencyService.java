@@ -3,7 +3,7 @@ package net.ukr.dreamsicle.service;
 import lombok.RequiredArgsConstructor;
 import net.ukr.dreamsicle.dto.CurrencyDTO;
 import net.ukr.dreamsicle.dto.CurrencyMapper;
-import net.ukr.dreamsicle.exception.ResourceIsStale;
+import net.ukr.dreamsicle.exception.ResourceIsStaleException;
 import net.ukr.dreamsicle.exception.ResourceNotFoundException;
 import net.ukr.dreamsicle.model.Currency;
 import net.ukr.dreamsicle.repository.CurrencyRepositoryDAO;
@@ -43,10 +43,10 @@ public class CurrencyService {
             throw new ResourceNotFoundException();
         }
 
-        Integer checkStateDelete = currencyRepositoryDAO.deleteCurrencyById(id);
+        boolean checkStateDelete = currencyRepositoryDAO.deleteCurrencyById(id);
 
-        if (checkStateDelete != 1) {
-            throw new ResourceIsStale();
+        if (!checkStateDelete) {
+            throw new ResourceIsStaleException();
         }
     }
 
@@ -74,10 +74,10 @@ public class CurrencyService {
         Currency currency = currencyMapper.toCurrency(currencyDTO);
         currency.setId(id);
         currency.setVersion(currencyById.getVersion());
-        Integer checkStateUpdate = currencyRepositoryDAO.updateCurrency(id, currency);
+        boolean checkStateUpdate = currencyRepositoryDAO.updateCurrency(id, currency);
 
-        if (checkStateUpdate != 1) {
-            throw new ResourceIsStale();
+        if (!checkStateUpdate) {
+            throw new ResourceIsStaleException();
         }
 
         return currencyMapper.toCurrencyDto(currencyRepositoryDAO.findCurrencyById(id));
