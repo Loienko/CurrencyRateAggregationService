@@ -7,6 +7,11 @@ plugins {
     id 'maven-publish'
 }
 
+group = 'net.ukr.dreamsicle'
+version = '1.0-SNAPSHOT'
+description = 'CurrencyRateAggregationService'
+sourceCompatibility = '1.8'
+
 repositories {
     mavenLocal()
     maven {
@@ -31,21 +36,4 @@ dependencies {
     testCompile 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
     testCompile 'org.mockito:mockito-core:2.21.0'
     compileOnly 'org.projectlombok:lombok:1.18.8'
-}
-
-group = 'net.ukr.dreamsicle'
-version = '1.0-SNAPSHOT'
-description = 'CurrencyRateAggregationService'
-sourceCompatibility = '1.8'
-
-publishing {
-    publications {
-        maven(MavenPublication) {
-            from(components.java)
-        }
-    }
-}
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
 }
