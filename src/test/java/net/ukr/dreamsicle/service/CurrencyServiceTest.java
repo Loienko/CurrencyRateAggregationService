@@ -1,30 +1,39 @@
 package net.ukr.dreamsicle.service;
 
+import net.ukr.dreamsicle.dto.CurrencyDTO;
+import net.ukr.dreamsicle.dto.CurrencyMapper;
+import net.ukr.dreamsicle.exception.ResourceIsStaleException;
+import net.ukr.dreamsicle.exception.ResourceNotFoundException;
 import net.ukr.dreamsicle.model.Currency;
 import net.ukr.dreamsicle.repository.CurrencyRepositoryDAO;
-import net.ukr.dreamsicle.util.CurrencyProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.test.context.ActiveProfiles;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static net.ukr.dreamsicle.util.CurrencyProvider.*;
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
+@ActiveProfiles("test")
 @RunWith(MockitoJUnitRunner.class)
 class CurrencyServiceTest {
 
-    @Captor
-    ArgumentCaptor<Currency> captor;
     @InjectMocks
     private CurrencyService currencyService;
     @Mock
     private CurrencyRepositoryDAO currencyRepositoryDAO;
+
+    @Mock
+    private CurrencyMapper currencyMapper;
 
     @BeforeEach
     void setUp() {
@@ -32,69 +41,137 @@ class CurrencyServiceTest {
     }
 
     @Test
-    void testGetAllCurrenciesData() {
-        int id = 1;
-        List<Currency> currencies = Arrays.asList(CurrencyProvider.getCurrencyProvider(id), CurrencyProvider.getCurrencyProvider(++id));
-        when(currencyRepositoryDAO.getFindAllCurrency()).thenReturn(currencies);
+    void testAllCurrenciesPositive() {
+        List<Currency> currencies = Arrays.asList(getCurrencyProvider(POSITIVE_ID), getCurrencyProvider(POSITIVE_ID));
+        List<CurrencyDTO> currencyDTOS = Arrays.asList(getCurrencyProvider(), getCurrencyProvider());
+        when(currencyRepositoryDAO.findAllCurrencies()).thenReturn(currencies);
+        when(currencyMapper.toCurrencyDTOs(currencies)).thenReturn(currencyDTOS);
 
-        List<Currency> allCurrenciesData = currencyService.getAllCurrenciesData();
+        List<CurrencyDTO> allCurrenciesData = currencyService.allCurrencies();
 
-        verify(currencyRepositoryDAO).getFindAllCurrency();
-        assertEquals(id, allCurrenciesData.size());
+        verify(currencyRepositoryDAO).findAllCurrencies();
+        assertEquals(POSITIVE_ID + 1, allCurrenciesData.size());
         assertNotNull(allCurrenciesData);
-        assertSame(currencies, allCurrenciesData);
+        assertSame(currencyDTOS, allCurrenciesData);
     }
 
     @Test
-    void testGetFindCurrencyById() {
-        int id = 1;
-        Currency currency = CurrencyProvider.getCurrencyProvider(id);
-        when(currencyRepositoryDAO.getFindCurrencyById(id)).thenReturn(currency);
+    void testFindCurrencyByIdPositive() {
+        Currency currency = getCurrencyProvider(POSITIVE_ID);
+        CurrencyDTO currencyDto = getCurrencyProvider();
+        when(currencyRepositoryDAO.findCurrencyById(POSITIVE_ID)).thenReturn(currency);
+        when(currencyMapper.toCurrencyDto(currencyRepositoryDAO.findCurrencyById(POSITIVE_ID))).thenReturn(currencyDto);
 
-        Currency actualCurrency = currencyService.getFindCurrencyById(id);
+        CurrencyDTO actualCurrency = currencyService.findCurrencyById(POSITIVE_ID);
 
-        verify(currencyRepositoryDAO).getFindCurrencyById(id);
-        assertEquals(currency, actualCurrency);
+        verify(currencyMapper).toCurrencyDto(currencyRepositoryDAO.findCurrencyById(POSITIVE_ID));
+        assertEquals(currencyDto, actualCurrency);
         assertNotNull(actualCurrency);
-        assertEquals(currency.getId(), actualCurrency.getId());
-        assertEquals(currency.getBankName(), actualCurrency.getBankName());
-        assertEquals(currency.getCurrencyCode(), actualCurrency.getCurrencyCode());
-        assertEquals(currency.getPurchaseCurrency(), actualCurrency.getPurchaseCurrency());
-        assertEquals(currency.getSaleOfCurrency(), actualCurrency.getSaleOfCurrency());
+        assertEquals(currencyDto.getBankName(), actualCurrency.getBankName());
+        assertEquals(currencyDto.getCurrencyCode(), actualCurrency.getCurrencyCode());
+        assertEquals(currencyDto.getPurchaseCurrency(), actualCurrency.getPurchaseCurrency());
+        assertEquals(currencyDto.getSaleOfCurrency(), actualCurrency.getSaleOfCurrency());
     }
 
     @Test
-    void testGetCreateCurrency() {
-        int id = 1;
-        Currency currency = CurrencyProvider.getCurrencyProvider(id);
-        doNothing().when(currencyRepositoryDAO).getCreateCurrency(eq(currency));
+    void testFindCurrencyByIdNotPresentInDb() {
+        when(currencyRepositoryDAO.findCurrencyById(POSITIVE_ID)).thenReturn(null);
 
-        currencyService.getCreateCurrency(currency);
-
-        verify(currencyRepositoryDAO).getCreateCurrency(captor.capture());
-        assertEquals(captor.getValue().getBankName(), currency.getBankName());
+        assertThrows(ResourceNotFoundException.class, () -> currencyService.findCurrencyById(POSITIVE_ID));
     }
 
     @Test
-    void testGetDeleteCurrencyById() {
-        int id = 1;
-        doNothing().when(currencyRepositoryDAO).getDeleteCurrencyById(eq(id));
+    void testDeleteCurrencyByIdPositive() {
+        Currency currency = getCurrencyProvider(POSITIVE_ID);
+        when(currencyRepositoryDAO.findCurrencyById(POSITIVE_ID)).thenReturn(currency);
+        when(currencyRepositoryDAO.deleteCurrencyById(POSITIVE_ID)).thenReturn(true);
 
-        currencyService.getDeleteCurrencyById(id);
+        currencyService.deleteCurrencyById(POSITIVE_ID);
 
-        verify(currencyRepositoryDAO).getDeleteCurrencyById(id);
+        verify(currencyRepositoryDAO).deleteCurrencyById(POSITIVE_ID);
     }
 
     @Test
-    void testGetUpdateCurrency() {
-        int id = 1;
-        int idForUpdate = 2;
-        Currency currencyForUpdate = CurrencyProvider.getCurrencyProvider(idForUpdate);
-        doNothing().when(currencyRepositoryDAO).getUpdateCurrency(eq(id), any());
+    void testDeleteCurrencyByIdNotPresentCurrencyInDb() {
+        when(currencyRepositoryDAO.findCurrencyById(POSITIVE_ID)).thenReturn(null);
 
-        currencyService.getUpdateCurrency(id, currencyForUpdate);
+        assertThrows(ResourceNotFoundException.class, () -> currencyService.deleteCurrencyById(POSITIVE_ID));
+    }
 
-        verify(currencyRepositoryDAO).getUpdateCurrency(eq(id), captor.capture());
-        assertEquals(captor.getValue().getBankName(), currencyForUpdate.getBankName());
+    @Test
+    void testDeleteCurrencyByIdDeleteNotPossibleResourceIsStale() {
+        Currency currency = getCurrencyProvider(POSITIVE_ID);
+        when(currencyRepositoryDAO.findCurrencyById(POSITIVE_ID)).thenReturn(currency);
+        when(currencyRepositoryDAO.deleteCurrencyById(POSITIVE_ID)).thenReturn(false);
+
+        assertThrows(ResourceIsStaleException.class, () -> currencyService.deleteCurrencyById(POSITIVE_ID));
+    }
+
+    @Test
+    void testCreateCurrencyPositive() {
+        Currency currency = getCurrencyProvider(POSITIVE_ID);
+        CurrencyDTO currencyDto = getCurrencyProvider();
+        when(currencyMapper.toCurrency(currencyDto)).thenReturn(currency);
+        when(currencyRepositoryDAO.createCurrency(currency)).thenReturn(POSITIVE_ID);
+        when(currencyRepositoryDAO.findCurrencyById(POSITIVE_ID)).thenReturn(currency);
+        when(currencyMapper.toCurrencyDto(currency)).thenReturn(currencyDto);
+
+        CurrencyDTO actualCurrency = currencyService.createCurrency(currencyDto);
+
+        verify(currencyRepositoryDAO).createCurrency(currency);
+        assertNotNull(actualCurrency);
+        assertEquals(currencyDto.getBankName(), actualCurrency.getBankName());
+        assertEquals(currencyDto.getCurrencyCode(), actualCurrency.getCurrencyCode());
+        assertEquals(currencyDto.getPurchaseCurrency(), actualCurrency.getPurchaseCurrency());
+        assertEquals(currencyDto.getSaleOfCurrency(), actualCurrency.getSaleOfCurrency());
+    }
+
+    @Test
+    void testCreateCurrencyFailedNotReturnCreatedCurrency() {
+        Currency currency = getCurrencyProvider(POSITIVE_ID);
+        CurrencyDTO currencyDto = getCurrencyProvider();
+        when(currencyMapper.toCurrency(currencyDto)).thenReturn(currency);
+        when(currencyRepositoryDAO.createCurrency(any())).thenReturn(null);
+
+        assertThrows(ResourceNotFoundException.class, () -> currencyService.createCurrency(currencyDto));
+    }
+
+    @Test
+    void testUpdateCurrencyPositive() {
+        Currency currencyForUpdate = getCurrencyProvider(POSITIVE_ID + 1);
+        CurrencyDTO currencyDto = getCurrencyProvider();
+        when(currencyRepositoryDAO.findCurrencyById(POSITIVE_ID)).thenReturn(currencyForUpdate);
+        when(currencyMapper.toCurrency(currencyDto)).thenReturn(currencyForUpdate);
+        when(currencyRepositoryDAO.updateCurrency(POSITIVE_ID, currencyForUpdate)).thenReturn(true);
+        when(currencyRepositoryDAO.findCurrencyById(POSITIVE_ID)).thenReturn(currencyForUpdate);
+        when(currencyMapper.toCurrencyDto(currencyForUpdate)).thenReturn(currencyDto);
+
+        CurrencyDTO actualCurrency = currencyService.updateCurrency(POSITIVE_ID, currencyDto);
+
+        verify(currencyRepositoryDAO).updateCurrency(POSITIVE_ID, currencyForUpdate);
+        assertNotNull(actualCurrency);
+        assertEquals(currencyDto.getBankName(), actualCurrency.getBankName());
+        assertEquals(currencyDto.getCurrencyCode(), actualCurrency.getCurrencyCode());
+        assertEquals(currencyDto.getPurchaseCurrency(), actualCurrency.getPurchaseCurrency());
+        assertEquals(currencyDto.getSaleOfCurrency(), actualCurrency.getSaleOfCurrency());
+    }
+
+    @Test
+    void testUpdateCurrencyNotPresentInDb() {
+        CurrencyDTO currencyDto = getCurrencyProvider();
+        when(currencyRepositoryDAO.findCurrencyById(POSITIVE_ID)).thenReturn(null);
+
+        assertThrows(ResourceNotFoundException.class, () -> currencyService.updateCurrency(POSITIVE_ID, currencyDto));
+    }
+
+    @Test
+    void testUpdateCurrencyUpdateNotPossibleResourceIsStale() {
+        Currency currencyForUpdate = getCurrencyProvider(POSITIVE_ID + 1);
+        CurrencyDTO currencyDto = getCurrencyProvider();
+        when(currencyRepositoryDAO.findCurrencyById(POSITIVE_ID)).thenReturn(currencyForUpdate);
+        when(currencyMapper.toCurrency(currencyDto)).thenReturn(currencyForUpdate);
+        when(currencyRepositoryDAO.updateCurrency(POSITIVE_ID, currencyForUpdate)).thenReturn(false);
+
+        assertThrows(ResourceIsStaleException.class, () -> currencyService.updateCurrency(POSITIVE_ID, currencyDto));
     }
 }

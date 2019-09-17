@@ -1,43 +1,50 @@
 package net.ukr.dreamsicle.controller;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import net.ukr.dreamsicle.dto.CurrencyDTO;
 import net.ukr.dreamsicle.service.CurrencyService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
+import java.util.List;
+
+@RestController
+@Slf4j
+@RequestMapping("/currencies")
+@RequiredArgsConstructor
 public class CurrencyController {
 
     private final CurrencyService currencyService;
 
-    @Autowired
-    public CurrencyController(CurrencyService currencyService) {
-        this.currencyService = currencyService;
+    @GetMapping
+    public List<CurrencyDTO> findAll() {
+        return currencyService.allCurrencies();
     }
 
-    @GetMapping("/index")
-    public String index(Model model) {
-        model.addAttribute("currencies", currencyService.getAllCurrenciesData());
-        return "index";
+    @GetMapping("/{id}")
+    public CurrencyDTO findById(@PathVariable @Min(1) @Positive int id) {
+        return currencyService.findCurrencyById(id);
     }
 
-    @PostMapping("/index")
-    public String add(
-            @RequestParam("file") MultipartFile file) {
-//        currencyService.getCurrenciesDataFromUploadingFile(file);
-        return "index";
+    @PutMapping
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public CurrencyDTO create(@Validated @RequestBody CurrencyDTO currencyDTO) {
+        return currencyService.createCurrency(currencyDTO);
     }
 
-    @GetMapping("/get")
-    public String getBestDealsOnExchangeRates(Model model) {
-//        model.addAttribute("dates", currencyService.getModelForOutData());
-        return "get";
+    @PutMapping("/{id}")
+    @ResponseStatus(code = HttpStatus.ACCEPTED)
+    public CurrencyDTO update(@PathVariable @Min(1) @Positive Integer id, @Validated @RequestBody CurrencyDTO currencyDTO) {
+        return currencyService.updateCurrency(id, currencyDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable @Min(1) @Positive int id) {
+        currencyService.deleteCurrencyById(id);
     }
 }
-
-
-

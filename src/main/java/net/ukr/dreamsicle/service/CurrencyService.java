@@ -1,41 +1,85 @@
 package net.ukr.dreamsicle.service;
 
-import lombok.extern.java.Log;
+import lombok.RequiredArgsConstructor;
+import net.ukr.dreamsicle.dto.CurrencyDTO;
+import net.ukr.dreamsicle.dto.CurrencyMapper;
+import net.ukr.dreamsicle.exception.ResourceIsStaleException;
+import net.ukr.dreamsicle.exception.ResourceNotFoundException;
 import net.ukr.dreamsicle.model.Currency;
 import net.ukr.dreamsicle.repository.CurrencyRepositoryDAO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-@Log
+@RequiredArgsConstructor
+@Transactional(isolation = Isolation.SERIALIZABLE)
 public class CurrencyService {
 
     private final CurrencyRepositoryDAO currencyRepositoryDAO;
+    private final CurrencyMapper currencyMapper;
 
-    @Autowired
-    public CurrencyService(CurrencyRepositoryDAO currencyRepositoryDAO) {
-        this.currencyRepositoryDAO = currencyRepositoryDAO;
+    public List<CurrencyDTO> allCurrencies() {
+        return currencyMapper.toCurrencyDTOs(currencyRepositoryDAO.findAllCurrencies());
     }
 
-    public List<Currency> getAllCurrenciesData() {
-        return currencyRepositoryDAO.getFindAllCurrency();
+    public CurrencyDTO findCurrencyById(int id) {
+        Currency currencyById = currencyRepositoryDAO.findCurrencyById(id);
+
+        if (currencyById == null) {
+            throw new ResourceNotFoundException();
+        }
+
+        return currencyMapper.toCurrencyDto(currencyById);
     }
 
-    public Currency getFindCurrencyById(int id) {
-        return currencyRepositoryDAO.getFindCurrencyById(id);
+    @Transactional
+    public void deleteCurrencyById(int id) {
+        Currency currencyById = currencyRepositoryDAO.findCurrencyById(id);
+
+        if (currencyById == null) {
+            throw new ResourceNotFoundException();
+        }
+
+        boolean checkStateDelete = currencyRepositoryDAO.deleteCurrencyById(id);
+
+        if (!checkStateDelete) {
+            throw new ResourceIsStaleException();
+        }
     }
 
-    public void getDeleteCurrencyById(int id) {
-        currencyRepositoryDAO.getDeleteCurrencyById(id);
+    @Transactional
+    public CurrencyDTO createCurrency(CurrencyDTO currencyDTO) {
+        Currency currency = currencyMapper.toCurrency(currencyDTO);
+        Integer id = currencyRepositoryDAO.createCurrency(currency);
+
+        if (id == null) {
+            throw new ResourceNotFoundException();
+        }
+        Currency currencyById = currencyRepositoryDAO.findCurrencyById(id);
+
+        return currencyMapper.toCurrencyDto(currencyById);
     }
 
-    public void getCreateCurrency(Currency currency) {
-        currencyRepositoryDAO.getCreateCurrency(currency);
-    }
+    @Transactional
+    public CurrencyDTO updateCurrency(int id, CurrencyDTO currencyDTO) {
+        Currency currencyById = currencyRepositoryDAO.findCurrencyById(id);
 
-    public void getUpdateCurrency(int id, Currency currency) {
-        currencyRepositoryDAO.getUpdateCurrency(id, currency);
+        if (currencyById == null) {
+            throw new ResourceNotFoundException();
+        }
+
+        Currency currency = currencyMapper.toCurrency(currencyDTO);
+        currency.setId(id);
+        currency.setVersion(currencyById.getVersion());
+        boolean checkStateUpdate = currencyRepositoryDAO.updateCurrency(id, currency);
+
+        if (!checkStateUpdate) {
+            throw new ResourceIsStaleException();
+        }
+
+        return currencyMapper.toCurrencyDto(currencyRepositoryDAO.findCurrencyById(id));
     }
 }
