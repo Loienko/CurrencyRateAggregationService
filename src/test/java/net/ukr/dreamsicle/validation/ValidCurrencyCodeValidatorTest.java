@@ -58,6 +58,8 @@ class ValidCurrencyCodeValidatorTest {
     void testIsValidNotCorrectInputValueField() {
         String value = "UAH1";
 
-        assertThrows(IllegalArgumentException.class, () -> validCurrencyCodeValidator.isValid(value, constraintValidatorContext));
+        boolean valid = validCurrencyCodeValidator.isValid(value, constraintValidatorContext);
+
+        assertFalse(valid);
     }
 }

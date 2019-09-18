@@ -13,6 +13,8 @@ import javax.validation.constraints.Pattern;
 @AllArgsConstructor
 public class CurrencyDTO {
 
+    private int id;
+
     @NotBlank(message = "Please fill the bank name")
     @Pattern(regexp = "^[a-zA-Zа-яёА-ЯЁ\\s\\-]+$")
     private String bankName;
