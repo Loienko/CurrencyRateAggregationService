@@ -12,6 +12,7 @@ import javax.validation.ConstraintValidatorContext;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @RunWith(MockitoJUnitRunner.class)
 class ValidCurrencyCodeValidatorTest {
@@ -57,8 +58,6 @@ class ValidCurrencyCodeValidatorTest {
     void testIsValidNotCorrectInputValueField() {
         String value = "UAH1";
 
-        boolean valid = validCurrencyCodeValidator.isValid(value, constraintValidatorContext);
-
-        assertFalse(valid);
+        assertThrows(IllegalArgumentException.class, () -> validCurrencyCodeValidator.isValid(value, constraintValidatorContext));
     }
 }

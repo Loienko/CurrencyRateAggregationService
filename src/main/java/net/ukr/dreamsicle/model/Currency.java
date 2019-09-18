@@ -24,7 +24,6 @@ public class Currency implements Serializable {
     private String currencyCode;
     private String purchaseCurrency;
     private String saleOfCurrency;
-    private int version;
 
     public Currency(String bankName, String currencyCode, String purchaseCurrency, String saleOfCurrency) {
         this.bankName = bankName;

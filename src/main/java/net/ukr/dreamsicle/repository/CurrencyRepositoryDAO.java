@@ -10,9 +10,9 @@ public interface CurrencyRepositoryDAO {
 
     List<Currency> findAllCurrencies();
 
-    boolean deleteCurrencyById(int id);
+    void deleteCurrencyById(int id);
 
     Integer createCurrency(Currency currency);
 
-    boolean updateCurrency(int id, Currency currency);
+    void updateCurrency(int id, Currency currency);
 }
