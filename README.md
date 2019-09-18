@@ -32,5 +32,6 @@
     e. Go to file createDBScripts.sql       
     
     f. Press Ctrl+Enter. Alternatively, click the Execute icon 'Run' on the toolbar.
-2. You should to create Table. For this action go to createDbTableScripts.sql and repeat command 'Execute'. Example item 'f'
+    
+2. You should to create Table. You need to choose your scheme '**currency.public**' before creating table. For this action go to createDbTableScripts.sql and repeat command 'Execute'. Example item 'f'
 3. For start this one go to Application.class and press Run
