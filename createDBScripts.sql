@@ -16,4 +16,3 @@ SET search_path to currency;
 CREATE SCHEMA currency.public;
 
 SET SCHEMA 'currency.public';
-
