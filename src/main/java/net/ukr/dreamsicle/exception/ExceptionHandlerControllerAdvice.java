@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
+import java.util.Objects;
 
 @ControllerAdvice
 public class ExceptionHandlerControllerAdvice {
@@ -49,7 +50,11 @@ public class ExceptionHandlerControllerAdvice {
     @ExceptionHandler({ArgumentNotValidException.class, MethodArgumentNotValidException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public @ResponseBody
-    ExceptionResponse validationError(final HttpServletRequest request) {
-        return new ExceptionResponse("Not valid Data", request.getRequestURI());
+    ExceptionResponse validationError(final MethodArgumentNotValidException ex,
+                                      final HttpServletRequest request) {
+
+        return new ExceptionResponse(
+                Objects.requireNonNull(ex.getBindingResult().getFieldError()).getDefaultMessage(),
+                request.getRequestURI());
     }
 }
