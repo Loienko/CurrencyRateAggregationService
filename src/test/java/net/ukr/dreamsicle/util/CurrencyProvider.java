@@ -16,6 +16,6 @@ public class CurrencyProvider {
     }
 
     public static CurrencyDTO getCurrencyProvider() {
-        return new CurrencyDTO(BANK_NAME, CURRENCY_CODE, PURCHASE_CURRENCY, SALE_OF_CURRENCY);
+        return new CurrencyDTO(ID, BANK_NAME, CURRENCY_CODE, PURCHASE_CURRENCY, SALE_OF_CURRENCY);
     }
 }
