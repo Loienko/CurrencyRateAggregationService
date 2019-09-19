@@ -6,7 +6,6 @@ import net.ukr.dreamsicle.exception.ResourceIsStaleException;
 import net.ukr.dreamsicle.exception.ResourceNotFoundException;
 import net.ukr.dreamsicle.model.Currency;
 import net.ukr.dreamsicle.repository.CurrencyRepositoryDAO;
-import net.ukr.dreamsicle.util.CurrencyProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +18,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.Arrays;
 import java.util.List;
 
+import static net.ukr.dreamsicle.util.CurrencyProvider.ID;
 import static net.ukr.dreamsicle.util.CurrencyProvider.getCurrencyProvider;
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -27,8 +27,6 @@ import static org.mockito.Mockito.*;
 @ActiveProfiles("test")
 @RunWith(MockitoJUnitRunner.class)
 class CurrencyServiceTest {
-
-    private static final int ID = 1;
 
     @InjectMocks
     private CurrencyService currencyService;
