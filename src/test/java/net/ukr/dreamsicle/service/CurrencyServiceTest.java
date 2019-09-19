@@ -54,6 +54,7 @@ class CurrencyServiceTest {
         assertEquals(ID + 1, allCurrenciesData.size());
         assertNotNull(allCurrenciesData);
         assertSame(currencyDTOS, allCurrenciesData);
+        assertEquals(currencyDTOS.get(ID).getId(), allCurrenciesData.get(ID).getId());
     }
 
     @Test
@@ -68,6 +69,7 @@ class CurrencyServiceTest {
         verify(currencyMapper).toCurrencyDto(currencyRepositoryDAO.findCurrencyById(ID));
         assertEquals(currencyDto, actualCurrency);
         assertNotNull(actualCurrency);
+        assertEquals(currencyDto.getId(), actualCurrency.getId());
         assertEquals(currencyDto.getBankName(), actualCurrency.getBankName());
         assertEquals(currencyDto.getCurrencyCode(), actualCurrency.getCurrencyCode());
         assertEquals(currencyDto.getPurchaseCurrency(), actualCurrency.getPurchaseCurrency());
@@ -112,6 +114,7 @@ class CurrencyServiceTest {
 
         verify(currencyRepositoryDAO).createCurrency(currency);
         assertNotNull(actualCurrency);
+        assertEquals(currencyDto.getId(), actualCurrency.getId());
         assertEquals(currencyDto.getBankName(), actualCurrency.getBankName());
         assertEquals(currencyDto.getCurrencyCode(), actualCurrency.getCurrencyCode());
         assertEquals(currencyDto.getPurchaseCurrency(), actualCurrency.getPurchaseCurrency());
@@ -142,6 +145,7 @@ class CurrencyServiceTest {
 
         verify(currencyRepositoryDAO).updateCurrency(ID, currencyForUpdate);
         assertNotNull(actualCurrency);
+        assertEquals(currencyDto.getId(), actualCurrency.getId());
         assertEquals(currencyDto.getBankName(), actualCurrency.getBankName());
         assertEquals(currencyDto.getCurrencyCode(), actualCurrency.getCurrencyCode());
         assertEquals(currencyDto.getPurchaseCurrency(), actualCurrency.getPurchaseCurrency());
