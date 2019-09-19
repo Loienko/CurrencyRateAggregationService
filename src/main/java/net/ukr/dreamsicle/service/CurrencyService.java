@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.ukr.dreamsicle.dto.CurrencyDTO;
 import net.ukr.dreamsicle.dto.CurrencyMapper;
+import net.ukr.dreamsicle.exception.ResourceIsStaleException;
 import net.ukr.dreamsicle.exception.ResourceNotFoundException;
 import net.ukr.dreamsicle.model.Currency;
 import net.ukr.dreamsicle.repository.CurrencyRepositoryDAO;
@@ -44,7 +45,11 @@ public class CurrencyService {
             throw new ResourceNotFoundException();
         }
 
-        currencyRepositoryDAO.deleteCurrencyById(id);
+        boolean isDelete = currencyRepositoryDAO.deleteCurrencyById(id);
+
+        if (!isDelete) {
+            throw new ResourceIsStaleException();
+        }
     }
 
     @Transactional
@@ -70,7 +75,12 @@ public class CurrencyService {
 
         Currency currency = currencyMapper.toCurrency(currencyDTO);
         currency.setId(id);
-        currencyRepositoryDAO.updateCurrency(id, currency);
+        currency.setVersion(currencyById.getVersion());
+        boolean checkStateUpdate = currencyRepositoryDAO.updateCurrency(id, currency);
+
+        if (!checkStateUpdate) {
+            throw new ResourceIsStaleException();
+        }
         return currencyMapper.toCurrencyDto(currencyRepositoryDAO.findCurrencyById(id));
     }
 }
