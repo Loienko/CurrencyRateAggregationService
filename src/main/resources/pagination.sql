@@ -1,0 +1,1 @@
+SELECT id, bank_name, currency_code, purchase_currency, sale_of_currency FROM currency ORDER BY id LIMIT 10 OFFSET 0;
