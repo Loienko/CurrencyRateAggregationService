@@ -33,9 +33,9 @@
     
     f. Press Ctrl+Enter. Alternatively, click the Execute icon 'Run' on the toolbar.
 
-2. You should to create Table. For this action go to createDbTableScripts.sql and repeat command 'Execute'. Example item 'f'.
-3. You should to create DB for test app.  For this action repeat items '1.e' and '1.f' for file createDBTestScripts.sql.
+2. You should to create Table. For this action go to `/resources/dump_db/createDbTableScripts.sql` and repeat command 'Execute'. Example item 'f'.
+3. You should to create DB for test app.  For this action repeat items '1.e' and '1.f' for file `/resources/dump_db/createDBTestScripts.sql`.
 4. You should to create Table for test app. You need to choose your scheme '**currency_test.public**' before creating table. 
-For this action go to createDbTableScripts.sql and repeat command 'Execute'. Example item 'f'.
+For this action go to `/resources/dump_db/createDbTableScripts.sql` and repeat command 'Execute'. Example item 'f'.
 5. For start this one go to Application.class and press Run
 
