@@ -39,7 +39,7 @@ public class ExceptionHandlerControllerAdvice {
     }
 
     @ExceptionHandler({ResourceIsStaleException.class, IllegalStateException.class})
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ResponseStatus(value = HttpStatus.CONFLICT)
     public @ResponseBody
     ExceptionResponse handleResourceIsStale(final Exception exception,
                                             final HttpServletRequest request) {

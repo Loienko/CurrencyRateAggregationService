@@ -76,9 +76,9 @@ public class CurrencyService {
         Currency currency = currencyMapper.toCurrency(currencyDTO);
         currency.setId(id);
         currency.setVersion(currencyById.getVersion());
-        boolean checkStateUpdate = currencyRepositoryDAO.updateCurrency(id, currency);
+        boolean isUpdate = currencyRepositoryDAO.updateCurrency(id, currency);
 
-        if (!checkStateUpdate) {
+        if (!isUpdate) {
             throw new ResourceIsStaleException();
         }
         return currencyMapper.toCurrencyDto(currencyRepositoryDAO.findCurrencyById(id));

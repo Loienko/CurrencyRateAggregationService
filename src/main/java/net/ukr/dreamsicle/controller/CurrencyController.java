@@ -30,7 +30,7 @@ public class CurrencyController {
         return currencyService.findCurrencyById(id);
     }
 
-    @PutMapping
+    @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public CurrencyDTO create(@Validated @RequestBody CurrencyDTO currencyDTO) {
         return currencyService.createCurrency(currencyDTO);
