@@ -5,6 +5,7 @@ import org.mapstruct.Mapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper
 @Service
@@ -15,4 +16,8 @@ public interface CurrencyMapper {
     List<CurrencyDTO> toCurrencyDTOs(List<Currency> currencies);
 
     Currency toCurrency(CurrencyDTO currencyDTO);
+
+    default <T> T unwrapOptional(Optional<T> optional) {
+        return optional.orElse(null);
+    }
 }
