@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class Currency {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "currency_id_seq")
     @Column(unique = true, nullable = false)
     private int id;
 
