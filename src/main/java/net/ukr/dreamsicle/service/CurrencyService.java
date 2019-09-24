@@ -7,6 +7,7 @@ import net.ukr.dreamsicle.dto.CurrencyMapper;
 import net.ukr.dreamsicle.exception.ResourceNotFoundException;
 import net.ukr.dreamsicle.model.Currency;
 import net.ukr.dreamsicle.repository.CurrencyRepository;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -24,8 +25,8 @@ public class CurrencyService {
     private final CurrencyMapper currencyMapper;
     private final CurrencyRepository currencyRepository;
 
-    public List<CurrencyDTO> allCurrencies() {
-        return currencyMapper.toCurrencyDTOs(currencyRepository.findAll());
+    public List<CurrencyDTO> findAllCurrencies(Pageable pageable) {
+        return currencyMapper.toCurrencyDTOs(currencyRepository.findAll(pageable));
     }
 
     public CurrencyDTO findCurrencyById(int id) {
