@@ -30,8 +30,6 @@ import static org.mockito.Mockito.*;
 class CurrencyServiceTest {
 
     @InjectMocks
-    Optional<Currency> optional;
-    @InjectMocks
     private CurrencyService currencyService;
     @Mock
     private CurrencyRepository currencyRepository;
@@ -61,9 +59,10 @@ class CurrencyServiceTest {
 
     @Test
     void testFindCurrencyByIdPositive() {
+        Currency currencyProvider = getCurrencyProvider(ID);
         CurrencyDTO currencyDto = getCurrencyProvider();
-        when(currencyRepository.findById(ID)).thenReturn(optional);
-        when(currencyMapper.toCurrencyDto(currencyMapper.unwrapOptional(optional))).thenReturn(currencyDto);
+        when(currencyRepository.findById(ID)).thenReturn(Optional.of(currencyProvider));
+        when(currencyMapper.toCurrencyDto(currencyProvider)).thenReturn(currencyDto);
 
         CurrencyDTO actualCurrency = currencyService.findCurrencyById(ID);
 
@@ -77,7 +76,7 @@ class CurrencyServiceTest {
     }
 
     @Test
-    void testFindCurrencyByIdNotPresentInDb() {
+    void testFindCurrencyByIdIsNotPresentInDb() {
         when(currencyRepository.findById(ID)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> currencyService.findCurrencyById(ID));
@@ -85,7 +84,8 @@ class CurrencyServiceTest {
 
     @Test
     void testDeleteCurrencyByIdPositive() {
-        when(currencyRepository.findById(ID)).thenReturn(optional);
+        Currency currencyProvider = getCurrencyProvider(ID);
+        when(currencyRepository.findById(ID)).thenReturn(Optional.of(currencyProvider));
         doNothing().when(currencyRepository).deleteById(ID);
 
         currencyService.deleteCurrencyById(ID);
@@ -98,6 +98,16 @@ class CurrencyServiceTest {
         when(currencyRepository.findById(ID)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> currencyService.deleteCurrencyById(ID));
+    }
+
+    @Test
+    void testDeleteCurrencyReturnedTransactionException() {
+        Currency currency = getCurrencyProvider(ID);
+        CurrencyDTO currencyDto = getCurrencyProvider();
+        when(currencyMapper.toCurrency(currencyDto)).thenReturn(currency);
+        when(currencyRepository.saveAndFlush(currency)).thenThrow(TransactionException.class);
+
+        assertThrows(TransactionException.class, () -> currencyService.createCurrency(currencyDto));
     }
 
     @Test
@@ -133,9 +143,8 @@ class CurrencyServiceTest {
     void testUpdateCurrencyPositive() {
         Currency currencyForUpdate = getCurrencyProvider(ID + 1);
         CurrencyDTO currencyDto = getCurrencyProvider();
-        when(currencyRepository.findById(ID)).thenReturn(optional);
+        when(currencyRepository.findById(ID)).thenReturn(Optional.of(currencyForUpdate));
         when(currencyMapper.toCurrency(currencyDto)).thenReturn(currencyForUpdate);
-        when(currencyMapper.unwrapOptional(optional)).thenReturn(currencyForUpdate);
         when(currencyRepository.saveAndFlush(currencyForUpdate)).thenReturn(currencyForUpdate);
         when(currencyMapper.toCurrencyDto(currencyForUpdate)).thenReturn(currencyDto);
 
@@ -151,7 +160,7 @@ class CurrencyServiceTest {
     }
 
     @Test
-    void testUpdateCurrencyNotPresentInDb() {
+    void testUpdateCurrencyIsNotPresentInDb() {
         CurrencyDTO currencyDto = getCurrencyProvider();
         when(currencyRepository.findById(ID)).thenReturn(Optional.empty());
 
@@ -159,12 +168,11 @@ class CurrencyServiceTest {
     }
 
     @Test
-    void testUpdateCurrencyFailedToUpdateCurrencyWithReturnedTransactionException() {
+    void testUpdateCurrencyReturnedTransactionException() {
         Currency currencyForUpdate = getCurrencyProvider(ID + 1);
         CurrencyDTO currencyDto = getCurrencyProvider();
-        when(currencyRepository.findById(ID)).thenReturn(optional);
+        when(currencyRepository.findById(ID)).thenReturn(Optional.of(currencyForUpdate));
         when(currencyMapper.toCurrency(currencyDto)).thenReturn(currencyForUpdate);
-        when(currencyMapper.unwrapOptional(optional)).thenReturn(currencyForUpdate);
         when(currencyRepository.saveAndFlush(currencyForUpdate)).thenThrow(TransactionException.class);
 
         assertThrows(TransactionException.class, () -> currencyService.updateCurrency(ID, currencyDto));

@@ -14,7 +14,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * @deprecated
+ */
 @Repository
+@Deprecated
 public class CurrencyRepositoryDAOImpl implements CurrencyRepositoryDAO {
 
     private static final String ID = "id";

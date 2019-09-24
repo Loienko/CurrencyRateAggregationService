@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.LockModeType;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -30,55 +29,37 @@ public class CurrencyService {
     }
 
     public CurrencyDTO findCurrencyById(int id) {
-        Optional<Currency> currencyById = currencyRepository.findById(id);
-
-        if (!currencyById.isPresent()) {
-            throw new ResourceNotFoundException();
-        }
-
-        return currencyMapper.toCurrencyDto(currencyMapper.unwrapOptional(currencyById));
+        return currencyRepository.findById(id)
+                .map(currencyMapper::toCurrencyDto)
+                .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     public void deleteCurrencyById(int id) {
-        Optional<Currency> currencyById = currencyRepository.findById(id);
-
-        if (!currencyById.isPresent()) {
-            throw new ResourceNotFoundException();
-        }
-
-        currencyRepository.deleteById(id);
+        currencyRepository.deleteById(currencyRepository.findById(id)
+                .orElseThrow(ResourceNotFoundException::new)
+                .getId());
     }
 
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     public CurrencyDTO createCurrency(CurrencyDTO currencyDTO) {
-        Currency currency = currencyMapper.toCurrency(currencyDTO);
-        Currency saveAndFlush = currencyRepository.saveAndFlush(currency);
-
-        return currencyMapper.toCurrencyDto(saveAndFlush);
+        return currencyMapper.toCurrencyDto(currencyRepository.saveAndFlush(currencyMapper.toCurrency(currencyDTO)));
     }
 
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     public CurrencyDTO updateCurrency(int id, CurrencyDTO currencyDTO) {
-        Optional<Currency> currencyUpdateById = currencyRepository.findById(id);
+        Currency currencyUpdateById = currencyRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
 
-        if (!currencyUpdateById.isPresent()) {
-            throw new ResourceNotFoundException();
-        }
+        Currency actualCurrency = currencyMapper.toCurrency(currencyDTO);
 
-        Currency currency = currencyMapper.toCurrency(currencyDTO);
-        Currency actualCurrency = currencyMapper.unwrapOptional(currencyUpdateById);
+        currencyUpdateById.setBankName(actualCurrency.getBankName());
+        currencyUpdateById.setCurrencyCode(actualCurrency.getCurrencyCode());
+        currencyUpdateById.setPurchaseCurrency(actualCurrency.getPurchaseCurrency());
+        currencyUpdateById.setSaleOfCurrency(actualCurrency.getSaleOfCurrency());
 
-        actualCurrency.setBankName(currency.getBankName());
-        actualCurrency.setCurrencyCode(currency.getCurrencyCode());
-        actualCurrency.setPurchaseCurrency(currency.getPurchaseCurrency());
-        actualCurrency.setSaleOfCurrency(currency.getSaleOfCurrency());
-
-        Currency saveAndFlush = currencyRepository.saveAndFlush(actualCurrency);
-
-        return currencyMapper.toCurrencyDto(saveAndFlush);
+        return currencyMapper.toCurrencyDto(currencyRepository.saveAndFlush(currencyUpdateById));
     }
 }
