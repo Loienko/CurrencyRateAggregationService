@@ -4,6 +4,12 @@ import net.ukr.dreamsicle.model.Currency;
 
 import java.util.List;
 
+
+/**
+ * @deprecated
+ */
+
+@Deprecated
 public interface CurrencyRepositoryDAO {
 
     Currency findCurrencyById(int id);

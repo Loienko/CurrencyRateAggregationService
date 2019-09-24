@@ -47,7 +47,7 @@ public class ExceptionHandlerControllerAdvice {
         return new ExceptionResponse(exception.getMessage(), request.getRequestURI());
     }
 
-    @ExceptionHandler({ArgumentNotValidException.class, MethodArgumentNotValidException.class})
+    @ExceptionHandler({ArgumentNotValidException.class, MethodArgumentNotValidException.class, IllegalArgumentException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public @ResponseBody
     ExceptionResponse validationError(final MethodArgumentNotValidException ex,
