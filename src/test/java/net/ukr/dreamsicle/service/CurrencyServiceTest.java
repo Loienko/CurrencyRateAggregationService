@@ -13,6 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Arrays;
@@ -29,6 +31,12 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 class CurrencyServiceTest {
 
+    @Mock
+    Page<Currency> currencyPage;
+    @Mock
+    Page<CurrencyDTO> currencyDTOPage;
+    @Mock
+    Pageable pageable;
     @InjectMocks
     private CurrencyService currencyService;
     @Mock
@@ -43,18 +51,14 @@ class CurrencyServiceTest {
 
     @Test
     void testAllCurrenciesPositive() {
-        List<Currency> currencies = Arrays.asList(getCurrencyProvider(ID), getCurrencyProvider(ID));
-        List<CurrencyDTO> currencyDTOS = Arrays.asList(getCurrencyProvider(), getCurrencyProvider());
-        when(currencyRepository.findAll()).thenReturn(currencies);
-        when(currencyMapper.toCurrencyDTOs(currencies)).thenReturn(currencyDTOS);
+        when(currencyRepository.findAll(pageable)).thenReturn(currencyPage);
+        when(currencyMapper.toCurrencyDTOs(currencyPage)).thenReturn(currencyDTOPage);
 
-        List<CurrencyDTO> allCurrenciesData = currencyService.allCurrencies();
+        Page<CurrencyDTO> actualCurrency = currencyService.findAllCurrencies(pageable);
 
-        verify(currencyRepository).findAll();
-        assertEquals(ID + 1, allCurrenciesData.size());
-        assertNotNull(allCurrenciesData);
-        assertSame(currencyDTOS, allCurrenciesData);
-        assertEquals(currencyDTOS.get(ID).getId(), allCurrenciesData.get(ID).getId());
+        verify(currencyRepository).findAll(pageable);
+        assertNotNull(actualCurrency);
+        assertEquals(currencyDTOPage, actualCurrency);
     }
 
     @Test
