@@ -34,6 +34,8 @@ class CurrencyServiceTest {
     @Mock
     Page<Currency> currencyPage;
     @Mock
+    Page<CurrencyDTO> currencyDTOPage;
+    @Mock
     Pageable pageable;
     @InjectMocks
     private CurrencyService currencyService;
@@ -49,18 +51,14 @@ class CurrencyServiceTest {
 
     @Test
     void testAllCurrenciesPositive() {
-        List<Currency> currencies = Arrays.asList(getCurrencyProvider(ID), getCurrencyProvider(ID));
-        List<CurrencyDTO> currencyDTOS = Arrays.asList(getCurrencyProvider(), getCurrencyProvider());
         when(currencyRepository.findAll(pageable)).thenReturn(currencyPage);
-        when(currencyMapper.toCurrencyDTOs(currencyPage)).thenReturn(currencyDTOS);
+        when(currencyMapper.toCurrencyDTOs(currencyPage)).thenReturn(currencyDTOPage);
 
-        List<CurrencyDTO> allCurrenciesData = currencyService.findAllCurrencies(pageable);
+        Page<CurrencyDTO> actualCurrency = currencyService.findAllCurrencies(pageable);
 
         verify(currencyRepository).findAll(pageable);
-        assertEquals(ID + 1, allCurrenciesData.size());
-        assertNotNull(allCurrenciesData);
-        assertSame(currencyDTOS, allCurrenciesData);
-        assertEquals(currencyDTOS.get(ID).getId(), allCurrenciesData.get(ID).getId());
+        assertNotNull(actualCurrency);
+        assertEquals(currencyDTOPage, actualCurrency);
     }
 
     @Test
