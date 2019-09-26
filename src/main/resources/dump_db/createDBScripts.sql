@@ -15,5 +15,6 @@ CREATE SCHEMA IF NOT EXISTS public;
 
 SHOW search_path;
 
+SET search_path TO public;
 
 SET SCHEMA 'currency.public';

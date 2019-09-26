@@ -5,6 +5,7 @@ import net.ukr.dreamsicle.dto.CurrencyMapper;
 import net.ukr.dreamsicle.exception.ResourceNotFoundException;
 import net.ukr.dreamsicle.model.Currency;
 import net.ukr.dreamsicle.repository.CurrencyRepository;
+import net.ukr.dreamsicle.service.impl.CurrencyServiceImpl;
 import org.hibernate.TransactionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,8 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import static net.ukr.dreamsicle.util.CurrencyProvider.ID;
@@ -29,7 +28,7 @@ import static org.mockito.Mockito.*;
 
 @ActiveProfiles("test")
 @RunWith(MockitoJUnitRunner.class)
-class CurrencyServiceTest {
+class CurrencyServiceImplTest {
 
     @Mock
     Page<Currency> currencyPage;
@@ -38,7 +37,7 @@ class CurrencyServiceTest {
     @Mock
     Pageable pageable;
     @InjectMocks
-    private CurrencyService currencyService;
+    private CurrencyServiceImpl currencyServiceImpl;
     @Mock
     private CurrencyRepository currencyRepository;
     @Mock
@@ -54,7 +53,7 @@ class CurrencyServiceTest {
         when(currencyRepository.findAll(pageable)).thenReturn(currencyPage);
         when(currencyMapper.toCurrencyDTOs(currencyPage)).thenReturn(currencyDTOPage);
 
-        Page<CurrencyDTO> actualCurrency = currencyService.findAllCurrencies(pageable);
+        Page<CurrencyDTO> actualCurrency = currencyServiceImpl.findAllCurrencies(pageable);
 
         verify(currencyRepository).findAll(pageable);
         assertNotNull(actualCurrency);
@@ -68,7 +67,7 @@ class CurrencyServiceTest {
         when(currencyRepository.findById(ID)).thenReturn(Optional.of(currencyProvider));
         when(currencyMapper.toCurrencyDto(currencyProvider)).thenReturn(currencyDto);
 
-        CurrencyDTO actualCurrency = currencyService.findCurrencyById(ID);
+        CurrencyDTO actualCurrency = currencyServiceImpl.findCurrencyById(ID);
 
         assertEquals(currencyDto, actualCurrency);
         assertNotNull(actualCurrency);
@@ -83,7 +82,7 @@ class CurrencyServiceTest {
     void testFindCurrencyByIdIsNotPresentInDb() {
         when(currencyRepository.findById(ID)).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class, () -> currencyService.findCurrencyById(ID));
+        assertThrows(ResourceNotFoundException.class, () -> currencyServiceImpl.findCurrencyById(ID));
     }
 
     @Test
@@ -92,7 +91,7 @@ class CurrencyServiceTest {
         when(currencyRepository.findById(ID)).thenReturn(Optional.of(currencyProvider));
         doNothing().when(currencyRepository).deleteById(ID);
 
-        currencyService.deleteCurrencyById(ID);
+        currencyServiceImpl.deleteCurrencyById(ID);
 
         verify(currencyRepository).deleteById(ID);
     }
@@ -101,7 +100,7 @@ class CurrencyServiceTest {
     void testDeleteCurrencyByIdNotPresentCurrencyInDb() {
         when(currencyRepository.findById(ID)).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class, () -> currencyService.deleteCurrencyById(ID));
+        assertThrows(ResourceNotFoundException.class, () -> currencyServiceImpl.deleteCurrencyById(ID));
     }
 
     @Test
@@ -111,7 +110,7 @@ class CurrencyServiceTest {
         when(currencyMapper.toCurrency(currencyDto)).thenReturn(currency);
         when(currencyRepository.saveAndFlush(currency)).thenThrow(TransactionException.class);
 
-        assertThrows(TransactionException.class, () -> currencyService.createCurrency(currencyDto));
+        assertThrows(TransactionException.class, () -> currencyServiceImpl.createCurrency(currencyDto));
     }
 
     @Test
@@ -122,7 +121,7 @@ class CurrencyServiceTest {
         when(currencyRepository.saveAndFlush(currency)).thenReturn(currency);
         when(currencyMapper.toCurrencyDto(currency)).thenReturn(currencyDto);
 
-        CurrencyDTO actualCurrency = currencyService.createCurrency(currencyDto);
+        CurrencyDTO actualCurrency = currencyServiceImpl.createCurrency(currencyDto);
 
         verify(currencyRepository).saveAndFlush(currency);
         assertNotNull(actualCurrency);
@@ -140,7 +139,7 @@ class CurrencyServiceTest {
         when(currencyMapper.toCurrency(currencyDto)).thenReturn(currency);
         when(currencyRepository.saveAndFlush(currency)).thenThrow(TransactionException.class);
 
-        assertThrows(TransactionException.class, () -> currencyService.createCurrency(currencyDto));
+        assertThrows(TransactionException.class, () -> currencyServiceImpl.createCurrency(currencyDto));
     }
 
     @Test
@@ -152,7 +151,7 @@ class CurrencyServiceTest {
         when(currencyRepository.saveAndFlush(currencyForUpdate)).thenReturn(currencyForUpdate);
         when(currencyMapper.toCurrencyDto(currencyForUpdate)).thenReturn(currencyDto);
 
-        CurrencyDTO actualCurrency = currencyService.updateCurrency(ID, currencyDto);
+        CurrencyDTO actualCurrency = currencyServiceImpl.updateCurrency(ID, currencyDto);
 
         verify(currencyRepository).saveAndFlush(currencyForUpdate);
         assertNotNull(actualCurrency);
@@ -168,7 +167,7 @@ class CurrencyServiceTest {
         CurrencyDTO currencyDto = getCurrencyProvider();
         when(currencyRepository.findById(ID)).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class, () -> currencyService.updateCurrency(ID, currencyDto));
+        assertThrows(ResourceNotFoundException.class, () -> currencyServiceImpl.updateCurrency(ID, currencyDto));
     }
 
     @Test
@@ -179,6 +178,6 @@ class CurrencyServiceTest {
         when(currencyMapper.toCurrency(currencyDto)).thenReturn(currencyForUpdate);
         when(currencyRepository.saveAndFlush(currencyForUpdate)).thenThrow(TransactionException.class);
 
-        assertThrows(TransactionException.class, () -> currencyService.updateCurrency(ID, currencyDto));
+        assertThrows(TransactionException.class, () -> currencyServiceImpl.updateCurrency(ID, currencyDto));
     }
 }
