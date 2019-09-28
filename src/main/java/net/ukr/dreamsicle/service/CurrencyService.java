@@ -1,18 +1,67 @@
 package net.ukr.dreamsicle.service;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.ukr.dreamsicle.dto.CurrencyDTO;
+import net.ukr.dreamsicle.dto.CurrencyMapper;
+import net.ukr.dreamsicle.exception.ResourceNotFoundException;
+import net.ukr.dreamsicle.model.Currency;
+import net.ukr.dreamsicle.repository.CurrencyRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Lock;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
-public interface CurrencyService {
+import javax.persistence.LockModeType;
 
-    Page<CurrencyDTO> findAllCurrencies(Pageable pageable);
+@Service
+@Slf4j
+@RequiredArgsConstructor
+@Transactional(isolation = Isolation.SERIALIZABLE)
+public class CurrencyService {
 
-    CurrencyDTO findCurrencyById(int id);
+    private final CurrencyMapper currencyMapper;
+    private final CurrencyRepository currencyRepository;
 
-    void deleteCurrencyById(int id);
+    public Page<CurrencyDTO> findAllCurrencies(Pageable pageable) {
+        return currencyMapper.toCurrencyDTOs(currencyRepository.findAll(pageable));
+    }
 
-    CurrencyDTO createCurrency(CurrencyDTO currencyDTO);
+    public CurrencyDTO findCurrencyById(long id) {
+        return currencyRepository.findById(id)
+                .map(currencyMapper::toCurrencyDto)
+                .orElseThrow(ResourceNotFoundException::new);
+    }
 
-    CurrencyDTO updateCurrency(int id, CurrencyDTO currencyDTO);
+    @Transactional
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    public void deleteCurrencyById(long id) {
+        currencyRepository.deleteById(
+                currencyRepository.findById(id)
+                        .orElseThrow(ResourceNotFoundException::new)
+                        .getId());
+    }
+
+    @Transactional
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    public CurrencyDTO createCurrency(CurrencyDTO currencyDTO) {
+        return currencyMapper.toCurrencyDto(currencyRepository.saveAndFlush(currencyMapper.toCurrency(currencyDTO)));
+    }
+
+    @Transactional
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    public CurrencyDTO updateCurrency(long id, CurrencyDTO currencyDTO) {
+        Currency currencyUpdateById = currencyRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+
+        Currency actualCurrency = currencyMapper.toCurrency(currencyDTO);
+
+        currencyUpdateById.setBankName(actualCurrency.getBankName());
+        currencyUpdateById.setCurrencyCode(actualCurrency.getCurrencyCode());
+        currencyUpdateById.setPurchaseCurrency(actualCurrency.getPurchaseCurrency());
+        currencyUpdateById.setSaleOfCurrency(actualCurrency.getSaleOfCurrency());
+
+        return currencyMapper.toCurrencyDto(currencyRepository.saveAndFlush(currencyUpdateById));
+    }
 }

@@ -5,7 +5,6 @@ import net.ukr.dreamsicle.dto.CurrencyMapper;
 import net.ukr.dreamsicle.exception.ResourceNotFoundException;
 import net.ukr.dreamsicle.model.Currency;
 import net.ukr.dreamsicle.repository.CurrencyRepository;
-import net.ukr.dreamsicle.service.impl.CurrencyServiceImpl;
 import org.hibernate.TransactionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,13 +21,14 @@ import java.util.Optional;
 
 import static net.ukr.dreamsicle.util.CurrencyProvider.ID;
 import static net.ukr.dreamsicle.util.CurrencyProvider.getCurrencyProvider;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ActiveProfiles("test")
 @RunWith(MockitoJUnitRunner.class)
-class CurrencyServiceImplTest {
+class CurrencyServiceTest {
 
     @Mock
     Page<Currency> currencyPage;
@@ -37,7 +37,7 @@ class CurrencyServiceImplTest {
     @Mock
     Pageable pageable;
     @InjectMocks
-    private CurrencyServiceImpl currencyServiceImpl;
+    private CurrencyService currencyService;
     @Mock
     private CurrencyRepository currencyRepository;
     @Mock
@@ -53,7 +53,7 @@ class CurrencyServiceImplTest {
         when(currencyRepository.findAll(pageable)).thenReturn(currencyPage);
         when(currencyMapper.toCurrencyDTOs(currencyPage)).thenReturn(currencyDTOPage);
 
-        Page<CurrencyDTO> actualCurrency = currencyServiceImpl.findAllCurrencies(pageable);
+        Page<CurrencyDTO> actualCurrency = currencyService.findAllCurrencies(pageable);
 
         verify(currencyRepository).findAll(pageable);
         assertNotNull(actualCurrency);
@@ -67,7 +67,7 @@ class CurrencyServiceImplTest {
         when(currencyRepository.findById(ID)).thenReturn(Optional.of(currencyProvider));
         when(currencyMapper.toCurrencyDto(currencyProvider)).thenReturn(currencyDto);
 
-        CurrencyDTO actualCurrency = currencyServiceImpl.findCurrencyById(ID);
+        CurrencyDTO actualCurrency = currencyService.findCurrencyById(ID);
 
         assertEquals(currencyDto, actualCurrency);
         assertNotNull(actualCurrency);
@@ -82,7 +82,7 @@ class CurrencyServiceImplTest {
     void testFindCurrencyByIdIsNotPresentInDb() {
         when(currencyRepository.findById(ID)).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class, () -> currencyServiceImpl.findCurrencyById(ID));
+        assertThrows(ResourceNotFoundException.class, () -> currencyService.findCurrencyById(ID));
     }
 
     @Test
@@ -91,7 +91,7 @@ class CurrencyServiceImplTest {
         when(currencyRepository.findById(ID)).thenReturn(Optional.of(currencyProvider));
         doNothing().when(currencyRepository).deleteById(ID);
 
-        currencyServiceImpl.deleteCurrencyById(ID);
+        currencyService.deleteCurrencyById(ID);
 
         verify(currencyRepository).deleteById(ID);
     }
@@ -100,7 +100,7 @@ class CurrencyServiceImplTest {
     void testDeleteCurrencyByIdNotPresentCurrencyInDb() {
         when(currencyRepository.findById(ID)).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class, () -> currencyServiceImpl.deleteCurrencyById(ID));
+        assertThrows(ResourceNotFoundException.class, () -> currencyService.deleteCurrencyById(ID));
     }
 
     @Test
@@ -110,7 +110,7 @@ class CurrencyServiceImplTest {
         when(currencyMapper.toCurrency(currencyDto)).thenReturn(currency);
         when(currencyRepository.saveAndFlush(currency)).thenThrow(TransactionException.class);
 
-        assertThrows(TransactionException.class, () -> currencyServiceImpl.createCurrency(currencyDto));
+        assertThrows(TransactionException.class, () -> currencyService.createCurrency(currencyDto));
     }
 
     @Test
@@ -121,7 +121,7 @@ class CurrencyServiceImplTest {
         when(currencyRepository.saveAndFlush(currency)).thenReturn(currency);
         when(currencyMapper.toCurrencyDto(currency)).thenReturn(currencyDto);
 
-        CurrencyDTO actualCurrency = currencyServiceImpl.createCurrency(currencyDto);
+        CurrencyDTO actualCurrency = currencyService.createCurrency(currencyDto);
 
         verify(currencyRepository).saveAndFlush(currency);
         assertNotNull(actualCurrency);
@@ -139,7 +139,7 @@ class CurrencyServiceImplTest {
         when(currencyMapper.toCurrency(currencyDto)).thenReturn(currency);
         when(currencyRepository.saveAndFlush(currency)).thenThrow(TransactionException.class);
 
-        assertThrows(TransactionException.class, () -> currencyServiceImpl.createCurrency(currencyDto));
+        assertThrows(TransactionException.class, () -> currencyService.createCurrency(currencyDto));
     }
 
     @Test
@@ -151,7 +151,7 @@ class CurrencyServiceImplTest {
         when(currencyRepository.saveAndFlush(currencyForUpdate)).thenReturn(currencyForUpdate);
         when(currencyMapper.toCurrencyDto(currencyForUpdate)).thenReturn(currencyDto);
 
-        CurrencyDTO actualCurrency = currencyServiceImpl.updateCurrency(ID, currencyDto);
+        CurrencyDTO actualCurrency = currencyService.updateCurrency(ID, currencyDto);
 
         verify(currencyRepository).saveAndFlush(currencyForUpdate);
         assertNotNull(actualCurrency);
@@ -167,7 +167,7 @@ class CurrencyServiceImplTest {
         CurrencyDTO currencyDto = getCurrencyProvider();
         when(currencyRepository.findById(ID)).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class, () -> currencyServiceImpl.updateCurrency(ID, currencyDto));
+        assertThrows(ResourceNotFoundException.class, () -> currencyService.updateCurrency(ID, currencyDto));
     }
 
     @Test
@@ -178,6 +178,6 @@ class CurrencyServiceImplTest {
         when(currencyMapper.toCurrency(currencyDto)).thenReturn(currencyForUpdate);
         when(currencyRepository.saveAndFlush(currencyForUpdate)).thenThrow(TransactionException.class);
 
-        assertThrows(TransactionException.class, () -> currencyServiceImpl.updateCurrency(ID, currencyDto));
+        assertThrows(TransactionException.class, () -> currencyService.updateCurrency(ID, currencyDto));
     }
 }

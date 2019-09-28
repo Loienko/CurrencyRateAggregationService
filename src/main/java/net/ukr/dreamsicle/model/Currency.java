@@ -13,9 +13,9 @@ import javax.persistence.*;
 public class Currency {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "currency_id_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(unique = true, nullable = false)
-    private int id;
+    private Long id;
 
     private String bankName;
     private String currencyCode;

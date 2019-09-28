@@ -3,7 +3,7 @@ package net.ukr.dreamsicle.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.ukr.dreamsicle.dto.CurrencyDTO;
-import net.ukr.dreamsicle.service.impl.CurrencyServiceImpl;
+import net.ukr.dreamsicle.service.CurrencyService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -21,33 +21,33 @@ import javax.validation.constraints.Positive;
 @RequiredArgsConstructor
 public class CurrencyController {
 
-    private final CurrencyServiceImpl currencyServiceImpl;
+    private final CurrencyService currencyService;
 
     @GetMapping
     public Page<CurrencyDTO> findAll(@PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable page) {
-        return currencyServiceImpl.findAllCurrencies(page);
+        return currencyService.findAllCurrencies(page);
     }
 
     @GetMapping("/{id}")
-    public CurrencyDTO findById(@PathVariable @Min(1) @Positive int id) {
-        return currencyServiceImpl.findCurrencyById(id);
+    public CurrencyDTO findById(@PathVariable @Min(1) @Positive long id) {
+        return currencyService.findCurrencyById(id);
     }
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public CurrencyDTO create(@Validated @RequestBody CurrencyDTO currencyDTO) {
-        return currencyServiceImpl.createCurrency(currencyDTO);
+        return currencyService.createCurrency(currencyDTO);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public CurrencyDTO update(@PathVariable @Min(1) @Positive Integer id, @Validated @RequestBody CurrencyDTO currencyDTO) {
-        return currencyServiceImpl.updateCurrency(id, currencyDTO);
+    public CurrencyDTO update(@PathVariable @Min(1) @Positive long id, @Validated @RequestBody CurrencyDTO currencyDTO) {
+        return currencyService.updateCurrency(id, currencyDTO);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable @Min(1) @Positive int id) {
-        currencyServiceImpl.deleteCurrencyById(id);
+    public void delete(@PathVariable @Min(1) @Positive long id) {
+        currencyService.deleteCurrencyById(id);
     }
 }
