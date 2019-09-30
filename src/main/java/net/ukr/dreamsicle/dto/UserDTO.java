@@ -32,6 +32,6 @@ public class UserDTO {
     private Set<String> role;
 
     @NotBlank(message = "Please fill the password")
-    @Size(min = 6, max = 40)
+    @Size(min = 6, max = 40, message = "Please fill the correct password from 6 to 40 letters")
     private String password;
 }
