@@ -8,6 +8,7 @@ import net.ukr.dreamsicle.dto.UserMapper;
 import net.ukr.dreamsicle.exception.CustomDataAlreadyExistsException;
 import net.ukr.dreamsicle.exception.ResourceNotFoundException;
 import net.ukr.dreamsicle.model.Role;
+import net.ukr.dreamsicle.model.RoleType;
 import net.ukr.dreamsicle.model.User;
 import net.ukr.dreamsicle.repository.RoleRepository;
 import net.ukr.dreamsicle.repository.UserRepository;
@@ -24,9 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.LockModeType;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import static net.ukr.dreamsicle.model.RoleType.ADMIN;
-import static net.ukr.dreamsicle.model.RoleType.USER;
 
 @Service
 @AllArgsConstructor
@@ -63,7 +61,7 @@ public class UserService {
 
     private Set<Role> acquireRoles(UserDTO user) {
         return user.getRole().stream()
-                .map(role -> roleRepository.findByName(ADMIN).orElse(roleRepository.findByName(USER).orElseThrow(ResourceNotFoundException::new)))
+                .map(role -> roleRepository.findByName(RoleType.getEnumFromString(role)).orElseThrow(ResourceNotFoundException::new))
                 .collect(Collectors.toSet());
     }
 
