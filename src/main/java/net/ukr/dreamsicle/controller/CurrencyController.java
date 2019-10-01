@@ -4,13 +4,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.ukr.dreamsicle.dto.CurrencyDTO;
 import net.ukr.dreamsicle.service.CurrencyService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
-import java.util.List;
 
 @RestController
 @Slf4j
@@ -21,16 +24,16 @@ public class CurrencyController {
     private final CurrencyService currencyService;
 
     @GetMapping
-    public List<CurrencyDTO> findAll() {
-        return currencyService.allCurrencies();
+    public Page<CurrencyDTO> findAll(@PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable page) {
+        return currencyService.findAllCurrencies(page);
     }
 
     @GetMapping("/{id}")
-    public CurrencyDTO findById(@PathVariable @Min(1) @Positive int id) {
+    public CurrencyDTO findById(@PathVariable @Min(1) @Positive long id) {
         return currencyService.findCurrencyById(id);
     }
 
-    @PutMapping
+    @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public CurrencyDTO create(@Validated @RequestBody CurrencyDTO currencyDTO) {
         return currencyService.createCurrency(currencyDTO);
@@ -38,13 +41,13 @@ public class CurrencyController {
 
     @PutMapping("/{id}")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public CurrencyDTO update(@PathVariable @Min(1) @Positive Integer id, @Validated @RequestBody CurrencyDTO currencyDTO) {
+    public CurrencyDTO update(@PathVariable @Min(1) @Positive long id, @Validated @RequestBody CurrencyDTO currencyDTO) {
         return currencyService.updateCurrency(id, currencyDTO);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable @Min(1) @Positive int id) {
+    public void delete(@PathVariable @Min(1) @Positive long id) {
         currencyService.deleteCurrencyById(id);
     }
 }

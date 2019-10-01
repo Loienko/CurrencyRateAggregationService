@@ -47,7 +47,7 @@
 		{
 			"name": "Create currency",
 			"request": {
-				"method": "PUT",
+				"method": "POST",
 				"header": [
 					{
 						"key": "Content-Type",
@@ -58,7 +58,12 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"bankName\": \"PUMB\",\n\t\"currencyCode\": \"USD\",\n\t\"purchaseCurrency\": \"25.15\",\n\t\"saleOfCurrency\": \"25.31\"\n}"
+					"raw": "{\n\t\"id\": 1,\n\t\"bankName\": \"PrivatBank\",\n\t\"currencyCode\": \"USD\",\n\t\"purchaseCurrency\": \"15.02\",\n\t\"saleOfCurrency\": \"25.05\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
 				},
 				"url": {
 					"raw": "http://localhost:8080/currencies",

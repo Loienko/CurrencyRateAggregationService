@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
+import java.util.Objects;
+
+/**
+ * {@Link handleResourceIsStale} @deprecated
+ */
 
 @ControllerAdvice
 public class ExceptionHandlerControllerAdvice {
@@ -39,7 +44,8 @@ public class ExceptionHandlerControllerAdvice {
     }
 
     @ExceptionHandler({ResourceIsStaleException.class, IllegalStateException.class})
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ResponseStatus(value = HttpStatus.CONFLICT)
+    @Deprecated
     public @ResponseBody
     ExceptionResponse handleResourceIsStale(final Exception exception,
                                             final HttpServletRequest request) {
@@ -49,7 +55,29 @@ public class ExceptionHandlerControllerAdvice {
     @ExceptionHandler({ArgumentNotValidException.class, MethodArgumentNotValidException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public @ResponseBody
-    ExceptionResponse validationError(final HttpServletRequest request) {
-        return new ExceptionResponse("Not valid Data", request.getRequestURI());
+    ExceptionResponse validationError(final MethodArgumentNotValidException ex,
+                                      final HttpServletRequest request) {
+
+        return new ExceptionResponse(
+                Objects.requireNonNull(ex.getBindingResult().getFieldError()).getDefaultMessage(),
+                request.getRequestURI());
+    }
+
+    @ExceptionHandler(CustomDataAlreadyExistsException.class)
+    @ResponseStatus(value = HttpStatus.CONFLICT)
+    public @ResponseBody
+    ExceptionResponse notUniqueValueHandle(final Exception exception,
+                                           final HttpServletRequest request) {
+
+        return new ExceptionResponse(exception.getMessage(), request.getRequestURI());
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public @ResponseBody
+    ExceptionResponse notAllowEnum(final Exception exception,
+                                   final HttpServletRequest request) {
+
+        return new ExceptionResponse(exception.getMessage(), request.getRequestURI());
     }
 }

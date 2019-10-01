@@ -29,8 +29,13 @@
      
     d. Input user, password for your DB and press 'Test Connection'
     
-    e. Go to file createDBScripts.sql       
+    e. Go to file createDBCurrencyScripts.sql       
     
     f. Press Ctrl+Enter. Alternatively, click the Execute icon 'Run' on the toolbar.
-2. You should to create Table. For this action go to createDbTableScripts.sql and repeat command 'Execute'. Example item 'f'
-3. For start this one go to Application.class and press Run
+
+2. You should to create Table. For this action go to `/resources/dump_db/createTableCurrencyScripts.sql` and repeat command 'Execute'. Example item 'f'.
+3. You should to create DB for test app.  For this action repeat items '1.e' and '1.f' for file `/resources/dump_db/createDBCurrencyTestScripts.sql`.
+4. You should to create Table for test app. You need to choose your scheme '**currency_test.public**' before creating table. 
+For this action go to `/resources/dump_db/createTableCurrencyScripts.sql` and repeat command 'Execute'. Example item 'f'.
+5. For start this one go to Application.class and press Run
+

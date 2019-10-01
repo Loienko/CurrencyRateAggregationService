@@ -17,7 +17,7 @@ public class ValidCurrencyCodeValidator implements ConstraintValidator<ValidCurr
         try {
             containsIsoCode = Currency.getAvailableCurrencies().contains(Currency.getInstance(value));
         } catch (IllegalArgumentException | NullPointerException ignored) {
-           log.info("Illegal CurrencyCode");
+            log.info("Illegal CurrencyCode");
         }
 
         return !Strings.isNullOrEmpty(value) && containsIsoCode;
