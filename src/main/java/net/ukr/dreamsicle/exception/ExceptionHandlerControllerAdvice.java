@@ -57,4 +57,13 @@ public class ExceptionHandlerControllerAdvice {
                 Objects.requireNonNull(ex.getBindingResult().getFieldError()).getDefaultMessage(),
                 request.getRequestURI());
     }
+
+    @ExceptionHandler(CustomDataAlreadyExistsException.class)
+    @ResponseStatus(value = HttpStatus.CONFLICT)
+    public @ResponseBody
+    ExceptionResponse notUniqueValueHandle(final Exception exception,
+                                           final HttpServletRequest request) {
+
+        return new ExceptionResponse(exception.getMessage(), request.getRequestURI());
+    }
 }

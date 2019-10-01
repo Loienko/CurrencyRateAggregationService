@@ -1,7 +1,6 @@
 package net.ukr.dreamsicle.security.jwt;
 
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import net.ukr.dreamsicle.security.JwtUserDetailsService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Component
 public class JwtAuthTokenFilter extends OncePerRequestFilter {
     private JwtProvider jwtProvider;

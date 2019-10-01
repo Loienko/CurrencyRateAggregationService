@@ -5,9 +5,9 @@ import net.ukr.dreamsicle.config.ApplicationConfig;
 import net.ukr.dreamsicle.dto.UserDTO;
 import net.ukr.dreamsicle.dto.UserLoginDto;
 import net.ukr.dreamsicle.dto.UserMapper;
+import net.ukr.dreamsicle.exception.CustomDataAlreadyExistsException;
 import net.ukr.dreamsicle.exception.ResourceNotFoundException;
 import net.ukr.dreamsicle.model.Role;
-import net.ukr.dreamsicle.model.RoleType;
 import net.ukr.dreamsicle.model.User;
 import net.ukr.dreamsicle.repository.RoleRepository;
 import net.ukr.dreamsicle.repository.UserRepository;
@@ -22,11 +22,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.LockModeType;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static net.ukr.dreamsicle.model.RoleType.ADMIN;
-import static net.ukr.dreamsicle.model.RoleType.PM;
+import static net.ukr.dreamsicle.model.RoleType.USER;
 
 @Service
 @AllArgsConstructor
@@ -43,41 +43,28 @@ public class UserService {
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     public UserDTO createUser(UserDTO userDTO) {
-        User user = userMapper.toUser(userDTO);
-
-        if (Boolean.TRUE.equals(userRepository.existsByUsername(user.getUsername()))) {
-            throw new ResourceNotFoundException("Username is already in use!");
+        if (Boolean.TRUE.equals(userRepository.existsByUsername(userDTO.getUsername()))) {
+            throw new CustomDataAlreadyExistsException("Username is already in use!");
         }
 
-        if (Boolean.TRUE.equals(userRepository.existsByEmail(user.getEmail()))) {
-            throw new ResourceNotFoundException("Email is already in use!");
+        if (Boolean.TRUE.equals(userRepository.existsByEmail(userDTO.getEmail()))) {
+            throw new CustomDataAlreadyExistsException("Email is already in use!");
         }
 
         User users = User.builder()
-                .name(user.getName())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .password(applicationConfig.passwordEncoder().encode(user.getPassword()))
-                .roles(getRoles(userDTO))
+                .name(userDTO.getName())
+                .username(userDTO.getUsername())
+                .email(userDTO.getEmail())
+                .password(applicationConfig.passwordEncoder().encode(userDTO.getPassword()))
+                .roles(acquireRoles(userDTO))
                 .build();
         return userMapper.toUserDto(userRepository.save(users));
     }
 
-    private Set<Role> getRoles(UserDTO user) {
-        Set<Role> roles = new HashSet<>();
-        user.getRole().forEach(role -> {
-            switch (role.toLowerCase()) {
-                case "admin":
-                    roles.add(roleRepository.findByName(ADMIN).orElseThrow(ResourceNotFoundException::new));
-                    break;
-                case "pm":
-                    roles.add(roleRepository.findByName(PM).orElseThrow(ResourceNotFoundException::new));
-                    break;
-                default:
-                    roles.add(roleRepository.findByName(RoleType.USER).orElseThrow(ResourceNotFoundException::new));
-            }
-        });
-        return roles;
+    private Set<Role> acquireRoles(UserDTO user) {
+        return user.getRole().stream()
+                .map(role -> roleRepository.findByName(ADMIN).orElse(roleRepository.findByName(USER).orElseThrow(ResourceNotFoundException::new)))
+                .collect(Collectors.toSet());
     }
 
     public String authenticateUser(UserLoginDto userLoginDto) {
