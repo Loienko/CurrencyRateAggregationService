@@ -10,15 +10,13 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Currency {
+@Table(name = "roles")
+public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(unique = true, nullable = false)
     private Long id;
 
-    private String bankName;
-    private String currencyCode;
-    private String purchaseCurrency;
-    private String saleOfCurrency;
+    @Enumerated(EnumType.STRING)
+    private RoleType name;
 }

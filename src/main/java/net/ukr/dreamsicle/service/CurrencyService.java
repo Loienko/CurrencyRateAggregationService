@@ -29,7 +29,7 @@ public class CurrencyService {
         return currencyMapper.toCurrencyDTOs(currencyRepository.findAll(pageable));
     }
 
-    public CurrencyDTO findCurrencyById(int id) {
+    public CurrencyDTO findCurrencyById(long id) {
         return currencyRepository.findById(id)
                 .map(currencyMapper::toCurrencyDto)
                 .orElseThrow(ResourceNotFoundException::new);
@@ -37,10 +37,11 @@ public class CurrencyService {
 
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    public void deleteCurrencyById(int id) {
-        currencyRepository.deleteById(currencyRepository.findById(id)
-                .orElseThrow(ResourceNotFoundException::new)
-                .getId());
+    public void deleteCurrencyById(long id) {
+        currencyRepository.deleteById(
+                currencyRepository.findById(id)
+                        .orElseThrow(ResourceNotFoundException::new)
+                        .getId());
     }
 
     @Transactional
@@ -51,7 +52,7 @@ public class CurrencyService {
 
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    public CurrencyDTO updateCurrency(int id, CurrencyDTO currencyDTO) {
+    public CurrencyDTO updateCurrency(long id, CurrencyDTO currencyDTO) {
         Currency currencyUpdateById = currencyRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
 
         Currency actualCurrency = currencyMapper.toCurrency(currencyDTO);

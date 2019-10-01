@@ -29,7 +29,7 @@ public class CurrencyController {
     }
 
     @GetMapping("/{id}")
-    public CurrencyDTO findById(@PathVariable @Min(1) @Positive int id) {
+    public CurrencyDTO findById(@PathVariable @Min(1) @Positive long id) {
         return currencyService.findCurrencyById(id);
     }
 
@@ -41,13 +41,13 @@ public class CurrencyController {
 
     @PutMapping("/{id}")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public CurrencyDTO update(@PathVariable @Min(1) @Positive Integer id, @Validated @RequestBody CurrencyDTO currencyDTO) {
+    public CurrencyDTO update(@PathVariable @Min(1) @Positive long id, @Validated @RequestBody CurrencyDTO currencyDTO) {
         return currencyService.updateCurrency(id, currencyDTO);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable @Min(1) @Positive int id) {
+    public void delete(@PathVariable @Min(1) @Positive long id) {
         currencyService.deleteCurrencyById(id);
     }
 }

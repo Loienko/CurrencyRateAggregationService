@@ -17,13 +17,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import static net.ukr.dreamsicle.util.CurrencyProvider.ID;
 import static net.ukr.dreamsicle.util.CurrencyProvider.getCurrencyProvider;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
