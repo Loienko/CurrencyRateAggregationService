@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Base64;
 import java.util.Date;
 
 @Component
@@ -20,6 +22,11 @@ public class JwtProvider {
 
     @Value("${app.jwtExpiration}")
     private int validityInMilliseconds;
+
+    @PostConstruct
+    protected void init() {
+        secret = Base64.getEncoder().encodeToString(secret.getBytes());
+    }
 
     public String createToken(Authentication authentication) {
         UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
