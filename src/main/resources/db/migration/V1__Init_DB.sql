@@ -32,11 +32,9 @@ create table IF NOT EXISTS user_roles
             references roles (id)
 );
 
-INSERT INTO "currency" ("bank_name", "currency_code", "purchase_currency", "sale_of_currency")  VALUES ('adhas@c.u', 'name', 'weqwe', 'qweqgwe');
-INSERT INTO "currency" ("bank_name", "currency_code", "purchase_currency", "sale_of_currency")  VALUES ('adhas@c.u', 'name', 'weqwe', 'qweqgwe');
+INSERT INTO "users" ("id" ,"email", "name", "password", "username")   VALUES ('1', 'admin@ukr.net', 'admin', 'admin', 'admin');
 
-INSERT INTO "users" ("email", "name", "password", "username")   VALUES ('adhas@c.u', 'name', 'weqwe', 'qweqgwe');
-INSERT INTO "users" ("email", "name", "password", "username")   VALUES ('ahwerdas@c.u', 'name', 'weqwe', 'qwheqwe');
+INSERT INTO "roles" (id, "name")    VALUES ('1', 'ADMIN');
+INSERT INTO "roles" (id, "name")    VALUES ('2', 'USER');
 
-INSERT INTO "roles" ("name")    VALUES ('ADMIN');
-INSERT INTO "roles" ("name")    VALUES ('USER');
+INSERT INTO "user_roles" (user_id, role_id) VALUES ('1', '1')

@@ -1,6 +1,7 @@
 package net.ukr.dreamsicle.config;
 
 import lombok.AllArgsConstructor;
+import net.ukr.dreamsicle.model.RoleType;
 import net.ukr.dreamsicle.security.JwtUserDetailsService;
 import net.ukr.dreamsicle.security.jwt.AuthEntryPoint;
 import net.ukr.dreamsicle.security.jwt.JwtAuthTokenFilter;
@@ -47,8 +48,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET).permitAll()
-                .antMatchers("/users/**").permitAll()
-                .antMatchers("/currencies/**").permitAll()
+                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/currencies/**").hasRole(RoleType.ADMIN.name())
+                .antMatchers("/currencies").hasRole(RoleType.ADMIN.name())
+                .antMatchers(HttpMethod.DELETE).hasRole(RoleType.ADMIN.name())
+                .antMatchers(HttpMethod.POST).hasRole(RoleType.ADMIN.name())
+                .antMatchers(HttpMethod.POST).hasRole(RoleType.USER.name())
+                .antMatchers(HttpMethod.PUT).hasRole(RoleType.ADMIN.name())
                 .anyRequest().authenticated().and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
