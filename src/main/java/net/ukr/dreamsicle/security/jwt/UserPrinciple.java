@@ -33,7 +33,7 @@ public final class UserPrinciple implements UserDetails {
                 .id(user.getId())
                 .name(user.getName())
                 .username(user.getUsername())
-                .email(user.getEmail())
+//                .email(user.getEmail())
                 .password(user.getPassword())
                 .authorities(mapToGrantedAuthorities(user))
                 .build();
