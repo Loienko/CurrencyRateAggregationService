@@ -45,14 +45,9 @@ public class UserService {
             throw new CustomDataAlreadyExistsException("Username is already in use!");
         }
 
-        /*if (Boolean.TRUE.equals(userRepository.existsByEmail(userDTO.getEmail()))) {
-            throw new CustomDataAlreadyExistsException("Email is already in use!");
-        }*/
-
         User users = User.builder()
                 .name(userDTO.getName())
                 .username(userDTO.getUsername())
-//                .email(userDTO.getEmail())
                 .password(applicationConfig.passwordEncoder().encode(userDTO.getPassword()))
                 .roles(acquireRoles(userDTO))
                 .build();
@@ -84,7 +79,6 @@ public class UserService {
 
         userUpdateById.setName(actualUser.getName());
         userUpdateById.setUsername(actualUser.getUsername());
-//        userUpdateById.setEmail(actualUser.getEmail());
         userUpdateById.setPassword(actualUser.getPassword());
         userUpdateById.setRoles(actualUser.getRoles());
 
