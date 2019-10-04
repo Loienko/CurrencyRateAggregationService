@@ -1,6 +1,9 @@
-alter table users add created   timestamp   not null default now();
-alter table users add updated   timestamp   not null default now();
-alter table users add status    VARCHAR(15) not null default 'NOT_ACTIVE';
+alter table users
+    add if not exists created timestamp not null default now();
+alter table users
+    add if not exists updated timestamp not null default now();
+alter table users
+    add if not exists status VARCHAR(15) not null default 'NOT_ACTIVE';
 
 create table IF NOT EXISTS user_details
 (
@@ -11,6 +14,3 @@ create table IF NOT EXISTS user_details
     user_id     bigint       not null
         constraint user_id_fk references users (id)
 );
-
-INSERT INTO "user_details" (surname, phone, description, user_id)
-VALUES ('admin', '123456789', 'just admin', 1);
