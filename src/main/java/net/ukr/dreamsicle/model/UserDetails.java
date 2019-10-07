@@ -1,6 +1,7 @@
 package net.ukr.dreamsicle.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Table(name = "user_details")
 public class UserDetails {
 
@@ -19,7 +21,7 @@ public class UserDetails {
 
     private String surname;
 
-    private Long phone;
+    private String phone;
 
     private String description;
 

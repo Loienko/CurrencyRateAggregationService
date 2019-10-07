@@ -1,8 +1,8 @@
 package net.ukr.dreamsicle.controller;
 
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import net.ukr.dreamsicle.dto.UserDTO;
+import net.ukr.dreamsicle.dto.UserDetailsDTO;
 import net.ukr.dreamsicle.dto.UserLoginDto;
 import net.ukr.dreamsicle.service.UserService;
 import org.springframework.data.domain.Page;
@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
 
-
-@Slf4j
 @RestController
 @RequestMapping("/users")
 @AllArgsConstructor
@@ -35,7 +33,7 @@ public class UserController {
         return userService.findUserById(id);
     }
 
-    @PostMapping("/create")
+    @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public UserDTO create(@Validated @RequestBody UserDTO userDTO) {
         return userService.createUser(userDTO);
@@ -57,5 +55,17 @@ public class UserController {
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable @Min(1) @Positive long id) {
         userService.deleteUser(id);
+    }
+
+    @PutMapping("/password")
+    @ResponseStatus(code = HttpStatus.ACCEPTED)
+    public UserLoginDto assignPassword(@Validated @RequestBody UserLoginDto userAssignPassDto) {
+        return userService.assignPassword(userAssignPassDto);
+    }
+
+    @PostMapping("/{id}")
+    @ResponseStatus(code = HttpStatus.ACCEPTED)
+    public UserDetailsDTO createUserDetails(@PathVariable @Min(1) @Positive long id, @Validated @RequestBody UserDetailsDTO userDetailsDTO) {
+        return userService.createUserDetails(id, userDetailsDTO);
     }
 }

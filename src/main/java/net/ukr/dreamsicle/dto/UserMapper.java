@@ -1,6 +1,7 @@
 package net.ukr.dreamsicle.dto;
 
 import net.ukr.dreamsicle.model.User;
+import net.ukr.dreamsicle.model.UserDetails;
 import org.mapstruct.Mapper;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ public interface UserMapper {
 
     UserLoginDto userToUserLoginDto(User user);
 
-    User userDetailsToUser(UserDetailsDTO userDetailsDTO);
+    UserDetails userDetailsToUser(UserDetailsDTO userDetailsDTO);
 
-    UserDetailsDTO userToUserDetailsDTO(User user);
+    UserDetailsDTO userToUserDetailsDTO(UserDetails user);
 }
