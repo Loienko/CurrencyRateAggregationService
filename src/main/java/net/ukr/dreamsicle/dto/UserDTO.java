@@ -3,11 +3,11 @@ package net.ukr.dreamsicle.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.ukr.dreamsicle.validation.ValidPassword;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Data
@@ -25,13 +25,13 @@ public class UserDTO {
     @Pattern(regexp = "^[a-zA-Zа-яёА-ЯЁ\\s\\-]+$", message = "Please input valid data for username")
     private String username;
 
-    @NotBlank(message = "Please fill the correct email")
+    @NotBlank(message = "Please fill the email")
     @Email(message = "Please input valid data for email")
     private String email;
 
     private Set<String> role;
 
     @NotBlank(message = "Please fill the password")
-    @Size(min = 6, max = 40, message = "Please fill the correct password from 6 to 40 letters")
+    @ValidPassword(message = "Please input valid data for password")
     private String password;
 }
