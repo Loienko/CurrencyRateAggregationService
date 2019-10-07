@@ -4,9 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
+import java.sql.Timestamp;
 import java.util.Set;
 
 @Entity
@@ -26,11 +28,21 @@ public class User {
     @Column(unique = true)
     private String username;
 
+    private String password;
+
     @Column(unique = true)
-    @Email
     private String email;
 
-    private String password;
+    @CreatedDate
+    @Column(columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private Timestamp created;
+
+    @LastModifiedDate
+    @Column(columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private Timestamp updated;
+
+    @Enumerated(EnumType.STRING)
+    private StatusType status;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",

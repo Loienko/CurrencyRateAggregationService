@@ -10,10 +10,10 @@ CREATE TABLE IF NOT EXISTS currency
 create table IF NOT EXISTS users
 (
     id       bigserial    not null unique PRIMARY KEY,
-    email    varchar(50)  not null unique,
     name     varchar(50)  not null,
+    username varchar(50)  not null unique,
     password varchar(256) not null,
-    username varchar(50)  not null unique
+    email    varchar(50)  not null unique
 );
 
 create table IF NOT EXISTS roles
