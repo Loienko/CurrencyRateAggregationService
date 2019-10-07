@@ -51,7 +51,7 @@ public class UserService {
                 .password(applicationConfig.passwordEncoder().encode(userDTO.getPassword()))
                 .roles(acquireRoles(userDTO))
                 .build();
-        return userMapper.toUserDto(userRepository.save(users));
+        return userMapper.userToUserDto(userRepository.save(users));
     }
 
     private Set<Role> acquireRoles(UserDTO user) {
@@ -75,24 +75,24 @@ public class UserService {
     public UserDTO updateUser(long id, UserDTO userDTO) {
         User userUpdateById = userRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
 
-        User actualUser = userMapper.toUser(userDTO);
+        User actualUser = userMapper.userDtoToUser(userDTO);
 
         userUpdateById.setName(actualUser.getName());
         userUpdateById.setUsername(actualUser.getUsername());
         userUpdateById.setPassword(actualUser.getPassword());
         userUpdateById.setRoles(actualUser.getRoles());
 
-        return userMapper.toUserDto(userRepository.saveAndFlush(userUpdateById));
+        return userMapper.userToUserDto(userRepository.saveAndFlush(userUpdateById));
     }
 
     public Page<UserDTO> findAllUsers(Pageable pageable) {
-        return userMapper.toUserDTOs(userRepository.findAll(pageable));
+        return userMapper.userToUserDTOs(userRepository.findAll(pageable));
     }
 
     public UserDTO findUserById(long id) {
         return userRepository
                 .findById(id)
-                .map(userMapper::toUserDto)
+                .map(userMapper::userToUserDto)
                 .orElseThrow(ResourceNotFoundException::new);
     }
 

@@ -80,4 +80,13 @@ public class ExceptionHandlerControllerAdvice {
 
         return new ExceptionResponse(exception.getMessage(), request.getRequestURI());
     }
+
+    @ExceptionHandler(EmailExistsException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public @ResponseBody
+    ExceptionResponse incorrectEmailHandle(final Exception exception,
+                                           final HttpServletRequest request) {
+
+        return new ExceptionResponse(exception.getMessage(), request.getRequestURI());
+    }
 }

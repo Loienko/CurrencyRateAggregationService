@@ -9,11 +9,19 @@ import org.springframework.stereotype.Service;
 @Service
 public interface UserMapper {
 
-    UserDTO toUserDto(User user);
+    UserDTO userToUserDto(User user);
 
-    User toUser(UserDTO userDTO);
+    User userDtoToUser(UserDTO userDTO);
 
-    default Page<UserDTO> toUserDTOs(Page<User> users) {
-        return users.map(this::toUserDto);
+    default Page<UserDTO> userToUserDTOs(Page<User> users) {
+        return users.map(this::userToUserDto);
     }
+
+    User userLoginDtoToUser(UserLoginDto userLoginDto);
+
+    UserLoginDto userToUserLoginDto(User user);
+
+    User userDetailsToUser(UserDetailsDTO userDetailsDTO);
+
+    UserDetailsDTO userToUserDetailsDTO(User user);
 }
