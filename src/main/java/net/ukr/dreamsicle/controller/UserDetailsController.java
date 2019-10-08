@@ -11,7 +11,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
 
 @RestController
-@RequestMapping("/profile")
+@RequestMapping("/user_details")
 @AllArgsConstructor
 public class UserDetailsController {
 
