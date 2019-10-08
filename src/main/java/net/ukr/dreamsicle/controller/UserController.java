@@ -2,7 +2,6 @@ package net.ukr.dreamsicle.controller;
 
 import lombok.AllArgsConstructor;
 import net.ukr.dreamsicle.dto.UserDTO;
-import net.ukr.dreamsicle.dto.UserDetailsDTO;
 import net.ukr.dreamsicle.dto.UserLoginDto;
 import net.ukr.dreamsicle.service.UserService;
 import org.springframework.data.domain.Page;
@@ -61,11 +60,5 @@ public class UserController {
     @ResponseStatus(code = HttpStatus.ACCEPTED)
     public UserLoginDto assignPassword(@Validated @RequestBody UserLoginDto userAssignPassDto) {
         return userService.assignPassword(userAssignPassDto);
-    }
-
-    @PostMapping("/{id}")
-    @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public UserDetailsDTO createUserDetails(@PathVariable @Min(1) @Positive long id, @Validated @RequestBody UserDetailsDTO userDetailsDTO) {
-        return userService.createUserDetails(id, userDetailsDTO);
     }
 }

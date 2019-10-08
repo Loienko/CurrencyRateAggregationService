@@ -3,14 +3,15 @@ package net.ukr.dreamsicle.service;
 import lombok.AllArgsConstructor;
 import net.ukr.dreamsicle.config.ApplicationConfig;
 import net.ukr.dreamsicle.dto.UserDTO;
-import net.ukr.dreamsicle.dto.UserDetailsDTO;
 import net.ukr.dreamsicle.dto.UserLoginDto;
 import net.ukr.dreamsicle.dto.UserMapper;
 import net.ukr.dreamsicle.exception.CustomDataAlreadyExistsException;
 import net.ukr.dreamsicle.exception.ResourceNotFoundException;
-import net.ukr.dreamsicle.model.*;
+import net.ukr.dreamsicle.model.Role;
+import net.ukr.dreamsicle.model.RoleType;
+import net.ukr.dreamsicle.model.StatusType;
+import net.ukr.dreamsicle.model.User;
 import net.ukr.dreamsicle.repository.RoleRepository;
-import net.ukr.dreamsicle.repository.UserDetailsRepository;
 import net.ukr.dreamsicle.repository.UserRepository;
 import net.ukr.dreamsicle.security.jwt.JwtProvider;
 import org.springframework.data.domain.Page;
@@ -36,7 +37,6 @@ public class UserService {
     private static final String BEARER = "Bearer ";
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final UserDetailsRepository userDetailsRepository;
     private final UserMapper userMapper;
     private final JwtProvider tokenProvider;
     private final AuthenticationManager authenticationManager;
@@ -126,27 +126,5 @@ public class UserService {
         user.setUpdated(Timestamp.valueOf(LocalDateTime.now()));
 
         return userMapper.userToUserLoginDto(userRepository.saveAndFlush(user));
-    }
-
-    @Transactional
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    public UserDetailsDTO createUserDetails(long id, UserDetailsDTO userDetailsDTO) {
-        UserDetails userDetails = userMapper.userDetailsToUser(userDetailsDTO);
-        User userByIdAddUserDetails = userRepository.findByIdAndStatus(id, StatusType.ACTIVE).orElseThrow(ResourceNotFoundException::new);
-
-        return userMapper.userToUserDetailsDTO(userDetailsRepository.findUserDetailsByUserId(userByIdAddUserDetails.getId())
-                .map(user -> {
-                    user.setSurname(userDetails.getSurname());
-                    user.setPhone(userDetails.getPhone());
-                    user.setDescription(userDetails.getDescription());
-                    return userDetailsRepository.saveAndFlush(user);
-                })
-                .orElse(userDetailsRepository.saveAndFlush(UserDetails.builder()
-                        .surname(userDetails.getSurname())
-                        .phone(userDetails.getPhone())
-                        .description(userDetails.getDescription())
-                        .user(userByIdAddUserDetails)
-                        .build()))
-        );
     }
 }

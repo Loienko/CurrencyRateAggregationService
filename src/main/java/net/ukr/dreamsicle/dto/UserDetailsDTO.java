@@ -22,6 +22,6 @@ public class UserDetailsDTO {
 
     @Size(max = 256)
     @NotBlank(message = "Please fill the description")
-    @Pattern(regexp = "^[a-zA-Zа-яёА-ЯЁ\\s\\-]+$", message = "Please input valid data for username")
+    @Pattern(regexp = "^[a-zA-Zа-яёА-ЯЁ\\s\\-]+$", message = "Please input valid data for description")
     private String description;
 }
