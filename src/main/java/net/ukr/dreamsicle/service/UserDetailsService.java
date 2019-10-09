@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.LockModeType;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -27,21 +28,23 @@ public class UserDetailsService {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     public UserDetailsDTO createUserDetails(long id, UserDetailsDTO userDetailsDTO) {
         UserDetails userDetails = userMapper.userDetailsToUser(userDetailsDTO);
-        User userByIdAddUserDetails = userRepository.findByIdAndStatus(id, StatusType.ACTIVE).orElseThrow(ResourceNotFoundException::new);
+        User user = userRepository.findByIdAndStatus(id, StatusType.ACTIVE).orElseThrow(ResourceNotFoundException::new);
 
-        return userMapper.userToUserDetailsDTO(userDetailsRepository.findUserDetailsByUserId(userByIdAddUserDetails.getId())
-                .map(user -> {
-                    user.setSurname(userDetails.getSurname());
-                    user.setPhone(userDetails.getPhone());
-                    user.setDescription(userDetails.getDescription());
-                    return userDetailsRepository.saveAndFlush(user);
-                })
-                .orElse(userDetailsRepository.saveAndFlush(UserDetails.builder()
-                        .surname(userDetails.getSurname())
-                        .phone(userDetails.getPhone())
-                        .description(userDetails.getDescription())
-                        .user(userByIdAddUserDetails)
-                        .build()))
-        );
+        Optional<UserDetails> userDetailsByUserId = userDetailsRepository.findUserDetailsByUserId(user.getId());
+
+        if (userDetailsByUserId.isPresent()) {
+            userDetailsByUserId.get().setSurname(userDetails.getSurname());
+            userDetailsByUserId.get().setPhone(userDetails.getPhone());
+            userDetailsByUserId.get().setDescription(userDetails.getDescription());
+            return userMapper.userToUserDetailsDTO(userDetailsRepository.saveAndFlush(userDetailsByUserId.get()));
+        } else {
+            return userMapper.userToUserDetailsDTO(userDetailsRepository.saveAndFlush(
+                    UserDetails.builder()
+                            .surname(userDetails.getSurname())
+                            .phone(userDetails.getPhone())
+                            .description(userDetails.getDescription())
+                            .user(user)
+                            .build()));
+        }
     }
 }
