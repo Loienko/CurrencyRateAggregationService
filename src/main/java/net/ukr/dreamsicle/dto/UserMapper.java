@@ -18,9 +18,9 @@ public interface UserMapper {
         return users.map(this::userToUserDto);
     }
 
-    User userLoginDtoToUser(UserLoginDto userLoginDto);
+    User usernameAndPasswordDataDTOToUser(UsernameAndPasswordDataDTO usernameAndPasswordDataDTO);
 
-    UserLoginDto userToUserLoginDto(User user);
+    UsernameAndPasswordDataDTO userToUsernameAndPasswordDataDTO(User user);
 
     UserDetails userDetailsToUser(UserDetailsDTO userDetailsDTO);
 

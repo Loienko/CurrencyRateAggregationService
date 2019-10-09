@@ -4,22 +4,22 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.ukr.dreamsicle.validation.ValidPassword;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserLoginDto {
+public class UsernameAndPasswordDataDTO {
 
     @NotBlank(message = "Please fill the username")
     @Pattern(regexp = "^[a-zA-Zа-яёА-ЯЁ\\s\\-]+$", message = "Please input valid data for username")
     private String username;
 
     @NotBlank(message = "Please fill the password")
-    @Size(min = 6, max = 40)
+    @ValidPassword(message = "Please input valid data for password")
     private String password;
 }
