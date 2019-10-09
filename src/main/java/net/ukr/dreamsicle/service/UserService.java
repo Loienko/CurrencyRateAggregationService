@@ -9,6 +9,7 @@ import net.ukr.dreamsicle.exception.CustomDataAlreadyExistsException;
 import net.ukr.dreamsicle.exception.ResourceNotFoundException;
 import net.ukr.dreamsicle.model.Role;
 import net.ukr.dreamsicle.model.RoleType;
+import net.ukr.dreamsicle.model.StatusType;
 import net.ukr.dreamsicle.model.User;
 import net.ukr.dreamsicle.repository.RoleRepository;
 import net.ukr.dreamsicle.repository.UserRepository;
@@ -23,7 +24,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.LockModeType;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,11 +49,19 @@ public class UserService {
             throw new CustomDataAlreadyExistsException("Username is already in use!");
         }
 
+        if (Boolean.TRUE.equals(userRepository.existsByEmail(userDTO.getEmail()))) {
+            throw new CustomDataAlreadyExistsException("Email is already in use!");
+        }
+
         User users = User.builder()
                 .name(userDTO.getName())
                 .username(userDTO.getUsername())
-                .password(applicationConfig.passwordEncoder().encode(userDTO.getPassword()))
+                .email(userDTO.getEmail())
+                .password(applicationConfig.passwordEncoder().encode(UUID.randomUUID().toString()))
                 .roles(acquireRoles(userDTO))
+                .created(Timestamp.valueOf(LocalDateTime.now()))
+                .updated(Timestamp.valueOf(LocalDateTime.now()))
+                .status(StatusType.ACTIVE)
                 .build();
         return userMapper.userToUserDto(userRepository.save(users));
     }
@@ -73,25 +85,25 @@ public class UserService {
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     public UserDTO updateUser(long id, UserDTO userDTO) {
-        User userUpdateById = userRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        User userUpdateById = userRepository.findByIdAndStatus(id, StatusType.ACTIVE).orElseThrow(ResourceNotFoundException::new);
 
         User actualUser = userMapper.userDtoToUser(userDTO);
 
         userUpdateById.setName(actualUser.getName());
         userUpdateById.setUsername(actualUser.getUsername());
-        userUpdateById.setPassword(actualUser.getPassword());
+        userUpdateById.setEmail(actualUser.getEmail());
         userUpdateById.setRoles(actualUser.getRoles());
 
         return userMapper.userToUserDto(userRepository.saveAndFlush(userUpdateById));
     }
 
     public Page<UserDTO> findAllUsers(Pageable pageable) {
-        return userMapper.userToUserDTOs(userRepository.findAll(pageable));
+        return userMapper.userToUserDTOs(userRepository.findAllByStatus(pageable, StatusType.ACTIVE));
     }
 
     public UserDTO findUserById(long id) {
         return userRepository
-                .findById(id)
+                .findByIdAndStatus(id, StatusType.ACTIVE)
                 .map(userMapper::userToUserDto)
                 .orElseThrow(ResourceNotFoundException::new);
     }
@@ -99,9 +111,20 @@ public class UserService {
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     public void deleteUser(long id) {
-        userRepository.deleteById(
-                userRepository.findById(id)
-                        .orElseThrow(ResourceNotFoundException::new)
-                        .getId());
+        userRepository.findByIdAndStatus(id, StatusType.ACTIVE)
+                .orElseThrow(ResourceNotFoundException::new)
+                .setStatus(StatusType.DELETED);
+    }
+
+    @Transactional
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    public UserLoginDto assignPassword(UserLoginDto userLoginDto) {
+        User user = userRepository.findByUsername(userLoginDto.getUsername()).orElseThrow(ResourceNotFoundException::new);
+
+        User actualUser = userMapper.userLoginDtoToUser(userLoginDto);
+        user.setPassword(applicationConfig.passwordEncoder().encode(actualUser.getPassword()));
+        user.setUpdated(Timestamp.valueOf(LocalDateTime.now()));
+
+        return userMapper.userToUserLoginDto(userRepository.saveAndFlush(user));
     }
 }
