@@ -55,7 +55,7 @@ public class UserService {
             throw new CustomDataAlreadyExistsException("Email is already in use!");
         }
 
-        User users = User.builder()
+        User user = User.builder()
                 .name(userDTO.getName())
                 .username(userDTO.getUsername())
                 .email(userDTO.getEmail())
@@ -65,7 +65,7 @@ public class UserService {
                 .updated(Timestamp.valueOf(LocalDateTime.now()))
                 .status(ACTIVE)
                 .build();
-        return userMapper.userToUserDto(userRepository.saveAndFlush(users));
+        return userMapper.userToUserDto(userRepository.saveAndFlush(user));
     }
 
     private Set<Role> acquireRoles(UserDTO user) {
