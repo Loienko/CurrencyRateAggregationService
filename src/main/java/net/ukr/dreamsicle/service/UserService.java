@@ -3,13 +3,12 @@ package net.ukr.dreamsicle.service;
 import lombok.AllArgsConstructor;
 import net.ukr.dreamsicle.config.ApplicationConfig;
 import net.ukr.dreamsicle.dto.UserDTO;
-import net.ukr.dreamsicle.dto.UserLoginDto;
 import net.ukr.dreamsicle.dto.UserMapper;
+import net.ukr.dreamsicle.dto.UsernameAndPasswordDataDTO;
 import net.ukr.dreamsicle.exception.CustomDataAlreadyExistsException;
 import net.ukr.dreamsicle.exception.ResourceNotFoundException;
 import net.ukr.dreamsicle.model.Role;
 import net.ukr.dreamsicle.model.RoleType;
-import net.ukr.dreamsicle.model.StatusType;
 import net.ukr.dreamsicle.model.User;
 import net.ukr.dreamsicle.repository.RoleRepository;
 import net.ukr.dreamsicle.repository.UserRepository;
@@ -29,6 +28,9 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static net.ukr.dreamsicle.model.StatusType.ACTIVE;
+import static net.ukr.dreamsicle.model.StatusType.DELETED;
 
 @Service
 @AllArgsConstructor
@@ -61,9 +63,9 @@ public class UserService {
                 .roles(acquireRoles(userDTO))
                 .created(Timestamp.valueOf(LocalDateTime.now()))
                 .updated(Timestamp.valueOf(LocalDateTime.now()))
-                .status(StatusType.ACTIVE)
+                .status(ACTIVE)
                 .build();
-        return userMapper.userToUserDto(userRepository.save(users));
+        return userMapper.userToUserDto(userRepository.saveAndFlush(users));
     }
 
     private Set<Role> acquireRoles(UserDTO user) {
@@ -72,11 +74,14 @@ public class UserService {
                 .collect(Collectors.toSet());
     }
 
-    public String authenticateUser(UserLoginDto userLoginDto) {
+    public String authenticateUser(UsernameAndPasswordDataDTO usernameAndPasswordDataDTO) {
+        User userByUsername = userRepository.findByUsername(usernameAndPasswordDataDTO.getUsername()).orElseThrow(ResourceNotFoundException::new);
+        User user = userRepository.findByIdAndStatus(userByUsername.getId(), ACTIVE).orElseThrow(ResourceNotFoundException::new);
+
         Authentication authenticate = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        userLoginDto.getUsername(),
-                        userLoginDto.getPassword()
+                        user.getUsername(),
+                        usernameAndPasswordDataDTO.getPassword()
                 )
         );
         return BEARER + tokenProvider.createToken(authenticate);
@@ -85,7 +90,7 @@ public class UserService {
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     public UserDTO updateUser(long id, UserDTO userDTO) {
-        User userUpdateById = userRepository.findByIdAndStatus(id, StatusType.ACTIVE).orElseThrow(ResourceNotFoundException::new);
+        User userUpdateById = userRepository.findByIdAndStatus(id, ACTIVE).orElseThrow(ResourceNotFoundException::new);
 
         User actualUser = userMapper.userDtoToUser(userDTO);
 
@@ -98,12 +103,12 @@ public class UserService {
     }
 
     public Page<UserDTO> findAllUsers(Pageable pageable) {
-        return userMapper.userToUserDTOs(userRepository.findAllByStatus(pageable, StatusType.ACTIVE));
+        return userMapper.userToUserDTOs(userRepository.findAllByStatus(pageable, ACTIVE));
     }
 
     public UserDTO findUserById(long id) {
         return userRepository
-                .findByIdAndStatus(id, StatusType.ACTIVE)
+                .findByIdAndStatus(id, ACTIVE)
                 .map(userMapper::userToUserDto)
                 .orElseThrow(ResourceNotFoundException::new);
     }
@@ -111,20 +116,21 @@ public class UserService {
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     public void deleteUser(long id) {
-        userRepository.findByIdAndStatus(id, StatusType.ACTIVE)
-                .orElseThrow(ResourceNotFoundException::new)
-                .setStatus(StatusType.DELETED);
+        User user = userRepository.findByIdAndStatus(id, ACTIVE)
+                .orElseThrow(ResourceNotFoundException::new);
+        user.setStatus(DELETED);
+        userRepository.saveAndFlush(user);
     }
 
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    public UserLoginDto assignPassword(UserLoginDto userLoginDto) {
-        User user = userRepository.findByUsername(userLoginDto.getUsername()).orElseThrow(ResourceNotFoundException::new);
+    public UsernameAndPasswordDataDTO assignPassword(UsernameAndPasswordDataDTO usernameAndPasswordDataDTO) {
+        User user = userRepository.findByUsername(usernameAndPasswordDataDTO.getUsername()).orElseThrow(ResourceNotFoundException::new);
 
-        User actualUser = userMapper.userLoginDtoToUser(userLoginDto);
+        User actualUser = userMapper.usernameAndPasswordDataDTOToUser(usernameAndPasswordDataDTO);
         user.setPassword(applicationConfig.passwordEncoder().encode(actualUser.getPassword()));
         user.setUpdated(Timestamp.valueOf(LocalDateTime.now()));
 
-        return userMapper.userToUserLoginDto(userRepository.saveAndFlush(user));
+        return userMapper.userToUsernameAndPasswordDataDTO(userRepository.saveAndFlush(user));
     }
 }

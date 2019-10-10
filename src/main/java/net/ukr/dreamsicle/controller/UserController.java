@@ -1,8 +1,8 @@
 package net.ukr.dreamsicle.controller;
 
 import lombok.AllArgsConstructor;
+import net.ukr.dreamsicle.dto.UsernameAndPasswordDataDTO;
 import net.ukr.dreamsicle.dto.UserDTO;
-import net.ukr.dreamsicle.dto.UserLoginDto;
 import net.ukr.dreamsicle.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,8 +40,8 @@ public class UserController {
 
     @PostMapping("/login")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public String login(@Validated @RequestBody UserLoginDto userLoginDto) {
-        return userService.authenticateUser(userLoginDto);
+    public String login(@Validated @RequestBody UsernameAndPasswordDataDTO usernameAndPasswordDataDTO) {
+        return userService.authenticateUser(usernameAndPasswordDataDTO);
     }
 
     @PutMapping("/{id}")
@@ -58,7 +58,7 @@ public class UserController {
 
     @PutMapping("/password")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public UserLoginDto assignPassword(@Validated @RequestBody UserLoginDto userAssignPassDto) {
-        return userService.assignPassword(userAssignPassDto);
+    public UsernameAndPasswordDataDTO assignPassword(@Validated @RequestBody UsernameAndPasswordDataDTO usernameAndPasswordDataDTO) {
+        return userService.assignPassword(usernameAndPasswordDataDTO);
     }
 }

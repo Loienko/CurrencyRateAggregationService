@@ -1,7 +1,7 @@
 package net.ukr.dreamsicle.util;
 
+import net.ukr.dreamsicle.dto.UsernameAndPasswordDataDTO;
 import net.ukr.dreamsicle.dto.UserDTO;
-import net.ukr.dreamsicle.dto.UserLoginDto;
 import net.ukr.dreamsicle.model.Role;
 import net.ukr.dreamsicle.model.StatusType;
 import net.ukr.dreamsicle.model.User;
@@ -51,8 +51,8 @@ public class UserProvider {
                 .build();
     }
 
-    public static UserLoginDto getUserLoginDtoProvider() {
-        return UserLoginDto.builder()
+    public static UsernameAndPasswordDataDTO getUsernameAndPasswordDataDTO() {
+        return UsernameAndPasswordDataDTO.builder()
                 .username(USERNAME)
                 .password(PASSWORD)
                 .build();
