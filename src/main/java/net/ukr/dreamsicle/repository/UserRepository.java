@@ -9,6 +9,12 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
+/**
+ * Repository interface that extends {@link JpaRepository} for class {@link User}.
+ *
+ * @author yurii.loienko
+ * @version 1.0
+ */
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
 

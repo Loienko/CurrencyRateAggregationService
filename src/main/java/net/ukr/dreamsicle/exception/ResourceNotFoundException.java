@@ -1,6 +1,12 @@
 package net.ukr.dreamsicle.exception;
 
-public class ResourceNotFoundException extends RuntimeException{
+/**
+ * ResourceNotFoundException class that extends {@link RuntimeException}
+ *
+ * @author yurii.loienko
+ * @version 1.0
+ */
+public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException() {
         super("Resource not found");
     }

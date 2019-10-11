@@ -1,14 +1,18 @@
 package net.ukr.dreamsicle.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import net.ukr.dreamsicle.validation.ValidPassword;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+/**
+ * DTO class for user request by username and password
+ * Used by {@link Lombok} to create template methods of an object like getters. setters, etc.
+ *
+ * @author yurii.loienko
+ * @version 1.0
+ */
 @Data
 @Builder
 @AllArgsConstructor

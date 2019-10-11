@@ -2,12 +2,20 @@ package net.ukr.dreamsicle.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Lombok;
 import lombok.NoArgsConstructor;
 import net.ukr.dreamsicle.validation.ValidCurrencyCode;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+/**
+ * DTO class for input currency data
+ * Used by {@link Lombok} to create template methods of an object like getters. setters, etc.
+ *
+ * @author yurii.loienko
+ * @version 1.0
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

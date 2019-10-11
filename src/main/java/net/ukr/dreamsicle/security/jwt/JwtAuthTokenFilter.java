@@ -9,12 +9,21 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.annotation.Nullable;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static java.util.Objects.requireNonNull;
+
+/**
+ * JWT token filter that handles all HTTP requests to application.
+ *
+ * @author yurii.loienko
+ * @version 1.0
+ */
 @AllArgsConstructor
 @Component
 public class JwtAuthTokenFilter extends OncePerRequestFilter {
@@ -22,9 +31,9 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
     private JwtUserDetailsService userDetailsService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(@Nullable HttpServletRequest request, @Nullable HttpServletResponse response, @Nullable FilterChain filterChain) throws ServletException, IOException {
         try {
-            String token = jwtProvider.resolveToken(request);
+            String token = jwtProvider.resolveToken(requireNonNull(request));
             if (token != null && jwtProvider.validateToken(token)) {
                 String username = jwtProvider.getUsername(token);
 
@@ -38,6 +47,6 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             logger.error("Can NOT set user authentication -> Message: {}", e);
         }
-        filterChain.doFilter(request, response);
+        requireNonNull(filterChain).doFilter(request, response);
     }
 }

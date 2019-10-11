@@ -1,8 +1,10 @@
 package net.ukr.dreamsicle.controller;
 
 import lombok.AllArgsConstructor;
-import net.ukr.dreamsicle.dto.UsernameAndPasswordDataDTO;
+import lombok.Lombok;
 import net.ukr.dreamsicle.dto.UserDTO;
+import net.ukr.dreamsicle.dto.UsernameAndPasswordDataDTO;
+import net.ukr.dreamsicle.model.User;
 import net.ukr.dreamsicle.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +17,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
 
+/**
+ * REST controller for work with {@link User} data (findAll, findById, create, login, update, delete, assignPassword)
+ * Used by {@link Lombok} to create template methods of an object like getters. setters, etc.
+ *
+ * @author yurii.loienko
+ * @version 1.0
+ */
 @RestController
 @RequestMapping("/users")
 @AllArgsConstructor

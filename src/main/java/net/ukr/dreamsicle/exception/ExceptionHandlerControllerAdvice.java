@@ -13,7 +13,11 @@ import java.sql.SQLException;
 import java.util.Objects;
 
 /**
- * {@Link handleResourceIsStale} @deprecated
+ * ExceptionHandlerControllerAdvice class that mark with annotation @ControllerAdvice and handle exception from app
+ *
+ * @author yurii.loienko
+ * @version 1.0
+ * @deprecated handleResourceIsStale
  */
 
 @ControllerAdvice

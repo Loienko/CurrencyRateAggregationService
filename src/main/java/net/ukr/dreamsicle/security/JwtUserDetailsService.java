@@ -9,7 +9,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
+/**
+ * Implementation of {@link UserDetailsService} interface for {@link UserPrinciple}.
+ *
+ * @author yurii.loienko
+ * @version 1.0
+ */
 @Service
 @AllArgsConstructor
 public class JwtUserDetailsService implements UserDetailsService {
