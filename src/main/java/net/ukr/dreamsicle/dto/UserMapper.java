@@ -6,11 +6,24 @@ import org.mapstruct.Mapper;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+
 @Mapper
 @Service
 public interface UserMapper {
 
-    UserDTO userToUserDto(User user);
+    default UserDTO userToUserDto(User user) {
+        if (user == null) {
+            return null;
+        }
+        return UserDTO.builder().
+                id(user.getId())
+                .name(user.getName())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .role(Collections.singleton(user.getRoles().toString()))
+                .build();
+    }
 
     User userDtoToUser(UserDTO userDTO);
 

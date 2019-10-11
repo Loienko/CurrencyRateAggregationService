@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "7a0cd796-262b-415a-ae5c-3b04720be693",
+		"_postman_id": "9bc730b5-5339-471f-9aac-f52af2dde5fc",
 		"name": "User",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -12,17 +12,24 @@
 					"type": "noauth"
 				},
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyIiwiaWF0IjoxNTY5ODMxNTI0LCJleHAiOjE1NzA2OTU1MjR9.PUaIBpSC159v5RF4JmWKB-JegIQbg-GcalCZJolOKa2d-f7iqV3cKKr2AW3sf9XoKWJuCZIOrfS-qyU0gBIG9w",
+						"type": "text",
+						"disabled": true
+					}
+				],
 				"url": {
-					"raw": "http://localhost:8080/user/3",
+					"raw": "http://localhost:8080/users/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"user",
-						"3"
+						"users",
+						"1"
 					]
 				}
 			},
@@ -35,7 +42,62 @@
 					"type": "noauth"
 				},
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTU2OTg0OTUyMCwiZXhwIjoxNTcwNzEzNTIwfQ.solmvmeJcHvpxNLHlqb3VzrY5yNtQXgVBIZR5K7vEF9_xj13yedUfJ34_F-RyjZ1N9M2p7RTbaDRu3xHYysphA",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/users?page=0&size=20",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "20"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create user ADMIN",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"admin\",\n\t\"username\": \"admin\",\n\t\"email\": \"admin@ukr.net\",\n\t\"role\": [\"admin\"]\n }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
 					"raw": "http://localhost:8080/users",
 					"protocol": "http",
@@ -51,45 +113,7 @@
 			"response": []
 		},
 		{
-			"name": "Create user",
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Yurii\",\n\t\"username\": \"ddddddddreammmmm\",\n\t\"email\": \"dddddddddfdmgfffsdre@dukr.net\",\n\t\"role\": [\"admin\", \"pm\"],\n\t\"password\": \"123456\"\n }",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/users/create",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"users",
-						"create"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "User authorization",
+			"name": "Authorization ADMIN",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -98,11 +122,16 @@
 						"name": "Content-Type",
 						"value": "application/json",
 						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTU3MDcxNDIwOCwiZXhwIjoxNTcwODAwNjA4fQ.P22aX0nwLG-wRiMS1xR-Nl8-h5meqVr-G7Mqi53sKGW2nfm1Ax9UXNH8f3IH32byzPLypBv-8sY1FRzRU9N08w",
+						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"username\": \"ddddddddreammmmm\",\n\t\"password\": \"123456\"\n}",
+					"raw": "{\n\t\"username\": \"admin\",\n\t\"password\": \"Qwerty1\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -134,11 +163,16 @@
 						"name": "Content-Type",
 						"value": "application/json",
 						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VycnJycnIiLCJpYXQiOjE1NzA3ODAxODYsImV4cCI6MTU3MDc4MTk4Nn0.DOX7MW4AIFFKXpYQIrePdSURxPica8tdlicA_vSqAr-AxIl3vVpWgMUo4mqvxkFcVQQGg3phon97BQfaVPQcsw",
+						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Yurii\",\n\t\"username\": \"ddddddddreammmmm\",\n\t\"email\": \"dddddddddfdmgfffsdre@dukr.net\",\n\t\"role\": [\"admin\", \"pm\"],\n\t\"password\": \"123456\"\n }",
+					"raw": "{\n\t\"name\": \"admin\",\n\t\"username\": \"admin\",\n\t\"email\": \"admin@ukr.net\",\n\t\"role\": [\"admin\"]\n }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -146,7 +180,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/users/1",
+					"raw": "http://localhost:8080/users/22",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -154,7 +188,7 @@
 					"port": "8080",
 					"path": [
 						"users",
-						"1"
+						"22"
 					]
 				}
 			},
@@ -163,10 +197,19 @@
 		{
 			"name": "Delete user",
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "DELETE",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTU3MDc4NDQ4MiwiZXhwIjoxNTcwNzg2MjgyfQ.xKPwLwNU6Vgobv9CZi_B95dEDyZnHq2UEyFAyBoE4Bgsrwdp4BvdfAgXx1-axamdpeavEgfqlGp4Ptpsl-6E1A",
+						"type": "text"
+					}
+				],
 				"url": {
-					"raw": "http://localhost:8080/users/1",
+					"raw": "http://localhost:8080/users/27",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -174,7 +217,43 @@
 					"port": "8080",
 					"path": [
 						"users",
-						"1"
+						"27"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Assign user password",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\" : \"admin\",\n\t\"password\" : \"Qwerty1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/users/password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"password"
 					]
 				}
 			},

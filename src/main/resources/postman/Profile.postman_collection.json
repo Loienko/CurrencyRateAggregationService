@@ -1,0 +1,52 @@
+{
+	"info": {
+		"_postman_id": "e49eeead-8c81-47f6-8046-e98775ab6211",
+		"name": "Profile",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create User details",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTU3MDc4MDQ5NywiZXhwIjoxNTcwNzgyMjk3fQ.ctH-1gDrHf6FbD_Sxw8KPbS4gQ2ljcUu5Zf_g2cT7vmYSy2m6wlvBli-ptfc--J2LC7UC7tag8SZhSv1CbJClg",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"surname\": \"admin\",\n\t\"phone\": \"7777778777\",\n\t\"description\": \"df fsdgs sh sdfgklhadfkjhjdfzdfgzdfbzdfbzdfbzbagkljadf\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/user_details/8",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user_details",
+						"8"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

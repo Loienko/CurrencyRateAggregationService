@@ -34,6 +34,7 @@ public final class UserPrinciple implements UserDetails {
                 .name(user.getName())
                 .username(user.getUsername())
                 .password(user.getPassword())
+                .email(user.getEmail())
                 .authorities(mapToGrantedAuthorities(user))
                 .build();
     }

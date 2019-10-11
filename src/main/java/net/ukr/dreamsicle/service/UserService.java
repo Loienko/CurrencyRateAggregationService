@@ -97,7 +97,7 @@ public class UserService {
         userUpdateById.setName(actualUser.getName());
         userUpdateById.setUsername(actualUser.getUsername());
         userUpdateById.setEmail(actualUser.getEmail());
-        userUpdateById.setRoles(actualUser.getRoles());
+        userUpdateById.setRoles(acquireRoles(userDTO));
 
         return userMapper.userToUserDto(userRepository.saveAndFlush(userUpdateById));
     }
