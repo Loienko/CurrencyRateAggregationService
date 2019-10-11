@@ -7,6 +7,7 @@ import net.ukr.dreamsicle.dto.UserMapper;
 import net.ukr.dreamsicle.dto.UsernameAndPasswordDataDTO;
 import net.ukr.dreamsicle.exception.CustomDataAlreadyExistsException;
 import net.ukr.dreamsicle.exception.ResourceNotFoundException;
+import net.ukr.dreamsicle.model.Currency;
 import net.ukr.dreamsicle.model.Role;
 import net.ukr.dreamsicle.model.RoleType;
 import net.ukr.dreamsicle.model.User;
@@ -33,7 +34,7 @@ import static net.ukr.dreamsicle.model.StatusType.ACTIVE;
 import static net.ukr.dreamsicle.model.StatusType.DELETED;
 
 /**
- * Wrapper for {@link UserRepository} and business logic
+ * Business logic for user object of work with methods {@link Currency} data (findAllUsers, findUserById, createUser, updateUser, deleteUser, authenticateUser, assignPassword)
  *
  * @author yurii.loienko
  * @version 1.0
@@ -153,7 +154,7 @@ public class UserService {
      * Retrieves an user by its id.
      *
      * @param id
-     * @return the user with the given id or {@literal Optional.empty()} if not found
+     * @return the user with the given id
      * @throws ResourceNotFoundException if {@code id} is not found
      */
     public UserDTO findUserById(long id) {
@@ -168,7 +169,6 @@ public class UserService {
      * Throws ResourceNotFoundException.class if none found the user by id
      *
      * @param id
-     * @return user by id
      * @throws ResourceNotFoundException if {@code id} is not found
      */
     @Transactional
@@ -181,10 +181,10 @@ public class UserService {
     }
 
     /**
-     * Create password for user
+     * Updates password created by user
      *
      * @param usernameAndPasswordDataDTO
-     * @return the add to user password
+     * @return updated the user password
      * @throws ResourceNotFoundException if {@code id} is not found
      */
     @Transactional

@@ -1,6 +1,5 @@
 package net.ukr.dreamsicle.service;
 
-import lombok.Lombok;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.ukr.dreamsicle.dto.CurrencyDTO;
@@ -18,8 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.LockModeType;
 
 /**
- * REST controller for work with {@link Currency} data (findAll, findById, create, update, delete)
- * Used by {@link Lombok} to create template methods of an object like getters. setters, etc.
+ * Business logic for currency object of work with methods {@link Currency} data (findAll, findById, create, update, delete)
  *
  * @author yurii.loienko
  * @version 1.0

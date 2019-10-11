@@ -17,7 +17,7 @@ import javax.persistence.LockModeType;
 import java.util.Optional;
 
 /**
- * Wrapper for {@link UserDetailsRepository} and business logic
+ * Business logic for user details object of work with methods createUserDetails
  *
  * @author yurii.loienko
  * @version 1.0
