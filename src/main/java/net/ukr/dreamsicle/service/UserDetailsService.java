@@ -16,6 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.LockModeType;
 import java.util.Optional;
 
+/**
+ * Wrapper for {@link UserDetailsRepository} and business logic
+ *
+ * @author yurii.loienko
+ * @version 1.0
+ */
 @Service
 @AllArgsConstructor
 public class UserDetailsService {
@@ -24,6 +30,16 @@ public class UserDetailsService {
     private final UserRepository userRepository;
     private final UserDetailsRepository userDetailsRepository;
 
+    /**
+     * The method creates user details by {@code id} and status is {@code ACTIVE}. Saves an user details and flushes changes instantly.
+     * If user data does not exist in the database, it will create a new one or update the last one, if any
+     * If the user does not exist, will be thrown ResourceNotFoundException.
+     *
+     * @param id
+     * @param userDetailsDTO
+     * @return user details saved entity
+     * @throws ResourceNotFoundException if {@code id} is not found
+     */
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     public UserDetailsDTO createUserDetails(long id, UserDetailsDTO userDetailsDTO) {
