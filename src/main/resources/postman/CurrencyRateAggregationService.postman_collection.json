@@ -6,12 +6,27 @@
 	},
 	"item": [
 		{
-			"name": "Find All currencies",
+			"name": "Find all currencies",
 			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "user",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "2b92dc28-5c36-4b2a-8897-34a1d3205ae5",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/currencies",
+					"raw": "http://localhost:8080/currencies?page=0",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -19,6 +34,12 @@
 					"port": "8080",
 					"path": [
 						"currencies"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						}
 					]
 				}
 			},
@@ -54,11 +75,17 @@
 						"name": "Content-Type",
 						"value": "application/json",
 						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VycnJycnIiLCJpYXQiOjE1NzA3ODAxODYsImV4cCI6MTU3MDc4MTk4Nn0.DOX7MW4AIFFKXpYQIrePdSURxPica8tdlicA_vSqAr-AxIl3vVpWgMUo4mqvxkFcVQQGg3phon97BQfaVPQcsw",
+						"type": "text",
+						"disabled": true
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"id\": 1,\n\t\"bankName\": \"PrivatBank\",\n\t\"currencyCode\": \"USD\",\n\t\"purchaseCurrency\": \"15.02\",\n\t\"saleOfCurrency\": \"25.05\"\n}",
+					"raw": "{\n\t\"bankName\": \"PrivatBank\",\n\t\"currencyCode\": \"USD\",\n\t\"purchaseCurrency\": \"45.02\",\n\t\"saleOfCurrency\": \"5.05\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -74,6 +101,12 @@
 					"port": "8080",
 					"path": [
 						"currencies"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": ""
+						}
 					]
 				}
 			},
@@ -88,6 +121,11 @@
 						"key": "Content-Type",
 						"name": "Content-Type",
 						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VycnJycnIiLCJpYXQiOjE1NzA3ODAxODYsImV4cCI6MTU3MDc4MTk4Nn0.DOX7MW4AIFFKXpYQIrePdSURxPica8tdlicA_vSqAr-AxIl3vVpWgMUo4mqvxkFcVQQGg3phon97BQfaVPQcsw",
 						"type": "text"
 					}
 				],
@@ -114,9 +152,15 @@
 			"name": "Delete currency By Id",
 			"request": {
 				"method": "DELETE",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VycnJycnIiLCJpYXQiOjE1NzA3ODAxODYsImV4cCI6MTU3MDc4MTk4Nn0.DOX7MW4AIFFKXpYQIrePdSURxPica8tdlicA_vSqAr-AxIl3vVpWgMUo4mqvxkFcVQQGg3phon97BQfaVPQcsw",
+						"type": "text"
+					}
+				],
 				"url": {
-					"raw": "http://localhost:8080/currencies/1",
+					"raw": "http://localhost:8080/currencies/5",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -124,7 +168,7 @@
 					"port": "8080",
 					"path": [
 						"currencies",
-						"1"
+						"5"
 					]
 				}
 			},
