@@ -6,8 +6,6 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.Arrays;
 
-import static java.lang.String.join;
-
 public class PasswordConstraintValidator implements ConstraintValidator<ValidPassword, String> {
 
     @Override
@@ -16,13 +14,14 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
                 new LengthRule(6, 30),
                 new CharacterRule(EnglishCharacterData.UpperCase, 1),
                 new CharacterRule(EnglishCharacterData.LowerCase, 1),
+                new CharacterRule(EnglishCharacterData.Digit, 1),
                 new WhitespaceRule()));
 
         final RuleResult result = validator.validate(new PasswordData(password));
         if (result.isValid()) {
             return true;
         }
-        context.buildConstraintViolationWithTemplate(join(validator.getMessages(result).toString())).addConstraintViolation().disableDefaultConstraintViolation();
+        context.buildConstraintViolationWithTemplate(validator.getMessages(result).iterator().next()).addConstraintViolation().disableDefaultConstraintViolation();
         return false;
     }
 }
