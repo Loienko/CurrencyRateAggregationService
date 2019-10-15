@@ -131,6 +131,7 @@ class UserServiceTest {
         UserDTO userDTO = getUserDtoProvider();
         when(userRepository.findByIdAndStatus(ID, STATUS_TYPE_ACTIVE)).thenReturn(Optional.of(user));
         when(userMapper.userDtoToUser(userDTO)).thenReturn(user);
+        when(roleRepository.findByName(ROLE_TYPE)).thenReturn(Optional.of(role));
         when(userRepository.saveAndFlush(user)).thenReturn(user);
         when(userMapper.userToUserDto(user)).thenReturn(userDTO);
 
@@ -175,6 +176,7 @@ class UserServiceTest {
         UserDTO userDTO = getUserDtoProvider();
         when(userRepository.findByIdAndStatus(ID, STATUS_TYPE_ACTIVE)).thenReturn(Optional.of(user));
         when(userMapper.userDtoToUser(userDTO)).thenReturn(user);
+        when(roleRepository.findByName(ROLE_TYPE)).thenReturn(Optional.of(role));
         when(userRepository.saveAndFlush(user)).thenThrow(TransactionException.class);
 
         assertThrows(TransactionException.class, () -> userService.updateUser(ID, userDTO));
