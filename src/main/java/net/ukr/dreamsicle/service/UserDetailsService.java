@@ -32,7 +32,7 @@ public class UserDetailsService {
 
     /**
      * The method creates user details by {@code id} and status is {@code ACTIVE}. Saves an user details and flushes changes instantly.
-     * If user data does not exist in the database, it will create a new one or update the last one, if any
+     * If user data does not exist it will create a new one or update the last one, if any
      * If the user does not exist, will be thrown ResourceNotFoundException.
      *
      * @param id

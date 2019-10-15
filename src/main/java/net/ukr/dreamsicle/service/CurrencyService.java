@@ -58,7 +58,6 @@ public class CurrencyService {
      * Deletes the currency with the given id. Throws ResourceNotFoundException.class if none found the currency by id
      *
      * @param id
-     * @return deleted currency by id
      * @throws ResourceNotFoundException if {@code id} is not found
      */
     @Transactional
