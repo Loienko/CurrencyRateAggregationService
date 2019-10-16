@@ -11,13 +11,13 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
 
 @RestController
-@RequestMapping("/user_details")
+@RequestMapping("user")
 @AllArgsConstructor
 public class UserDetailsController {
 
     private final UserDetailsService userDetailsService;
 
-    @PostMapping("/{id}")
+    @PostMapping("/{id}/details")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
     public UserDetailsDTO createUserDetails(@PathVariable @Min(1) @Positive long id, @Validated @RequestBody UserDetailsDTO userDetailsDTO) {
         return userDetailsService.createUserDetails(id, userDetailsDTO);
