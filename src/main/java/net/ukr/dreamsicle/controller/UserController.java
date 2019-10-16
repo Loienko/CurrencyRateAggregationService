@@ -58,7 +58,7 @@ public class UserController {
 
     @PutMapping("/password")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public UsernameAndPasswordDataDTO assignPassword(@Validated @RequestBody UsernameAndPasswordDataDTO usernameAndPasswordDataDTO) {
+    public String assignPassword(@Validated @RequestBody UsernameAndPasswordDataDTO usernameAndPasswordDataDTO) {
         return userService.assignPassword(usernameAndPasswordDataDTO);
     }
 }

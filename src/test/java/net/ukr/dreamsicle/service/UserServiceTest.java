@@ -306,14 +306,12 @@ class UserServiceTest {
         when(userMapper.usernameAndPasswordDataDTOToUser(usernameAndPasswordDataDTO)).thenReturn(user);
         when(applicationConfig.passwordEncoder()).thenReturn(bCryptPasswordEncoder);
         when(userRepository.saveAndFlush(user)).thenReturn(user);
-        when(userMapper.userToUsernameAndPasswordDataDTO(user)).thenReturn(usernameAndPasswordDataDTO);
 
-        UsernameAndPasswordDataDTO actualUser = userService.assignPassword(usernameAndPasswordDataDTO);
+        String assignPassword = userService.assignPassword(usernameAndPasswordDataDTO);
 
         verify(userRepository).saveAndFlush(user);
-        assertNotNull(actualUser);
-        assertEquals(usernameAndPasswordDataDTO.getUsername(), actualUser.getUsername());
-        assertEquals(usernameAndPasswordDataDTO.getPassword(), actualUser.getPassword());
+        assertNotNull(assignPassword);
+        assertEquals(SUCCESSFULLY_COMPLETED, assignPassword);
     }
 
     @Test

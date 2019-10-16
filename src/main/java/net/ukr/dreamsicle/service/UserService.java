@@ -44,7 +44,7 @@ import static net.ukr.dreamsicle.model.StatusType.DELETED;
 public class UserService {
 
     private static final String BEARER = "Bearer ";
-    public static final String SUCCESSFULLY_ADDED = "Successfully added";
+    private static final String SUCCESSFULLY_COMPLETED = "Successfully completed!";
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
@@ -185,19 +185,18 @@ public class UserService {
      * Updates password created by user
      *
      * @param usernameAndPasswordDataDTO
-     * @return updated the user password
+     * @return string value 'Successfully completed'
      * @throws ResourceNotFoundException if {@code id} is not found
      */
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    public UsernameAndPasswordDataDTO assignPassword(UsernameAndPasswordDataDTO usernameAndPasswordDataDTO) {
+    public String assignPassword(UsernameAndPasswordDataDTO usernameAndPasswordDataDTO) {
         User user = userRepository.findByUsername(usernameAndPasswordDataDTO.getUsername()).orElseThrow(ResourceNotFoundException::new);
 
         User actualUser = userMapper.usernameAndPasswordDataDTOToUser(usernameAndPasswordDataDTO);
         user.setPassword(applicationConfig.passwordEncoder().encode(actualUser.getPassword()));
         user.setUpdated(Timestamp.valueOf(LocalDateTime.now()));
-        User saveAndFlush = userRepository.saveAndFlush(user);
-        saveAndFlush.setPassword(SUCCESSFULLY_ADDED);
-        return userMapper.userToUsernameAndPasswordDataDTO(saveAndFlush);
+        userRepository.saveAndFlush(user);
+        return SUCCESSFULLY_COMPLETED;
     }
 }
