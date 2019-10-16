@@ -44,6 +44,7 @@ import static net.ukr.dreamsicle.model.StatusType.DELETED;
 public class UserService {
 
     private static final String BEARER = "Bearer ";
+    public static final String SUCCESSFULLY_ADDED = "Successfully added";
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
@@ -195,7 +196,8 @@ public class UserService {
         User actualUser = userMapper.usernameAndPasswordDataDTOToUser(usernameAndPasswordDataDTO);
         user.setPassword(applicationConfig.passwordEncoder().encode(actualUser.getPassword()));
         user.setUpdated(Timestamp.valueOf(LocalDateTime.now()));
-
-        return userMapper.userToUsernameAndPasswordDataDTO(userRepository.saveAndFlush(user));
+        User saveAndFlush = userRepository.saveAndFlush(user);
+        saveAndFlush.setPassword(SUCCESSFULLY_ADDED);
+        return userMapper.userToUsernameAndPasswordDataDTO(saveAndFlush);
     }
 }
