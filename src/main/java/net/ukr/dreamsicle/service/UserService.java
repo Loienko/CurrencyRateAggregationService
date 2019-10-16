@@ -130,8 +130,17 @@ public class UserService {
     public UserDTO updateUser(long id, UserDTO userDTO) {
         User userUpdateById = userRepository.findByIdAndStatus(id, ACTIVE).orElseThrow(ResourceNotFoundException::new);
 
+        if (Boolean.TRUE.equals(userRepository.existsByUsername(userDTO.getUsername())) && !userUpdateById.getUsername().equals(userDTO.getUsername())) {
+            throw new CustomDataAlreadyExistsException("Username is already in use!");
+        }
+
+        if (Boolean.TRUE.equals(userRepository.existsByEmail(userDTO.getEmail())) && !userUpdateById.getEmail().equals(userDTO.getEmail())) {
+            throw new CustomDataAlreadyExistsException("Email is already in use!");
+        }
+
         User actualUser = userMapper.userDtoToUser(userDTO);
 
+        userUpdateById.setId(id);
         userUpdateById.setName(actualUser.getName());
         userUpdateById.setUsername(actualUser.getUsername());
         userUpdateById.setEmail(actualUser.getEmail());
