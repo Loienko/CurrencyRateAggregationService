@@ -302,7 +302,7 @@ class UserServiceTest {
         String actualToken = userService.authenticateUser(usernameAndPasswordDataDTO);
 
         assertNotNull(actualToken);
-        assertEquals(BEARER + TOKEN, actualToken);
+        assertEquals(BEARER + TOKEN + CAUTION, actualToken);
     }
 
     @Test

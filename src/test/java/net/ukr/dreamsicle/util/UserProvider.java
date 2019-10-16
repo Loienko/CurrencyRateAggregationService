@@ -28,6 +28,7 @@ public class UserProvider {
     private static final String EMAIL = "EMAIL";
     private static final String PASSWORD = UUID.randomUUID().toString();
     public static final String SUCCESSFULLY_COMPLETED = "Successfully completed!";
+    public static final String CAUTION = "\nPlease set your own password!!!";
     private static final Set<Role> ROLES = new HashSet<>(Collections.singletonList(new Role(ID, RoleType.ADMIN)));
     private static final Set<String> ROLES_STRING = new HashSet<>(Collections.singletonList(RoleType.ADMIN.getName()));
     private static final Timestamp CREATED = Timestamp.valueOf(LocalDateTime.now());

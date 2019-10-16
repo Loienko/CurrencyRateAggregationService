@@ -27,7 +27,6 @@ import javax.persistence.LockModeType;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static net.ukr.dreamsicle.model.StatusType.ACTIVE;
@@ -45,6 +44,8 @@ public class UserService {
 
     private static final String BEARER = "Bearer ";
     private static final String SUCCESSFULLY_COMPLETED = "Successfully completed!";
+    private static final String PASSWORD = "Password1";
+    private static final String CAUTION = "\nPlease set your own password!!!";
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
@@ -75,7 +76,7 @@ public class UserService {
                 .name(userDTO.getName())
                 .username(userDTO.getUsername())
                 .email(userDTO.getEmail())
-                .password(applicationConfig.passwordEncoder().encode(UUID.randomUUID().toString()))
+                .password(applicationConfig.passwordEncoder().encode(PASSWORD))
                 .roles(acquireRoles(userDTO))
                 .created(Timestamp.valueOf(LocalDateTime.now()))
                 .updated(Timestamp.valueOf(LocalDateTime.now()))
@@ -115,7 +116,7 @@ public class UserService {
                         usernameAndPasswordDataDTO.getPassword()
                 )
         );
-        return BEARER + tokenProvider.createToken(authenticate);
+        return BEARER + tokenProvider.createToken(authenticate) + CAUTION;
     }
 
     /**
