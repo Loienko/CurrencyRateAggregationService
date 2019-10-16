@@ -130,6 +130,8 @@ class UserServiceTest {
         User user = getUserProvider(ID + 1, STATUS_TYPE_ACTIVE);
         UserDTO userDTO = getUserDtoProvider();
         when(userRepository.findByIdAndStatus(ID, STATUS_TYPE_ACTIVE)).thenReturn(Optional.of(user));
+        when(userRepository.existsByUsername(userDTO.getUsername())).thenReturn(Boolean.FALSE);
+        when(userRepository.existsByEmail(userDTO.getEmail())).thenReturn(Boolean.FALSE);
         when(userMapper.userDtoToUser(userDTO)).thenReturn(user);
         when(roleRepository.findByName(ROLE_TYPE)).thenReturn(Optional.of(role));
         when(userRepository.saveAndFlush(user)).thenReturn(user);
@@ -180,6 +182,29 @@ class UserServiceTest {
         when(userRepository.saveAndFlush(user)).thenThrow(TransactionException.class);
 
         assertThrows(TransactionException.class, () -> userService.updateUser(ID, userDTO));
+    }
+
+    @Test
+    void testUpdateUserIsUserNotUniqueInDB() {
+        User user = getUserProvider(ID + 1, STATUS_TYPE_ACTIVE);
+        UserDTO userDTO = getUserDtoProvider();
+        userDTO.setUsername("qwerty");
+        when(userRepository.findByIdAndStatus(ID, STATUS_TYPE_ACTIVE)).thenReturn(Optional.of(user));
+        when(userRepository.existsByUsername(userDTO.getUsername())).thenReturn(Boolean.TRUE).thenThrow(CustomDataAlreadyExistsException.class);
+
+        assertThrows(CustomDataAlreadyExistsException.class, () -> userService.updateUser(ID, userDTO));
+    }
+
+    @Test
+    void testUpdateUserIsEmailNotUniqueInDB() {
+        User user = getUserProvider(ID + 1, STATUS_TYPE_ACTIVE);
+        UserDTO userDTO = getUserDtoProvider();
+        userDTO.setEmail("qwerty@gmail.com");
+        when(userRepository.findByIdAndStatus(ID, STATUS_TYPE_ACTIVE)).thenReturn(Optional.of(user));
+        when(userRepository.existsByUsername(userDTO.getUsername())).thenReturn(Boolean.FALSE);
+        when(userRepository.existsByEmail(userDTO.getEmail())).thenReturn(Boolean.TRUE).thenThrow(CustomDataAlreadyExistsException.class);
+
+        assertThrows(CustomDataAlreadyExistsException.class, () -> userService.updateUser(ID, userDTO));
     }
 
     @Test
