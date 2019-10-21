@@ -1,9 +1,11 @@
 package net.ukr.dreamsicle.service;
 
+import net.ukr.dreamsicle.dto.CurrencyDTO;
 import net.ukr.dreamsicle.model.Currency;
 import net.ukr.dreamsicle.repository.CurrencyRepository;
 import net.ukr.dreamsicle.repository.RoleRepository;
 import net.ukr.dreamsicle.repository.UserRepository;
+import net.ukr.dreamsicle.util.RestPageImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,20 +13,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Objects;
 
 import static net.ukr.dreamsicle.util.CurrencyProvider.ID;
 import static net.ukr.dreamsicle.util.CurrencyProvider.*;
 import static net.ukr.dreamsicle.util.UserProvider.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.HttpMethod.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -41,6 +41,8 @@ public class CurrencyControllerIntegrationsTest {
     private UserService userService;
     @Autowired
     private TestRestTemplate testRestTemplate;
+    @Autowired
+    private RestTemplate restTemplate;
     @LocalServerPort
     private int port;
 
@@ -62,10 +64,10 @@ public class CurrencyControllerIntegrationsTest {
 
     @Test
     public void testGetAllCurrenciesReturnStatus200Ok() {
-        currencyRepository.saveAndFlush(getCurrencyProvider(ID));
-        currencyRepository.saveAndFlush(getCurrencyProvider(ID + 1));
+        currencyRepository.saveAndFlush(getCurrencyProvider());
 
-        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES, GET, null, Currency.class);
+        ResponseEntity<RestPageImpl<CurrencyDTO>> response = restTemplate.exchange(getRootUrl() + CURRENCIES, GET, null, new ParameterizedTypeReference<RestPageImpl<CurrencyDTO>>() {
+        });
 
         assertNotNull(response.getBody());
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -73,14 +75,14 @@ public class CurrencyControllerIntegrationsTest {
 
     @Test
     public void findCurrencyByIdReturnStatus200Ok() {
-        Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider(ID));
+        Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider());
 
-        HttpEntity<Currency> entity = new HttpEntity<>(currency);
-        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, GET, entity, Currency.class, currency.getId());
+        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, GET, new HttpEntity<>(currency), Currency.class, currency.getId());
         Currency body = response.getBody();
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(Objects.requireNonNull(response.getBody()).getId());
         assertEquals(currency.getBankName(), Objects.requireNonNull(body).getBankName());
         assertEquals(currency.getCurrencyCode(), Objects.requireNonNull(response.getBody()).getCurrencyCode());
         assertEquals(currency.getPurchaseCurrency(), response.getBody().getPurchaseCurrency());
@@ -95,128 +97,150 @@ public class CurrencyControllerIntegrationsTest {
 
         assertNotNull(response);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(Objects.requireNonNull(response.getBody()).getId());
     }
 
     @Test
     public void createCurrencyReturnStatus200Ok() {
-        Currency currency = getCurrencyProvider(ID);
+        Currency currency = getCurrencyProvider();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, TOKEN_ADMIN);
-        HttpEntity<Object> entity = new HttpEntity<>(currency, headers);
-        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES, POST, entity, Currency.class);
+        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES, POST, getHeaderData(currency, TOKEN_ADMIN), Currency.class);
         Currency body = response.getBody();
 
         assertNotNull(response);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertNotNull(Objects.requireNonNull(response.getBody()).getId());
         assertEquals(currency.getBankName(), Objects.requireNonNull(body).getBankName());
         assertEquals(currency.getCurrencyCode(), Objects.requireNonNull(body).getCurrencyCode());
         assertEquals(currency.getPurchaseCurrency(), Objects.requireNonNull(body).getPurchaseCurrency());
         assertEquals(currency.getSaleOfCurrency(), Objects.requireNonNull(body).getSaleOfCurrency());
     }
 
-    @Test
-    public void createCurrencyNotValidDataReturnStatus400BadRequest() {
-        Currency currency = getCurrencyNotValidDataProvider("", "", "", "");
-
+    private HttpEntity<Object> getHeaderData(Currency currency, String tokenAdmin) {
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, TOKEN_ADMIN);
-        HttpEntity<Object> entity = new HttpEntity<>(currency, headers);
-        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES, POST, entity, Currency.class);
+        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+        headers.add(HttpHeaders.AUTHORIZATION, tokenAdmin);
+        return new HttpEntity<>(currency, headers);
+    }
+
+    @Test
+    public void createCurrencyNotInputBankNameReturnStatus400BadRequest() {
+        Currency currency = getCurrencyNotValidDataProvider(null, CURRENCY_CODE, PURCHASE_CURRENCY, SALE_OF_CURRENCY);
+
+        ResponseEntity<String> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES, POST, getHeaderData(currency, TOKEN_ADMIN), String.class);
 
         assertNotNull(response);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertTrue(Objects.requireNonNull(response.getBody()).contains("Please fill the bank name"));
     }
 
     @Test
     public void createCurrencyNotValidBankNameReturnStatus400BadRequest() {
-        Currency currency = getCurrencyNotValidDataProvider("", CURRENCY_CODE, PURCHASE_CURRENCY, SALE_OF_CURRENCY);
+        Currency currency = getCurrencyNotValidDataProvider("1", CURRENCY_CODE, PURCHASE_CURRENCY, SALE_OF_CURRENCY);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, TOKEN_ADMIN);
-        HttpEntity<Object> entity = new HttpEntity<>(currency, headers);
-        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES, POST, entity, Currency.class);
+        ResponseEntity<String> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES, POST, getHeaderData(currency, TOKEN_ADMIN), String.class);
 
         assertNotNull(response);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertTrue(Objects.requireNonNull(response.getBody()).contains("Please input valid data for bank name"));
     }
 
     @Test
     public void createCurrencyNotValidCurrencyCodeReturnStatus400BadRequest() {
         Currency currency = getCurrencyNotValidDataProvider(BANK_NAME, "US", PURCHASE_CURRENCY, SALE_OF_CURRENCY);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, TOKEN_ADMIN);
-        HttpEntity<Object> entity = new HttpEntity<>(currency, headers);
-        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES, POST, entity, Currency.class);
+        ResponseEntity<String> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES, POST, getHeaderData(currency, TOKEN_ADMIN), String.class);
 
         assertNotNull(response);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertTrue(Objects.requireNonNull(response.getBody()).contains("Please input valid data for currency code"));
+    }
+
+    @Test
+    public void createCurrencyNotInputCurrencyCodeReturnStatus400BadRequest() {
+        Currency currency = getCurrencyNotValidDataProvider(BANK_NAME, " ", PURCHASE_CURRENCY, SALE_OF_CURRENCY);
+
+        ResponseEntity<String> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES, POST, getHeaderData(currency, TOKEN_ADMIN), String.class);
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertTrue(Objects.requireNonNull(response.getBody()).contains("Please fill the currency code"));
     }
 
     @Test
     public void createCurrencyNotValidPurchaseCurrencyReturnStatus400BadRequest() {
         Currency currency = getCurrencyNotValidDataProvider(BANK_NAME, CURRENCY_CODE, ".00", SALE_OF_CURRENCY);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, TOKEN_ADMIN);
-        HttpEntity<Object> entity = new HttpEntity<>(currency, headers);
-        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES, POST, entity, Currency.class);
+        ResponseEntity<String> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES, POST, getHeaderData(currency, TOKEN_ADMIN), String.class);
 
         assertNotNull(response);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertTrue(Objects.requireNonNull(response.getBody()).contains("Please input valid data for purchase currency"));
+    }
+
+    @Test
+    public void createCurrencyNotInputPurchaseCurrencyReturnStatus400BadRequest() {
+        Currency currency = getCurrencyNotValidDataProvider(BANK_NAME, CURRENCY_CODE, null, SALE_OF_CURRENCY);
+
+        ResponseEntity<String> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES, POST, getHeaderData(currency, TOKEN_ADMIN), String.class);
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertTrue(Objects.requireNonNull(response.getBody()).contains("Please fill the purchase currency"));
     }
 
     @Test
     public void createCurrencyNotValidSaleOfCurrencyReturnStatus400BadRequest() {
         Currency currency = getCurrencyNotValidDataProvider(BANK_NAME, CURRENCY_CODE, PURCHASE_CURRENCY, ".15");
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, TOKEN_ADMIN);
-        HttpEntity<Object> entity = new HttpEntity<>(currency, headers);
-        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES, POST, entity, Currency.class);
+        ResponseEntity<String> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES, POST, getHeaderData(currency, TOKEN_ADMIN), String.class);
 
         assertNotNull(response);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertTrue(Objects.requireNonNull(response.getBody()).contains("Please input valid data for sale of currency"));
+    }
+
+    @Test
+    public void createCurrencyNotInputSaleOfCurrencyReturnStatus400BadRequest() {
+        Currency currency = getCurrencyNotValidDataProvider(BANK_NAME, CURRENCY_CODE, PURCHASE_CURRENCY, null);
+
+        ResponseEntity<String> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES, POST, getHeaderData(currency, TOKEN_ADMIN), String.class);
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertTrue(Objects.requireNonNull(response.getBody()).contains("Please fill the sale of currency"));
     }
 
     @Test
     public void createCurrencyReturnStatus401Unauthorized() {
-        Currency currency = getCurrencyProvider(ID);
+        Currency currency = getCurrencyProvider();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, null);
-        HttpEntity<Object> entity = new HttpEntity<>(currency, headers);
-        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES, POST, entity, Currency.class);
+        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES, POST, getHeaderData(currency, null), Currency.class);
 
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+        assertNull(Objects.requireNonNull(response.getBody()).getId());
     }
 
     @Test
     public void createCurrencyReturnStatus403AccessDenied() {
-        Currency currency = getCurrencyProvider(ID);
+        Currency currency = getCurrencyProvider();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, TOKEN_USER);
-        HttpEntity<Object> entity = new HttpEntity<>(currency, headers);
-        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES, POST, entity, Currency.class);
+        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES, POST, getHeaderData(currency, TOKEN_USER), Currency.class);
 
         assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
     }
 
     @Test
     public void updateCurrencyReturnStatus200Ok() {
-        Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider(ID));
-        Currency currencyForUpdate = getCurrencyProvider(ID + 1);
+        Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider());
+        Currency currencyForUpdate = getCurrencyProvider();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, TOKEN_ADMIN);
-        HttpEntity<Object> entity = new HttpEntity<>(currencyForUpdate, headers);
-        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, PUT, entity, Currency.class, currency.getId());
+        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, PUT, getHeaderData(currencyForUpdate, TOKEN_ADMIN), Currency.class, currency.getId());
         Currency body = response.getBody();
 
         assertNotNull(response);
         assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
+        assertNotNull(Objects.requireNonNull(response.getBody()).getId());
         assertEquals(currency.getId(), Objects.requireNonNull(body).getId());
         assertEquals(currencyForUpdate.getBankName(), Objects.requireNonNull(body).getBankName());
         assertEquals(currencyForUpdate.getPurchaseCurrency(), Objects.requireNonNull(body).getPurchaseCurrency());
@@ -224,122 +248,125 @@ public class CurrencyControllerIntegrationsTest {
     }
 
     @Test
-    public void updateCurrencyNotValidAllDataReturnStatus400OkBadRequest() {
-        Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider(ID));
-        Currency currencyForUpdate = getCurrencyNotValidDataProvider("", "", "", "");
+    public void updateCurrencyNotInputBankNameReturnStatus400OkBadRequest() {
+        Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider());
+        Currency currencyForUpdate = getCurrencyNotValidDataProvider(null, CURRENCY_CODE, PURCHASE_CURRENCY, SALE_OF_CURRENCY);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, TOKEN_ADMIN);
-        HttpEntity<Object> entity = new HttpEntity<>(currencyForUpdate, headers);
-        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, PUT, entity, Currency.class, currency.getId());
+        ResponseEntity<String> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, PUT, getHeaderData(currencyForUpdate, TOKEN_ADMIN), String.class, currency.getId());
 
         assertNotNull(response);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertTrue(Objects.requireNonNull(response.getBody()).contains("Please fill the bank name"));
     }
 
     @Test
     public void updateCurrencyNotValidBankNameReturnStatus400OkBadRequest() {
-        Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider(ID));
-        Currency currencyForUpdate = getCurrencyNotValidDataProvider("", CURRENCY_CODE, PURCHASE_CURRENCY, SALE_OF_CURRENCY);
+        Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider());
+        Currency currencyForUpdate = getCurrencyNotValidDataProvider("1", CURRENCY_CODE, PURCHASE_CURRENCY, SALE_OF_CURRENCY);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, TOKEN_ADMIN);
-        HttpEntity<Object> entity = new HttpEntity<>(currencyForUpdate, headers);
-        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, PUT, entity, Currency.class, currency.getId());
+        ResponseEntity<String> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, PUT, getHeaderData(currencyForUpdate, TOKEN_ADMIN), String.class, currency.getId());
 
         assertNotNull(response);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertTrue(Objects.requireNonNull(response.getBody()).contains("Please input valid data for bank name"));
     }
 
     @Test
     public void updateCurrencyNotValidCurrencyCodeReturnStatus400OkBadRequest() {
-        Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider(ID));
+        Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider());
         Currency currencyForUpdate = getCurrencyNotValidDataProvider(BANK_NAME, "US1", PURCHASE_CURRENCY, SALE_OF_CURRENCY);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, TOKEN_ADMIN);
-        HttpEntity<Object> entity = new HttpEntity<>(currencyForUpdate, headers);
-        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, PUT, entity, Currency.class, currency.getId());
+        ResponseEntity<String> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, PUT, getHeaderData(currencyForUpdate, TOKEN_ADMIN), String.class, currency.getId());
 
         assertNotNull(response);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertTrue(Objects.requireNonNull(response.getBody()).contains("Please input valid data for currency code"));
     }
 
     @Test
     public void updateCurrencyNotValidPurchaseCurrencyReturnStatus400OkBadRequest() {
-        Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider(ID));
+        Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider());
         Currency currencyForUpdate = getCurrencyNotValidDataProvider(BANK_NAME, CURRENCY_CODE, ".00", SALE_OF_CURRENCY);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, TOKEN_ADMIN);
-        HttpEntity<Object> entity = new HttpEntity<>(currencyForUpdate, headers);
-        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, PUT, entity, Currency.class, currency.getId());
+        ResponseEntity<String> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, PUT, getHeaderData(currencyForUpdate, TOKEN_ADMIN), String.class, currency.getId());
 
         assertNotNull(response);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertTrue(Objects.requireNonNull(response.getBody()).contains("Please input valid data for purchase currency"));
+    }
+
+    @Test
+    public void updateCurrencyNotInputPurchaseCurrencyReturnStatus400OkBadRequest() {
+        Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider());
+        Currency currencyForUpdate = getCurrencyNotValidDataProvider(BANK_NAME, CURRENCY_CODE, null, SALE_OF_CURRENCY);
+
+        ResponseEntity<String> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, PUT, getHeaderData(currencyForUpdate, TOKEN_ADMIN), String.class, currency.getId());
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertTrue(Objects.requireNonNull(response.getBody()).contains("Please fill the purchase currency"));
     }
 
     @Test
     public void updateCurrencyNotValidSaleOfCurrencyReturnStatus400OkBadRequest() {
-        Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider(ID));
+        Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider());
         Currency currencyForUpdate = getCurrencyNotValidDataProvider(BANK_NAME, CURRENCY_CODE, PURCHASE_CURRENCY, ".15");
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, TOKEN_ADMIN);
-        HttpEntity<Object> entity = new HttpEntity<>(currencyForUpdate, headers);
-        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, PUT, entity, Currency.class, currency.getId());
+        ResponseEntity<String> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, PUT, getHeaderData(currencyForUpdate, TOKEN_ADMIN), String.class, currency.getId());
 
         assertNotNull(response);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertTrue(Objects.requireNonNull(response.getBody()).contains("Please input valid data for sale of currency"));
+    }
+
+    @Test
+    public void updateCurrencyNotInputSaleOfCurrencyReturnStatus400OkBadRequest() {
+        Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider());
+        Currency currencyForUpdate = getCurrencyNotValidDataProvider(BANK_NAME, CURRENCY_CODE, PURCHASE_CURRENCY, null);
+
+        ResponseEntity<String> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, PUT, getHeaderData(currencyForUpdate, TOKEN_ADMIN), String.class, currency.getId());
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertTrue(Objects.requireNonNull(response.getBody()).contains("Please fill the sale of currency"));
     }
 
     @Test
     public void updateCurrencyReturnStatus404NotFound() {
-        Currency currencyForUpdate = getCurrencyProvider(ID);
+        Currency currencyForUpdate = getCurrencyProvider();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, TOKEN_ADMIN);
-        HttpEntity<Object> entity = new HttpEntity<>(currencyForUpdate, headers);
-        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, PUT, entity, Currency.class, currencyForUpdate.getId());
+        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, PUT, getHeaderData(currencyForUpdate, TOKEN_ADMIN), Currency.class, currencyForUpdate.getId());
 
         assertNotNull(response);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(Objects.requireNonNull(response.getBody()).getId());
     }
 
     @Test
     public void updateCurrencyReturnStatus401Unauthorized() {
-        Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider(ID));
-        Currency currencyForUpdate = getCurrencyProvider(ID + 1);
+        Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider());
+        Currency currencyForUpdate = getCurrencyProvider();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, null);
-        HttpEntity<Object> entity = new HttpEntity<>(currencyForUpdate, headers);
-        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, PUT, entity, Currency.class, currency.getId());
+        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, PUT, getHeaderData(currencyForUpdate, null), Currency.class, currency.getId());
 
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
     }
 
     @Test
     public void updateCurrencyReturnStatus403AccessDenied() {
-        Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider(ID));
-        Currency currencyForUpdate = getCurrencyProvider(ID + 1);
+        Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider());
+        Currency currencyForUpdate = getCurrencyProvider();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, TOKEN_USER);
-        HttpEntity<Object> entity = new HttpEntity<>(currencyForUpdate, headers);
-        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, PUT, entity, Currency.class, currency.getId());
+        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, PUT, getHeaderData(currencyForUpdate, TOKEN_USER), Currency.class, currency.getId());
 
         assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
     }
 
     @Test
     public void deleteCurrencyReturnStatus200Ok() {
-        Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider(ID));
+        Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider());
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, TOKEN_ADMIN);
-        HttpEntity<Object> entity = new HttpEntity<>(currency, headers);
-        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, DELETE, entity, Currency.class, currency.getId());
+        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, DELETE, getHeaderData(currency, TOKEN_ADMIN), Currency.class, currency.getId());
 
         assertNotNull(response);
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
@@ -347,9 +374,7 @@ public class CurrencyControllerIntegrationsTest {
 
     @Test
     public void deleteCurrencyReturnStatus404NotFound() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, TOKEN_ADMIN);
-        HttpEntity<Object> entity = new HttpEntity<>(null, headers);
+        HttpEntity<Object> entity = getHeaderData(null, TOKEN_ADMIN);
         ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, DELETE, entity, Currency.class, ID);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
@@ -357,24 +382,18 @@ public class CurrencyControllerIntegrationsTest {
 
     @Test
     public void deleteCurrencyReturnStatus401Unauthorized() {
-        Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider(ID));
+        Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider());
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, null);
-        HttpEntity<Object> entity = new HttpEntity<>(currency, headers);
-        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, DELETE, entity, Currency.class, currency.getId());
+        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, DELETE, getHeaderData(currency, null), Currency.class, currency.getId());
 
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
     }
 
     @Test
     public void deleteCurrencyReturnStatus403AccessDenied() {
-        Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider(ID));
+        Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider());
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, TOKEN_USER);
-        HttpEntity<Object> entity = new HttpEntity<>(currency, headers);
-        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, DELETE, entity, Currency.class, currency.getId());
+        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, DELETE, getHeaderData(currency, TOKEN_USER), Currency.class, currency.getId());
 
         assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
     }

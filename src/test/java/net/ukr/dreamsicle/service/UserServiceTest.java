@@ -297,12 +297,12 @@ class UserServiceTest {
         when(userRepository.findByUsername(usernameAndPasswordDataDTO.getUsername())).thenReturn(Optional.of(user));
         when(userRepository.findByIdAndStatus(user.getId(), STATUS_TYPE_ACTIVE)).thenReturn(Optional.of(user));
         when(authenticationManager.authenticate(authenticationToken)).thenReturn(authentication);
-        when(tokenProvider.createToken(authentication)).thenReturn(TOKEN);
+        when(tokenProvider.createToken(authentication)).thenReturn(TOKEN_WITH_PASSED_DATE);
 
         String actualToken = userService.authenticateUser(usernameAndPasswordDataDTO);
 
         assertNotNull(actualToken);
-        assertEquals(BEARER + TOKEN + CAUTION, actualToken);
+        assertEquals(BEARER + TOKEN_WITH_PASSED_DATE + CAUTION, actualToken);
     }
 
     @Test

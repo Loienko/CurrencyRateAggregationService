@@ -30,6 +30,6 @@ public class CurrencyDTO {
     private String purchaseCurrency;
 
     @NotBlank(message = "Please fill the sale of currency")
-    @Pattern(regexp = "^[+-]?[0-9]{1,3}(?:,?[0-9]{3})*\\.[0-9]{1,5}$", message = "Please input valid data for sale of currency")
+    @Pattern(regexp = "^[+-]?[0-9]{1,3}(?:,?[0-9]{3})*\\.[0-9]{1,6}$", message = "Please input valid data for sale of currency")
     private String saleOfCurrency;
 }

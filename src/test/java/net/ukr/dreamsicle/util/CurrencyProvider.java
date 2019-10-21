@@ -11,7 +11,7 @@ public class CurrencyProvider {
     public static final String PURCHASE_CURRENCY = "25.12";
     public static final String SALE_OF_CURRENCY = "25.30";
 
-    public static Currency getCurrencyProvider(long id) {
+    public static Currency getCurrencyProvider() {
         return Currency.builder()
                 .id(ID)
                 .bankName(BANK_NAME)
@@ -21,7 +21,7 @@ public class CurrencyProvider {
                 .build();
     }
 
-    public static CurrencyDTO getCurrencyProvider() {
+    public static CurrencyDTO getCurrencyDtoProvider() {
         return CurrencyDTO.builder()
                 .id(ID)
                 .bankName(BANK_NAME)

@@ -43,7 +43,7 @@ public class UserProvider {
     // Token data for user
     public static String TOKEN_ADMIN;
     public static String TOKEN_USER;
-    public static final String TOKEN = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTU3MTM0MTg0OCwiZXhwIjoxNTcxNDI4MjQ4fQ.cVIX0vZHHIndmf2BbyQesaA6RJwFnxt5UWfqZKju48t_m7d_rQFCQP6O75q5445fUuw1Wn922lFXSfCeCJCn4g";
+    public static final String TOKEN_WITH_PASSED_DATE = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTU3MTM0MTg0OCwiZXhwIjoxNTcxNDI4MjQ4fQ.cVIX0vZHHIndmf2BbyQesaA6RJwFnxt5UWfqZKju48t_m7d_rQFCQP6O75q5445fUuw1Wn922lFXSfCeCJCn4g";
 
     //Status for user
     public static final StatusType STATUS_TYPE_ACTIVE = StatusType.ACTIVE;
