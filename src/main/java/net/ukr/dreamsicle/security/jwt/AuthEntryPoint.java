@@ -13,6 +13,8 @@ public class AuthEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException {
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Error -> Unauthorized");
+        response.addHeader("WWW-Authenticate", "UNAUTHORIZED");
+        response.setContentType("application/json");
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "HTTP Status 401 - " + e.getMessage());
     }
 }

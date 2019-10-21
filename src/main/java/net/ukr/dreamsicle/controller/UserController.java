@@ -1,9 +1,8 @@
 package net.ukr.dreamsicle.controller;
 
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import net.ukr.dreamsicle.dto.UsernameAndPasswordDataDTO;
 import net.ukr.dreamsicle.dto.UserDTO;
-import net.ukr.dreamsicle.dto.UserLoginDto;
 import net.ukr.dreamsicle.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,8 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
 
-
-@Slf4j
 @RestController
 @RequestMapping("/users")
 @AllArgsConstructor
@@ -35,7 +32,7 @@ public class UserController {
         return userService.findUserById(id);
     }
 
-    @PostMapping("/create")
+    @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public UserDTO create(@Validated @RequestBody UserDTO userDTO) {
         return userService.createUser(userDTO);
@@ -43,8 +40,8 @@ public class UserController {
 
     @PostMapping("/login")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public String login(@Validated @RequestBody UserLoginDto userLoginDto) {
-        return userService.authenticateUser(userLoginDto);
+    public String login(@Validated @RequestBody UsernameAndPasswordDataDTO usernameAndPasswordDataDTO) {
+        return userService.authenticateUser(usernameAndPasswordDataDTO);
     }
 
     @PutMapping("/{id}")
@@ -57,5 +54,11 @@ public class UserController {
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable @Min(1) @Positive long id) {
         userService.deleteUser(id);
+    }
+
+    @PutMapping("/password")
+    @ResponseStatus(code = HttpStatus.ACCEPTED)
+    public String assignPassword(@Validated @RequestBody UsernameAndPasswordDataDTO usernameAndPasswordDataDTO) {
+        return userService.assignPassword(usernameAndPasswordDataDTO);
     }
 }
