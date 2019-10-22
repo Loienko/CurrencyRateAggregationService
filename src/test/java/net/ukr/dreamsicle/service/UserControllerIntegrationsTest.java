@@ -59,19 +59,13 @@ public class UserControllerIntegrationsTest {
         return HTTP_LOCALHOST + port;
     }
 
-    private <T> HttpEntity<T> getHeader(T header, String token) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, token);
-        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
-        return new HttpEntity<>(header, headers);
-    }
-
     @Test
     public void testGetAllUsersReturnStatus200Ok() {
         ResponseEntity<RestPageImpl<UserDTO>> response = restTemplate.exchange(getRootUrl() + CURRENCIES, GET, null, new ParameterizedTypeReference<RestPageImpl<UserDTO>>() {
         });
 
         assertNotNull(response.getBody());
+        assertNotNull(response.getBody().getContent().size());
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
