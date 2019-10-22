@@ -19,7 +19,7 @@ public class UserProvider {
     public static final long ID = 1L;
 
     //User data like {name, surname, email}
-    private static final String NAME = "test";
+    public static final String NAME = "test";
     public static final String USERNAME_ADMIN = "admin";
     public static final String USERNAME_USER = "user";
     public static final String EMAIL_ADMIN = "admin@ukr.net";
@@ -27,13 +27,15 @@ public class UserProvider {
 
     //Password
     public static final String PASSWORD_WITHOUT_ENCODE = "Qwerty1";
-    private static final String PASSWORD = new BCryptPasswordEncoder().encode("Qwerty1");
+    public static final String PASSWORD = new BCryptPasswordEncoder().encode("Qwerty1");
 
     //User roles
     public static final Role ROLE_ADMIN = new Role(ID, RoleType.ADMIN);
     public static final Role ROLE_USER = new Role(ID + 1, RoleType.USER);
     public static final RoleType ROLE_TYPE = RoleType.ADMIN;
-    private static final Set<String> ROLES_STRING = new HashSet<>(Collections.singletonList(RoleType.ADMIN.getName()));
+    public static final Set<String> ROLES_STRING_ADMIN = new HashSet<>(Collections.singletonList(RoleType.ADMIN.getName()));
+    public static final Set<String> ROLES_STRING_USER = new HashSet<>(Collections.singletonList(RoleType.USER.getName()));
+    public static final Set<String> ROLES_STRING_EMPTY = new HashSet<>(Collections.singletonList(""));
     private static final Set<Role> ROLES = new HashSet<>(Collections.singletonList(ROLE_ADMIN));
 
     //Time for created and updated user account
@@ -52,16 +54,19 @@ public class UserProvider {
 
     //url data
     public static final String HTTP_LOCALHOST = "http://localhost:";
+    public static final String USERS = "/users";
     public static final String BY_ID = "/{id}";
+    public static final String LOGIN = "/login";
+    public static final String PASSWORD_URL = "/password";
 
     //Description
     public static final String BEARER = "Bearer ";
     public static final String SUCCESSFULLY_COMPLETED = "Successfully completed!";
     public static final String CAUTION = "\nPlease set your own password!!!";
 
-    public static User getUserProvider(long id, StatusType statusType) {
+    public static User getUserProvider(StatusType statusType) {
         return User.builder()
-                .id(id)
+                .id(ID)
                 .name(NAME)
                 .username(USERNAME_ADMIN)
                 .email(EMAIL_ADMIN)
@@ -79,7 +84,7 @@ public class UserProvider {
                 .name(NAME)
                 .username(USERNAME_ADMIN)
                 .email(EMAIL_ADMIN)
-                .role(ROLES_STRING)
+                .role(ROLES_STRING_ADMIN)
                 .build();
     }
 
@@ -101,7 +106,7 @@ public class UserProvider {
                 .build();
     }
 
-    public static User getUserProviderForIntegrationTest(Long id, String username, String email, Role role) {
+    public static User getUserIntegrationTestForCreateToken(Long id, String username, String email, Role role) {
         return User.builder()
                 .id(id)
                 .name(NAME)
@@ -112,6 +117,29 @@ public class UserProvider {
                 .created(CREATED)
                 .updated(UPDATED)
                 .status(STATUS_TYPE_ACTIVE)
+                .build();
+    }
+
+    public static User getUserIntegrationTest(String username, String email, Role role) {
+        return User.builder()
+                .name(NAME)
+                .username(username)
+                .email(email)
+                .password(PASSWORD)
+                .roles(new HashSet<>(Collections.singletonList(role)))
+                .created(CREATED)
+                .updated(UPDATED)
+                .status(STATUS_TYPE_ACTIVE)
+                .build();
+    }
+
+    public static UserDTO getUserWithInputDataProvider(String name, String username, String email, Set<String> role) {
+        return UserDTO.builder()
+                .id(ID)
+                .name(name)
+                .username(username)
+                .email(email)
+                .role(role)
                 .build();
     }
 }

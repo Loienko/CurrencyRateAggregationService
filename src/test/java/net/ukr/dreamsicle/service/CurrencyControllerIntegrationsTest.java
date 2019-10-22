@@ -51,8 +51,8 @@ public class CurrencyControllerIntegrationsTest {
         roleRepository.save(ROLE_ADMIN);
         roleRepository.save(ROLE_USER);
 
-        userRepository.save(getUserProviderForIntegrationTest(ID, USERNAME_ADMIN, EMAIL_ADMIN, ROLE_ADMIN));
-        userRepository.save(getUserProviderForIntegrationTest(ID + 1, USERNAME_USER, EMAIL_USER, ROLE_USER));
+        userRepository.save(getUserIntegrationTestForCreateToken(ID, USERNAME_ADMIN, EMAIL_ADMIN, ROLE_ADMIN));
+        userRepository.save(getUserIntegrationTestForCreateToken(ID + 1, USERNAME_USER, EMAIL_USER, ROLE_USER));
 
         TOKEN_ADMIN = userService.authenticateUser(getUsernameAndPasswordIntegrationTest(USERNAME_ADMIN, PASSWORD_WITHOUT_ENCODE)).replace(CAUTION, "");
         TOKEN_USER = userService.authenticateUser(getUsernameAndPasswordIntegrationTest(USERNAME_USER, PASSWORD_WITHOUT_ENCODE)).replace(CAUTION, "");
