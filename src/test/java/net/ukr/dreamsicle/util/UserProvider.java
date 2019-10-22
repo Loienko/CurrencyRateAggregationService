@@ -6,9 +6,6 @@ import net.ukr.dreamsicle.model.Role;
 import net.ukr.dreamsicle.model.RoleType;
 import net.ukr.dreamsicle.model.StatusType;
 import net.ukr.dreamsicle.model.User;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -144,12 +141,5 @@ public class UserProvider {
                 .email(email)
                 .role(role)
                 .build();
-    }
-
-    public static  <T> HttpEntity<T> getHeader(T header, String token) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, token);
-        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
-        return new HttpEntity<>(header, headers);
     }
 }

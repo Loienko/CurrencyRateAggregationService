@@ -26,6 +26,7 @@ import java.util.Objects;
 
 import static net.ukr.dreamsicle.util.CurrencyProvider.ID;
 import static net.ukr.dreamsicle.util.CurrencyProvider.*;
+import static net.ukr.dreamsicle.util.HttpHeaderProvider.getHeader;
 import static net.ukr.dreamsicle.util.UserProvider.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.HttpMethod.*;
@@ -151,17 +152,6 @@ public class CurrencyControllerIntegrationsTest {
         assertNotNull(response);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertTrue(Objects.requireNonNull(response.getBody()).contains("Please input valid data for currency code"));
-    }
-
-    @Test
-    public void createCurrencyNotInputCurrencyCodeReturnStatus400BadRequest() {
-        Currency currency = getCurrencyNotValidDataProvider(BANK_NAME, " ", PURCHASE_CURRENCY, SALE_OF_CURRENCY);
-
-        ResponseEntity<String> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES, POST, getHeader(currency, TOKEN_ADMIN), String.class);
-
-        assertNotNull(response);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertTrue(Objects.requireNonNull(response.getBody()).contains("Please fill the currency code"));
     }
 
     @Test
