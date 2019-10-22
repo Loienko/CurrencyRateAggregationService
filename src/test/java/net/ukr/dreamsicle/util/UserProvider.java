@@ -7,39 +7,64 @@ import net.ukr.dreamsicle.model.RoleType;
 import net.ukr.dreamsicle.model.StatusType;
 import net.ukr.dreamsicle.model.User;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 public class UserProvider {
-    public static final long ID = 1;
+    public static final long ID = 1L;
+
+    //User data like {name, surname, email}
+    private static final String NAME = "test";
+    public static final String USERNAME_ADMIN = "admin";
+    public static final String USERNAME_USER = "user";
+    public static final String EMAIL_ADMIN = "admin@ukr.net";
+    public static final String EMAIL_USER = "user@ukr.net";
+
+    //Password
+    public static final String PASSWORD_WITHOUT_ENCODE = "Qwerty1";
+    private static final String PASSWORD = new BCryptPasswordEncoder().encode("Qwerty1");
+
+    //User roles
+    public static final Role ROLE_ADMIN = new Role(ID, RoleType.ADMIN);
+    public static final Role ROLE_USER = new Role(ID + 1, RoleType.USER);
+    public static final RoleType ROLE_TYPE = RoleType.ADMIN;
+    private static final Set<String> ROLES_STRING = new HashSet<>(Collections.singletonList(RoleType.ADMIN.getName()));
+    private static final Set<Role> ROLES = new HashSet<>(Collections.singletonList(ROLE_ADMIN));
+
+    //Time for created and updated user account
+    private static final Timestamp CREATED = Timestamp.valueOf(LocalDateTime.now());
+    private static final Timestamp UPDATED = Timestamp.valueOf(LocalDateTime.now());
+
+    // Token data for user
+    public static String TOKEN_ADMIN;
+    public static String TOKEN_USER;
+    public static final String TOKEN_WITH_PASSED_DATE = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTU3MTM0MTg0OCwiZXhwIjoxNTcxNDI4MjQ4fQ.cVIX0vZHHIndmf2BbyQesaA6RJwFnxt5UWfqZKju48t_m7d_rQFCQP6O75q5445fUuw1Wn922lFXSfCeCJCn4g";
+
+    //Status for user
     public static final StatusType STATUS_TYPE_ACTIVE = StatusType.ACTIVE;
     public static final StatusType STATUS_TYPE_NOT_ACTIVE = StatusType.NOT_ACTIVE;
     public static final StatusType STATUS_TYPE_DELETED = StatusType.DELETED;
-    public static final RoleType ROLE_TYPE = RoleType.ADMIN;
+
+    //url data
+    public static final String HTTP_LOCALHOST = "http://localhost:";
+    public static final String BY_ID = "/{id}";
+
+    //Description
     public static final String BEARER = "Bearer ";
-    public static final String TOKEN = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbm5hIiwiaWF0IjoxNTcwNjQ2MzAyLCJleHAiOjE1NzA3MzI3MDJ9.PhniKHni8XmpthhZX2NhnAvDMC6n_UpFkLxvOVBFfIXyQYo1dU9SkFHGdjbIX_Pix1nPi4OvR_fdyZv1tZqCVA";
-    private static final String NAME = "USER";
-    private static final String USERNAME = "USERNAME";
-    private static final String EMAIL = "EMAIL";
-    private static final String PASSWORD = UUID.randomUUID().toString();
     public static final String SUCCESSFULLY_COMPLETED = "Successfully completed!";
     public static final String CAUTION = "\nPlease set your own password!!!";
-    private static final Set<Role> ROLES = new HashSet<>(Collections.singletonList(new Role(ID, RoleType.ADMIN)));
-    private static final Set<String> ROLES_STRING = new HashSet<>(Collections.singletonList(RoleType.ADMIN.getName()));
-    private static final Timestamp CREATED = Timestamp.valueOf(LocalDateTime.now());
-    private static final Timestamp UPDATED = Timestamp.valueOf(LocalDateTime.now());
 
     public static User getUserProvider(long id, StatusType statusType) {
         return User.builder()
                 .id(id)
                 .name(NAME)
-                .username(USERNAME)
-                .email(EMAIL)
+                .username(USERNAME_ADMIN)
+                .email(EMAIL_ADMIN)
                 .password(PASSWORD)
                 .roles(ROLES)
                 .created(CREATED)
@@ -52,20 +77,41 @@ public class UserProvider {
         return UserDTO.builder()
                 .id(ID)
                 .name(NAME)
-                .username(USERNAME)
-                .email(EMAIL)
+                .username(USERNAME_ADMIN)
+                .email(EMAIL_ADMIN)
                 .role(ROLES_STRING)
                 .build();
     }
 
     public static UsernameAndPasswordDataDTO getUsernameAndPasswordDataDTO() {
         return UsernameAndPasswordDataDTO.builder()
-                .username(USERNAME)
+                .username(USERNAME_ADMIN)
                 .password(PASSWORD)
                 .build();
     }
 
     public static UsernamePasswordAuthenticationToken getAuthenticationToken() {
-        return new UsernamePasswordAuthenticationToken(USERNAME, PASSWORD);
+        return new UsernamePasswordAuthenticationToken(USERNAME_ADMIN, PASSWORD);
+    }
+
+    public static UsernameAndPasswordDataDTO getUsernameAndPasswordIntegrationTest(String username, String password) {
+        return UsernameAndPasswordDataDTO.builder()
+                .username(username)
+                .password(password)
+                .build();
+    }
+
+    public static User getUserProviderForIntegrationTest(Long id, String username, String email, Role role) {
+        return User.builder()
+                .id(id)
+                .name(NAME)
+                .username(username)
+                .email(email)
+                .password(PASSWORD)
+                .roles(new HashSet<>(Collections.singletonList(role)))
+                .created(CREATED)
+                .updated(UPDATED)
+                .status(STATUS_TYPE_ACTIVE)
+                .build();
     }
 }
