@@ -41,7 +41,7 @@ public class UserController {
     @PostMapping("/login")
     @ResponseStatus(code = HttpStatus.CREATED)
     public String login(@Validated @RequestBody UsernameAndPasswordDataDTO usernameAndPasswordDataDTO) {
-        return userService.authenticateUser(usernameAndPasswordDataDTO);
+        return userService.login(usernameAndPasswordDataDTO);
     }
 
     @PutMapping("/{id}")

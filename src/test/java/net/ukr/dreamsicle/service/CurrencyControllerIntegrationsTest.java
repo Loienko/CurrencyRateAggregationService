@@ -58,8 +58,8 @@ public class CurrencyControllerIntegrationsTest {
         userRepository.save(getUserIntegrationTestForCreateToken(ID, USERNAME_ADMIN, EMAIL_ADMIN, ROLE_ADMIN));
         userRepository.save(getUserIntegrationTestForCreateToken(ID + 1, USERNAME_USER, EMAIL_USER, ROLE_USER));
 
-        TOKEN_ADMIN = userService.authenticateUser(getUsernameAndPasswordIntegrationTest(USERNAME_ADMIN, PASSWORD_WITHOUT_ENCODE)).replace(CAUTION, "");
-        TOKEN_USER = userService.authenticateUser(getUsernameAndPasswordIntegrationTest(USERNAME_USER, PASSWORD_WITHOUT_ENCODE)).replace(CAUTION, "");
+        TOKEN_ADMIN = userService.login(getUsernameAndPasswordIntegrationTest(USERNAME_ADMIN, PASSWORD_WITHOUT_ENCODE)).replace(CAUTION, "");
+        TOKEN_USER = userService.login(getUsernameAndPasswordIntegrationTest(USERNAME_USER, PASSWORD_WITHOUT_ENCODE)).replace(CAUTION, "");
     }
 
     private String getRootUrl() {
@@ -98,7 +98,7 @@ public class CurrencyControllerIntegrationsTest {
     public void findCurrencyByIdReturnStatus404NotFound() {
         HttpEntity<Currency> entity = new HttpEntity<>(null, new HttpHeaders());
 
-        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, GET, entity, Currency.class, ID);
+        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, GET, entity, Currency.class, Integer.MAX_VALUE);
 
         assertNotNull(response);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
@@ -322,7 +322,7 @@ public class CurrencyControllerIntegrationsTest {
     public void updateCurrencyReturnStatus404NotFound() {
         Currency currencyForUpdate = getCurrencyProvider();
 
-        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, PUT, getHeader(currencyForUpdate, TOKEN_ADMIN), Currency.class, currencyForUpdate.getId());
+        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, PUT, getHeader(currencyForUpdate, TOKEN_ADMIN), Currency.class, Integer.MAX_VALUE);
 
         assertNotNull(response);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
@@ -350,7 +350,7 @@ public class CurrencyControllerIntegrationsTest {
     }
 
     @Test
-    public void deleteCurrencyReturnStatus200Ok() {
+    public void deleteCurrencyReturnStatus204NoContent() {
         Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider());
 
         ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, DELETE, getHeader(currency, TOKEN_ADMIN), Currency.class, currency.getId());
@@ -362,7 +362,7 @@ public class CurrencyControllerIntegrationsTest {
     @Test
     public void deleteCurrencyReturnStatus404NotFound() {
         HttpEntity<Object> entity = getHeader(null, TOKEN_ADMIN);
-        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, DELETE, entity, Currency.class, ID);
+        ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, DELETE, entity, Currency.class, Integer.MAX_VALUE);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
