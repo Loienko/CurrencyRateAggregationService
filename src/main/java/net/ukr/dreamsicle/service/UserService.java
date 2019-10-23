@@ -106,7 +106,7 @@ public class UserService {
      * @throws ResourceNotFoundException if user {@code id} is not found
      * @throws ResourceNotFoundException if user {@code username} is not found
      */
-    public String authenticateUser(UsernameAndPasswordDataDTO usernameAndPasswordDataDTO) {
+    public String login(UsernameAndPasswordDataDTO usernameAndPasswordDataDTO) {
         User userByUsername = userRepository.findByUsername(usernameAndPasswordDataDTO.getUsername()).orElseThrow(ResourceNotFoundException::new);
         User user = userRepository.findByIdAndStatus(userByUsername.getId(), ACTIVE).orElseThrow(ResourceNotFoundException::new);
 

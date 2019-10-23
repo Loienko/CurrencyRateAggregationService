@@ -48,7 +48,7 @@ class UserDetailsServiceTest {
 
     @Test
     void testCreateUserDetailsDataExistInDb() {
-        User user = getUserProvider(ID, STATUS_TYPE_ACTIVE);
+        User user = getUserProvider( STATUS_TYPE_ACTIVE);
         UserDetails userDetails = UserDetailsProvider.getUserDetailsProvider();
         UserDetailsDTO userDetailsDto = UserDetailsProvider.getUserDetailsDtoProvider();
         when(userMapper.userDetailsToUser(userDetailsDto)).thenReturn(userDetails);
@@ -67,7 +67,7 @@ class UserDetailsServiceTest {
 
     @Test
     void testCreateUserDetailsNewDataInDb() {
-        User user = getUserProvider(ID, STATUS_TYPE_ACTIVE);
+        User user = getUserProvider( STATUS_TYPE_ACTIVE);
         UserDetails userDetails = UserDetailsProvider.getUserDetailsProvider();
         UserDetailsDTO userDetailsDto = UserDetailsProvider.getUserDetailsDtoProvider();
         when(userMapper.userDetailsToUser(userDetailsDto)).thenReturn(userDetails);
@@ -120,7 +120,7 @@ class UserDetailsServiceTest {
 
     @Test
     void testCreateUserDetailsDataExistInDbThrowTransactionException() {
-        User user = getUserProvider(ID, STATUS_TYPE_ACTIVE);
+        User user = getUserProvider( STATUS_TYPE_ACTIVE);
         UserDetails userDetails = UserDetailsProvider.getUserDetailsProvider();
         UserDetailsDTO userDetailsDto = UserDetailsProvider.getUserDetailsDtoProvider();
         when(userMapper.userDetailsToUser(userDetailsDto)).thenReturn(userDetails);

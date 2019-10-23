@@ -299,7 +299,7 @@ class UserServiceTest {
         when(authenticationManager.authenticate(authenticationToken)).thenReturn(authentication);
         when(tokenProvider.createToken(authentication)).thenReturn(TOKEN_WITH_PASSED_DATE);
 
-        String actualToken = userService.authenticateUser(usernameAndPasswordDataDTO);
+        String actualToken = userService.login(usernameAndPasswordDataDTO);
 
         assertNotNull(actualToken);
         assertEquals(BEARER + TOKEN_WITH_PASSED_DATE + CAUTION, actualToken);
@@ -310,7 +310,7 @@ class UserServiceTest {
         UsernameAndPasswordDataDTO usernameAndPasswordDataDTO = getUsernameAndPasswordDataDTO();
         when(userRepository.findByUsername(usernameAndPasswordDataDTO.getUsername())).thenThrow(ResourceNotFoundException.class);
 
-        assertThrows(ResourceNotFoundException.class, () -> userService.authenticateUser(usernameAndPasswordDataDTO));
+        assertThrows(ResourceNotFoundException.class, () -> userService.login(usernameAndPasswordDataDTO));
     }
 
     @Test
@@ -320,7 +320,7 @@ class UserServiceTest {
         when(userRepository.findByUsername(usernameAndPasswordDataDTO.getUsername())).thenReturn(Optional.of(user));
         when(userRepository.findByIdAndStatus(user.getId(), STATUS_TYPE_ACTIVE)).thenThrow(ResourceNotFoundException.class);
 
-        assertThrows(ResourceNotFoundException.class, () -> userService.authenticateUser(usernameAndPasswordDataDTO));
+        assertThrows(ResourceNotFoundException.class, () -> userService.login(usernameAndPasswordDataDTO));
     }
 
     @Test
