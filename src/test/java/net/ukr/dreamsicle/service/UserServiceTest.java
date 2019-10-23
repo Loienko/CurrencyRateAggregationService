@@ -88,7 +88,7 @@ class UserServiceTest {
 
     @Test
     void testFindUserById() {
-        User user = getUserProvider(ID, STATUS_TYPE_ACTIVE);
+        User user = getUserProvider(STATUS_TYPE_ACTIVE);
         UserDTO userDTO = getUserDtoProvider();
         when(userRepository.findByIdAndStatus(ID, STATUS_TYPE_ACTIVE)).thenReturn(Optional.of(user));
         when(userMapper.userToUserDto(user)).thenReturn(userDTO);
@@ -127,7 +127,7 @@ class UserServiceTest {
 
     @Test
     void testUpdateUser() {
-        User user = getUserProvider(ID + 1, STATUS_TYPE_ACTIVE);
+        User user = getUserProvider(STATUS_TYPE_ACTIVE);
         UserDTO userDTO = getUserDtoProvider();
         when(userRepository.findByIdAndStatus(ID, STATUS_TYPE_ACTIVE)).thenReturn(Optional.of(user));
         when(userRepository.existsByUsername(userDTO.getUsername())).thenReturn(Boolean.FALSE);
@@ -174,7 +174,7 @@ class UserServiceTest {
 
     @Test
     void testUpdateUserReturnedTransactionException() {
-        User user = getUserProvider(ID + 1, STATUS_TYPE_ACTIVE);
+        User user = getUserProvider(STATUS_TYPE_ACTIVE);
         UserDTO userDTO = getUserDtoProvider();
         when(userRepository.findByIdAndStatus(ID, STATUS_TYPE_ACTIVE)).thenReturn(Optional.of(user));
         when(userMapper.userDtoToUser(userDTO)).thenReturn(user);
@@ -186,7 +186,7 @@ class UserServiceTest {
 
     @Test
     void testUpdateUserIsUserNotUniqueInDB() {
-        User user = getUserProvider(ID + 1, STATUS_TYPE_ACTIVE);
+        User user = getUserProvider(STATUS_TYPE_ACTIVE);
         UserDTO userDTO = getUserDtoProvider();
         userDTO.setUsername("qwerty");
         when(userRepository.findByIdAndStatus(ID, STATUS_TYPE_ACTIVE)).thenReturn(Optional.of(user));
@@ -197,7 +197,7 @@ class UserServiceTest {
 
     @Test
     void testUpdateUserIsEmailNotUniqueInDB() {
-        User user = getUserProvider(ID + 1, STATUS_TYPE_ACTIVE);
+        User user = getUserProvider(STATUS_TYPE_ACTIVE);
         UserDTO userDTO = getUserDtoProvider();
         userDTO.setEmail("qwerty@gmail.com");
         when(userRepository.findByIdAndStatus(ID, STATUS_TYPE_ACTIVE)).thenReturn(Optional.of(user));
@@ -209,8 +209,8 @@ class UserServiceTest {
 
     @Test
     void testDeleteUser() {
-        User user = getUserProvider(ID, STATUS_TYPE_ACTIVE);
-        User userDeletedStatus = getUserProvider(ID, STATUS_TYPE_DELETED);
+        User user = getUserProvider(STATUS_TYPE_ACTIVE);
+        User userDeletedStatus = getUserProvider(STATUS_TYPE_DELETED);
         when(userRepository.findByIdAndStatus(ID, STATUS_TYPE_ACTIVE)).thenReturn(Optional.of(user));
         when(userRepository.saveAndFlush(userDeletedStatus)).thenReturn(userDeletedStatus);
 
@@ -242,7 +242,7 @@ class UserServiceTest {
 
     @Test
     void testCreateUser() {
-        User user = getUserProvider(ID, STATUS_TYPE_ACTIVE);
+        User user = getUserProvider(STATUS_TYPE_ACTIVE);
         UserDTO userDTO = getUserDtoProvider();
         when(userRepository.existsByUsername(userDTO.getUsername())).thenReturn(Boolean.FALSE);
         when(userRepository.existsByEmail(userDTO.getEmail())).thenReturn(Boolean.FALSE);
@@ -291,7 +291,7 @@ class UserServiceTest {
 
     @Test
     void testAuthenticateUser() {
-        User user = getUserProvider(ID, STATUS_TYPE_ACTIVE);
+        User user = getUserProvider(STATUS_TYPE_ACTIVE);
         UsernameAndPasswordDataDTO usernameAndPasswordDataDTO = getUsernameAndPasswordDataDTO();
         UsernamePasswordAuthenticationToken authenticationToken = getAuthenticationToken();
         when(userRepository.findByUsername(usernameAndPasswordDataDTO.getUsername())).thenReturn(Optional.of(user));
@@ -315,7 +315,7 @@ class UserServiceTest {
 
     @Test
     void testAuthenticateUserByIdNotPresentUserInDb() {
-        User user = getUserProvider(ID, STATUS_TYPE_ACTIVE);
+        User user = getUserProvider(STATUS_TYPE_ACTIVE);
         UsernameAndPasswordDataDTO usernameAndPasswordDataDTO = getUsernameAndPasswordDataDTO();
         when(userRepository.findByUsername(usernameAndPasswordDataDTO.getUsername())).thenReturn(Optional.of(user));
         when(userRepository.findByIdAndStatus(user.getId(), STATUS_TYPE_ACTIVE)).thenThrow(ResourceNotFoundException.class);
@@ -325,7 +325,7 @@ class UserServiceTest {
 
     @Test
     void testAssignPassword() {
-        User user = getUserProvider(ID, STATUS_TYPE_ACTIVE);
+        User user = getUserProvider(STATUS_TYPE_ACTIVE);
         UsernameAndPasswordDataDTO usernameAndPasswordDataDTO = getUsernameAndPasswordDataDTO();
         when(userRepository.findByUsername(usernameAndPasswordDataDTO.getUsername())).thenReturn(Optional.of(user));
         when(userMapper.usernameAndPasswordDataDTOToUser(usernameAndPasswordDataDTO)).thenReturn(user);
@@ -349,7 +349,7 @@ class UserServiceTest {
 
     @Test
     void testAssignPasswordReturnedTransactionException() {
-        User user = getUserProvider(ID, STATUS_TYPE_ACTIVE);
+        User user = getUserProvider(STATUS_TYPE_ACTIVE);
         UsernameAndPasswordDataDTO usernameAndPasswordDataDTO = getUsernameAndPasswordDataDTO();
         when(userRepository.findByUsername(usernameAndPasswordDataDTO.getUsername())).thenReturn(Optional.of(user));
         when(userMapper.usernameAndPasswordDataDTOToUser(usernameAndPasswordDataDTO)).thenReturn(user);
