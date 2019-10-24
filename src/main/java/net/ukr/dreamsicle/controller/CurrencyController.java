@@ -70,13 +70,6 @@ public class CurrencyController {
     @ApiResponses(value = {
             @ApiResponse(code = 202, message = "Accepted", response = CurrencyDTO.class),
             @ApiResponse(code = 400, message = "Bad request. Not valid data"),
-//            @ApiResponse(code = 400, message = "Please fill the bank name"),
-//            @ApiResponse(code = 400, message = "Please input valid data for bank name"),
-//            @ApiResponse(code = 400, message = "Please fill the currency code"),
-//            @ApiResponse(code = 400, message = "Please input valid data for currency code"),
-//            @ApiResponse(code = 400, message = "Please input valid data for purchase currency"),
-//            @ApiResponse(code = 400, message = "Please input valid data for sale of currency"),
-//            @ApiResponse(code = 400, message = "Please fill the sale of currency"),
             @ApiResponse(code = 401, message = "Full authentication is required to access this resource"),
             @ApiResponse(code = 403, message = "Forbidden"),
             @ApiResponse(code = 404, message = "Resource not found")

@@ -26,7 +26,7 @@ public class UserDetailsController {
     @ApiResponses(value = {
             @ApiResponse(code = 202, message = "Accepted"),
             @ApiResponse(code = 204, message = "No Content"),
-            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 400, message = "Bad request. Not valid data."),
             @ApiResponse(code = 404, message = "Resource not found"),
             @ApiResponse(code = 401, message = "Full authentication is required to access this resource"),
             @ApiResponse(code = 403, message = "Forbidden")
