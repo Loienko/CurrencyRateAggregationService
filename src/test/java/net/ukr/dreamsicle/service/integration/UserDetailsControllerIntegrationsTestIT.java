@@ -1,4 +1,4 @@
-package net.ukr.dreamsicle.service;
+package net.ukr.dreamsicle.service.integration;
 
 import net.ukr.dreamsicle.dto.UserDetailsDTO;
 import net.ukr.dreamsicle.model.User;
@@ -6,6 +6,7 @@ import net.ukr.dreamsicle.model.UserDetails;
 import net.ukr.dreamsicle.repository.RoleRepository;
 import net.ukr.dreamsicle.repository.UserDetailsRepository;
 import net.ukr.dreamsicle.repository.UserRepository;
+import net.ukr.dreamsicle.service.UserService;
 import net.ukr.dreamsicle.util.UserDetailsProvider;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +35,7 @@ import static org.springframework.http.HttpStatus.ACCEPTED;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public class UserDetailsControllerIntegrationsTest {
+public class UserDetailsControllerIntegrationsTestIT {
     @Autowired
     private UserDetailsRepository userDetailsRepository;
     @Autowired
