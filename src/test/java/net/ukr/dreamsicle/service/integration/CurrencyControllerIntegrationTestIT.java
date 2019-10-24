@@ -1,10 +1,11 @@
-package net.ukr.dreamsicle.service;
+package net.ukr.dreamsicle.service.integration;
 
 import net.ukr.dreamsicle.dto.CurrencyDTO;
 import net.ukr.dreamsicle.model.Currency;
 import net.ukr.dreamsicle.repository.CurrencyRepository;
 import net.ukr.dreamsicle.repository.RoleRepository;
 import net.ukr.dreamsicle.repository.UserRepository;
+import net.ukr.dreamsicle.service.UserService;
 import net.ukr.dreamsicle.util.RestPageImpl;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +35,7 @@ import static org.springframework.http.HttpMethod.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public class CurrencyControllerIntegrationsTest {
+public class CurrencyControllerIntegrationTestIT {
     @Autowired
     private CurrencyRepository currencyRepository;
     @Autowired
