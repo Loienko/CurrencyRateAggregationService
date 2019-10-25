@@ -6,8 +6,21 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.Arrays;
 
+/**
+ * PasswordConstraintValidator class that implements {@link ConstraintValidator} for class {@link ValidPassword}.
+ *
+ * @author yurii.loienko
+ * @version 1.0
+ */
 public class PasswordConstraintValidator implements ConstraintValidator<ValidPassword, String> {
 
+    /**
+     * Validates the supplied password data against the rules in this validator
+     *
+     * @param password
+     * @param context
+     * @return Boolean value of the verified password data
+     */
     @Override
     public boolean isValid(String password, ConstraintValidatorContext context) {
         PasswordValidator validator = new PasswordValidator(Arrays.asList(

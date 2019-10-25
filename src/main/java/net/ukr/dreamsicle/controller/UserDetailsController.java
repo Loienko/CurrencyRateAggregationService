@@ -5,7 +5,9 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
+import lombok.Lombok;
 import net.ukr.dreamsicle.dto.UserDetailsDTO;
+import net.ukr.dreamsicle.model.UserDetails;
 import net.ukr.dreamsicle.service.UserDetailsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -14,6 +16,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
 
+/**
+ * REST controller for create {@link UserDetails} data
+ * Used by {@link Lombok} to create template methods of an object like getters. setters, etc.
+ *
+ * @author yurii.loienko
+ * @version 1.0
+ */
 @Api(value = "/user", produces = "application/json")
 @RestController
 @RequestMapping("/user")

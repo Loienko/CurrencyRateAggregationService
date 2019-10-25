@@ -2,16 +2,20 @@ package net.ukr.dreamsicle.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.Set;
 
+/**
+ * DTO class for input user data
+ * Used by {@link Lombok} to create template methods of an object like getters. setters, etc.
+ *
+ * @author yurii.loienko
+ * @version 1.0
+ */
 @Data
 @NoArgsConstructor
 @Builder

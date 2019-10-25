@@ -1,5 +1,6 @@
 package net.ukr.dreamsicle.dto;
 
+import lombok.Lombok;
 import net.ukr.dreamsicle.model.User;
 import net.ukr.dreamsicle.model.UserDetails;
 import org.mapstruct.Mapper;
@@ -8,6 +9,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 
+/**
+ * The generation of a implementation of {@link UserDTO} to {@link User} and back via MapStruct.
+ * Used by {@link Lombok} to create template methods of an object like getters. setters, etc.
+ *
+ * @author yurii.loienko
+ * @version 1.0
+ */
 @Mapper
 @Service
 public interface UserMapper {

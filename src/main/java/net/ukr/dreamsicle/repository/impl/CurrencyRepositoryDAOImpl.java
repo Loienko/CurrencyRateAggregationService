@@ -15,6 +15,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
+ * Class for connection with DB uses Spring JDBCTemplate technology
+ *
+ * @author yurii.loienko
+ * @version 1.0
  * @deprecated
  */
 @Repository

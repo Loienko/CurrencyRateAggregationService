@@ -14,6 +14,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Spring Security wrapper for class {@link User}
+ *
+ * @author yurii.loienko
+ * @version 1.0
+ */
 @Data
 @Builder
 @AllArgsConstructor

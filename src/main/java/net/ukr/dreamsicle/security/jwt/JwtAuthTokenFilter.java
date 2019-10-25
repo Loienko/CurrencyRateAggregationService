@@ -15,6 +15,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * JWT token filter that handles all HTTP requests to application.
+ *
+ * @author yurii.loienko
+ * @version 1.0
+ */
 @AllArgsConstructor
 @Component
 public class JwtAuthTokenFilter extends OncePerRequestFilter {

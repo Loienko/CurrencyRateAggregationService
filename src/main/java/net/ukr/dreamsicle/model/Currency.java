@@ -1,12 +1,16 @@
 package net.ukr.dreamsicle.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
+/**
+ * A simple Entity object that creates a 'currency' table in a database
+ * Used by {@link Lombok} to create template methods of an object like getters. setters, etc.
+ *
+ * @author yurii.loienko
+ * @version 1.0
+ */
 @Entity
 @Data
 @Builder

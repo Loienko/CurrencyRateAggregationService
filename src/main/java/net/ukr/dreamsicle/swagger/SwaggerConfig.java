@@ -21,9 +21,21 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Config data for {@link EnableSwagger2}
+ *
+ * @author yurii.loienko
+ * @version 1.0
+ */
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig extends WebMvcConfigurationSupport {
+
+    /**
+     * Provides convenience methods for configuration APi
+     *
+     * @return Docket object type
+     */
     @Bean
     public Docket customImplementation() {
         List<SecurityScheme> schemeList = new ArrayList<>();
@@ -37,6 +49,11 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
                 .apiInfo(getApiInfo());
     }
 
+    /**
+     * Сontains user information about the API.
+     *
+     * @return Docket object type
+     */
     private ApiInfo getApiInfo() {
         return new ApiInfoBuilder()
                 .title("Currency Rate Aggregation Service Documentation")
@@ -49,14 +66,23 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
                 .build();
     }
 
+    /**
+     * Required for registering resource handlers and serving static resources
+     *
+     * @param registry
+     */
     @Override
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("swagger-ui.html")
-                .addResourceLocations("classpath:/META-INF/resources/");
-        registry.addResourceHandler("/webjars/**")
-                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+        registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
+
+    /**
+     * Provides conversion of Page data into a List for correct display in the documentation
+     *
+     * @param argumentResolvers
+     */
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(new PageableHandlerMethodArgumentResolver());
