@@ -1,8 +1,7 @@
-package net.ukr.dreamsicle.dto;
+package net.ukr.dreamsicle.dto.user;
 
 import lombok.Lombok;
-import net.ukr.dreamsicle.model.User;
-import net.ukr.dreamsicle.model.UserDetails;
+import net.ukr.dreamsicle.model.user.User;
 import org.mapstruct.Mapper;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -40,10 +39,4 @@ public interface UserMapper {
     }
 
     User usernameAndPasswordDataDTOToUser(UsernameAndPasswordDataDTO usernameAndPasswordDataDTO);
-
-    UsernameAndPasswordDataDTO userToUsernameAndPasswordDataDTO(User user);
-
-    UserDetails userDetailsToUser(UserDetailsDTO userDetailsDTO);
-
-    UserDetailsDTO userToUserDetailsDTO(UserDetails user);
 }

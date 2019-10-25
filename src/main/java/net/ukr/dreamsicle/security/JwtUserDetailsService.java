@@ -3,6 +3,7 @@ package net.ukr.dreamsicle.security;
 import lombok.AllArgsConstructor;
 import net.ukr.dreamsicle.repository.UserRepository;
 import net.ukr.dreamsicle.security.jwt.UserPrinciple;
+import net.ukr.dreamsicle.util.Constants;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,6 +27,6 @@ public class JwtUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) {
         return UserPrinciple.create(
                 userRepository.findByUsername(username)
-                        .orElseThrow(() -> new UsernameNotFoundException("User Not Found with -> username or email : " + username)));
+                        .orElseThrow(() -> new UsernameNotFoundException(Constants.USER_NOT_FOUND_WITH_USERNAME_OR_EMAIL + username)));
     }
 }

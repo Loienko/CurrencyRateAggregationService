@@ -1,7 +1,7 @@
 package net.ukr.dreamsicle.repository;
 
-import net.ukr.dreamsicle.model.Role;
-import net.ukr.dreamsicle.model.RoleType;
+import net.ukr.dreamsicle.model.user.Role;
+import net.ukr.dreamsicle.model.user.RoleType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

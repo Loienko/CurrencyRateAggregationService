@@ -1,8 +1,8 @@
 package net.ukr.dreamsicle.service.integration;
 
-import net.ukr.dreamsicle.dto.UserDTO;
-import net.ukr.dreamsicle.dto.UsernameAndPasswordDataDTO;
-import net.ukr.dreamsicle.model.User;
+import net.ukr.dreamsicle.dto.user.UserDTO;
+import net.ukr.dreamsicle.dto.user.UsernameAndPasswordDataDTO;
+import net.ukr.dreamsicle.model.user.User;
 import net.ukr.dreamsicle.repository.RoleRepository;
 import net.ukr.dreamsicle.repository.UserRepository;
 import net.ukr.dreamsicle.service.UserService;
@@ -23,9 +23,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Objects;
 
-import static net.ukr.dreamsicle.util.CurrencyProvider.CURRENCIES;
+import static net.ukr.dreamsicle.util.currency.CurrencyProvider.CURRENCIES;
 import static net.ukr.dreamsicle.util.HttpHeaderProvider.getHeader;
-import static net.ukr.dreamsicle.util.UserProvider.*;
+import static net.ukr.dreamsicle.util.user.UserProvider.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.HttpMethod.*;
 

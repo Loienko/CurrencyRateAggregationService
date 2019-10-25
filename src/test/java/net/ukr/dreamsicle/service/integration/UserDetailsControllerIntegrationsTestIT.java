@@ -1,13 +1,13 @@
 package net.ukr.dreamsicle.service.integration;
 
-import net.ukr.dreamsicle.dto.UserDetailsDTO;
-import net.ukr.dreamsicle.model.User;
-import net.ukr.dreamsicle.model.UserDetails;
+import net.ukr.dreamsicle.dto.userDetails.UserDetailsDTO;
+import net.ukr.dreamsicle.model.user.User;
+import net.ukr.dreamsicle.model.userDetails.UserDetails;
 import net.ukr.dreamsicle.repository.RoleRepository;
 import net.ukr.dreamsicle.repository.UserDetailsRepository;
 import net.ukr.dreamsicle.repository.UserRepository;
 import net.ukr.dreamsicle.service.UserService;
-import net.ukr.dreamsicle.util.UserDetailsProvider;
+import net.ukr.dreamsicle.util.userDetails.UserDetailsProvider;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,10 +22,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Objects;
 
-import static net.ukr.dreamsicle.util.CurrencyProvider.ID;
+import static net.ukr.dreamsicle.util.currency.CurrencyProvider.ID;
 import static net.ukr.dreamsicle.util.HttpHeaderProvider.getHeader;
-import static net.ukr.dreamsicle.util.UserDetailsProvider.*;
-import static net.ukr.dreamsicle.util.UserProvider.*;
+import static net.ukr.dreamsicle.util.userDetails.UserDetailsProvider.*;
+import static net.ukr.dreamsicle.util.user.UserProvider.*;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

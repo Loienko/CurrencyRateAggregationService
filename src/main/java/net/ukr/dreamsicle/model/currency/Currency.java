@@ -1,4 +1,4 @@
-package net.ukr.dreamsicle.model;
+package net.ukr.dreamsicle.model.currency;
 
 import lombok.*;
 

@@ -1,12 +1,15 @@
-package net.ukr.dreamsicle.dto;
+package net.ukr.dreamsicle.dto.currency;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
-import net.ukr.dreamsicle.validation.ValidCurrencyCode;
+import net.ukr.dreamsicle.util.ConstantsRegex;
+import net.ukr.dreamsicle.validation.currencyCode.ValidCurrencyCode;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+
+import static net.ukr.dreamsicle.util.Constants.*;
 
 /**
  * DTO class for input currency data
@@ -26,22 +29,22 @@ public class CurrencyDTO {
     private Long id;
 
     @ApiModelProperty(notes = "Name of used bank", example = "Pumb")
-    @NotBlank(message = "Please fill the bank name")
-    @Pattern(regexp = "^[a-zA-Zа-яёА-ЯЁ\\s\\-]+$", message = "Please input valid data for bank name")
+    @NotBlank(message = FILL_THE_BANK_NAME)
+    @Pattern(regexp = ConstantsRegex.INPUT_STRING_VALUE_REGEX, message = INPUT_VALID_DATA_FOR_BANK_NAME)
     private String bankName;
 
     @ApiModelProperty(notes = "Unique identifier of the currency. Use ISO 4217 CURRENCY CODES for the presentation of currencies", example = "USD")
-    @NotBlank(message = "Please fill the currency code")
-    @ValidCurrencyCode(message = "Please input valid data for currency code")
+    @NotBlank(message = FILL_THE_CURRENCY_CODE)
+    @ValidCurrencyCode(message = INPUT_VALID_DATA_FOR_CURRENCY_CODE)
     private String currencyCode;
 
     @ApiModelProperty(notes = "Currency purchase price", example = "27.85")
-    @NotBlank(message = "Please fill the purchase currency")
-    @Pattern(regexp = "^[+-]?[0-9]{1,3}(?:,?[0-9]{3})*\\.[0-9]{1,5}$", message = "Please input valid data for purchase currency")
+    @NotBlank(message = FILL_THE_PURCHASE_CURRENCY)
+    @Pattern(regexp = ConstantsRegex.PURCHASE_CURRENCY_REGEX, message = INPUT_VALID_DATA_FOR_PURCHASE_CURRENCY)
     private String purchaseCurrency;
 
     @ApiModelProperty(notes = "Currency sale value", example = "28.10")
-    @NotBlank(message = "Please fill the sale of currency")
-    @Pattern(regexp = "^[+-]?[0-9]{1,3}(?:,?[0-9]{3})*\\.[0-9]{1,6}$", message = "Please input valid data for sale of currency")
+    @NotBlank(message = FILL_THE_SALE_OF_CURRENCY)
+    @Pattern(regexp = ConstantsRegex.SALE_OF_CURRENCY_REGEX, message = INPUT_VALID_DATA_FOR_SALE_OF_CURRENCY)
     private String saleOfCurrency;
 }

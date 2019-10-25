@@ -1,7 +1,7 @@
 package net.ukr.dreamsicle.service.integration;
 
-import net.ukr.dreamsicle.dto.CurrencyDTO;
-import net.ukr.dreamsicle.model.Currency;
+import net.ukr.dreamsicle.dto.currency.CurrencyDTO;
+import net.ukr.dreamsicle.model.currency.Currency;
 import net.ukr.dreamsicle.repository.CurrencyRepository;
 import net.ukr.dreamsicle.repository.RoleRepository;
 import net.ukr.dreamsicle.repository.UserRepository;
@@ -25,10 +25,10 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Objects;
 
-import static net.ukr.dreamsicle.util.CurrencyProvider.ID;
-import static net.ukr.dreamsicle.util.CurrencyProvider.*;
+import static net.ukr.dreamsicle.util.currency.CurrencyProvider.ID;
+import static net.ukr.dreamsicle.util.currency.CurrencyProvider.*;
 import static net.ukr.dreamsicle.util.HttpHeaderProvider.getHeader;
-import static net.ukr.dreamsicle.util.UserProvider.*;
+import static net.ukr.dreamsicle.util.user.UserProvider.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.HttpMethod.*;
 

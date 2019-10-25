@@ -1,6 +1,6 @@
 package net.ukr.dreamsicle.repository;
 
-import net.ukr.dreamsicle.model.UserDetails;
+import net.ukr.dreamsicle.model.userDetails.UserDetails;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

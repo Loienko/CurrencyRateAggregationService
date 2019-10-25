@@ -1,6 +1,7 @@
-package net.ukr.dreamsicle.model;
+package net.ukr.dreamsicle.model.userDetails;
 
 import lombok.*;
+import net.ukr.dreamsicle.model.user.User;
 
 import javax.persistence.*;
 

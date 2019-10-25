@@ -1,11 +1,11 @@
-package net.ukr.dreamsicle.util;
+package net.ukr.dreamsicle.util.user;
 
-import net.ukr.dreamsicle.dto.UserDTO;
-import net.ukr.dreamsicle.dto.UsernameAndPasswordDataDTO;
-import net.ukr.dreamsicle.model.Role;
-import net.ukr.dreamsicle.model.RoleType;
-import net.ukr.dreamsicle.model.StatusType;
-import net.ukr.dreamsicle.model.User;
+import net.ukr.dreamsicle.dto.user.UserDTO;
+import net.ukr.dreamsicle.dto.user.UsernameAndPasswordDataDTO;
+import net.ukr.dreamsicle.model.user.Role;
+import net.ukr.dreamsicle.model.user.RoleType;
+import net.ukr.dreamsicle.model.user.StatusType;
+import net.ukr.dreamsicle.model.user.User;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 

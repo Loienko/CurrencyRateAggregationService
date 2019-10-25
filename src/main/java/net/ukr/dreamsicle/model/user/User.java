@@ -1,4 +1,4 @@
-package net.ukr.dreamsicle.model;
+package net.ukr.dreamsicle.model.user;
 
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
