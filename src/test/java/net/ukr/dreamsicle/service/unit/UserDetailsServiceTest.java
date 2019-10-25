@@ -1,4 +1,4 @@
-package net.ukr.dreamsicle.service;
+package net.ukr.dreamsicle.service.unit;
 
 import net.ukr.dreamsicle.dto.UserDetailsDTO;
 import net.ukr.dreamsicle.dto.UserMapper;
@@ -7,6 +7,7 @@ import net.ukr.dreamsicle.model.User;
 import net.ukr.dreamsicle.model.UserDetails;
 import net.ukr.dreamsicle.repository.UserDetailsRepository;
 import net.ukr.dreamsicle.repository.UserRepository;
+import net.ukr.dreamsicle.service.UserDetailsService;
 import net.ukr.dreamsicle.util.UserDetailsProvider;
 import org.hibernate.TransactionException;
 import org.junit.jupiter.api.BeforeEach;

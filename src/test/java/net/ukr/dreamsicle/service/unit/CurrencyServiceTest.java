@@ -1,10 +1,11 @@
-package net.ukr.dreamsicle.service;
+package net.ukr.dreamsicle.service.unit;
 
 import net.ukr.dreamsicle.dto.CurrencyDTO;
 import net.ukr.dreamsicle.dto.CurrencyMapper;
 import net.ukr.dreamsicle.exception.ResourceNotFoundException;
 import net.ukr.dreamsicle.model.Currency;
 import net.ukr.dreamsicle.repository.CurrencyRepository;
+import net.ukr.dreamsicle.service.CurrencyService;
 import net.ukr.dreamsicle.util.CurrencyProvider;
 import org.hibernate.TransactionException;
 import org.junit.jupiter.api.BeforeEach;
