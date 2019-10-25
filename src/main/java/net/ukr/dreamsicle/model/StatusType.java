@@ -2,7 +2,15 @@ package net.ukr.dreamsicle.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Lombok;
 
+/**
+ * Simple POJO object that represents application user's status - ACTIVE, NOT_ACTIVE, DELETED.
+ * Used by {@link Lombok} to create template methods of an object like getters. setters, etc.
+ *
+ * @author yurii.loienko
+ * @version 1.0
+ */
 @AllArgsConstructor
 public enum StatusType {
     ACTIVE("active"),

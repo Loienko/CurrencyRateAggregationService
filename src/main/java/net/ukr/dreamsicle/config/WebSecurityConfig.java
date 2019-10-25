@@ -1,6 +1,7 @@
 package net.ukr.dreamsicle.config;
 
 import lombok.AllArgsConstructor;
+import lombok.Lombok;
 import net.ukr.dreamsicle.model.RoleType;
 import net.ukr.dreamsicle.security.JwtUserDetailsService;
 import net.ukr.dreamsicle.security.jwt.AuthEntryPoint;
@@ -17,6 +18,13 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * Security configuration class for JWT based Spring Security application.
+ * Used by {@link Lombok} to create template methods of an object like getters. setters, etc.
+ *
+ * @author yurii.loienko
+ * @version 1.0
+ */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)

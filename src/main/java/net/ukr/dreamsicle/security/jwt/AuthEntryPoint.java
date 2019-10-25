@@ -1,5 +1,6 @@
 package net.ukr.dreamsicle.security.jwt;
 
+import net.ukr.dreamsicle.Application;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -8,6 +9,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Authentication exception for {@link Application} application.
+ *
+ * @author yurii.loienko
+ * @version 1.0
+ */
 @Component
 public class AuthEntryPoint implements AuthenticationEntryPoint {
 

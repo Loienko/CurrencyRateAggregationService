@@ -12,6 +12,12 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
 
+/**
+ * Util class that provides methods for create, resolve, etc. of JWT token.
+ *
+ * @author yurii.loienko
+ * @version 1.0
+ */
 @Component
 public class JwtProvider {
 

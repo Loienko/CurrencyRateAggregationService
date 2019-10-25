@@ -1,6 +1,10 @@
 package net.ukr.dreamsicle.exception;
 
 /**
+ * ResourceIsStaleException class that extends {@link RuntimeException}
+ *
+ * @author yurii.loienko
+ * @version 1.0
  * @deprecated
  */
 @Deprecated

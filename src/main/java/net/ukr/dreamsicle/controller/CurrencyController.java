@@ -1,9 +1,11 @@
 package net.ukr.dreamsicle.controller;
 
 import io.swagger.annotations.*;
+import lombok.Lombok;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.ukr.dreamsicle.dto.CurrencyDTO;
+import net.ukr.dreamsicle.model.Currency;
 import net.ukr.dreamsicle.service.CurrencyService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,12 +18,19 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
 
+/**
+ * REST controller for work with {@link Currency} data (findAll, findById, create, update, delete)
+ * Used by {@link Lombok} to create template methods of an object like getters. setters, etc.
+ *
+ * @author yurii.loienko
+ * @version 1.0
+ */
 @Api(value = "/currencies", produces = "application/json")
 @RestController
 @Slf4j
 @RequestMapping("/currencies")
 @RequiredArgsConstructor
-public class CurrencyController {
+class CurrencyController {
 
     private final CurrencyService currencyService;
 
