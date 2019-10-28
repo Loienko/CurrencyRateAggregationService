@@ -1,12 +1,15 @@
-package net.ukr.dreamsicle.dto;
+package net.ukr.dreamsicle.dto.userDetails;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import net.ukr.dreamsicle.util.ConstantsRegex;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
+import static net.ukr.dreamsicle.util.Constants.*;
 
 /**
  * DTO class for input user details data
@@ -23,17 +26,17 @@ import javax.validation.constraints.Size;
 public class UserDetailsDTO {
 
     @ApiModelProperty(notes = "User surname", example = "Surname", required = true)
-    @NotBlank(message = "Please fill the surname")
-    @Pattern(regexp = "^[a-zA-Zа-яёА-ЯЁ\\s\\-]+$", message = "Please input valid data for surname")
+    @NotBlank(message = FILL_THE_SURNAME)
+    @Pattern(regexp = ConstantsRegex.INPUT_STRING_VALUE_REGEX, message = INPUT_VALID_DATA_FOR_SURNAME)
     private String surname;
 
     @ApiModelProperty(notes = "User phone number", example = "+38(012)345-67-89")
-    @Pattern(regexp = "^\\+?([0-9]{2})?\\(?[0-9]{3}\\)?[0-9]{3}\\-?[0-9]{2}\\-?[0-9]{2}$", message = "Please input valid data for phone")
+    @Pattern(regexp = ConstantsRegex.PHONE_REGEX, message = INPUT_VALID_DATA_FOR_PHONE)
     private String phone;
 
     @ApiModelProperty(notes = "User description", example = "Good Person!", required = true)
     @Size(max = 256)
-    @NotBlank(message = "Please fill the description")
-    @Pattern(regexp = "^[a-zA-Zа-яёА-ЯЁ\\s\\-]+$", message = "Please input valid data for description")
+    @NotBlank(message = FILL_THE_DESCRIPTION)
+    @Pattern(regexp = ConstantsRegex.INPUT_STRING_VALUE_REGEX, message = INPUT_VALID_DATA_FOR_DESCRIPTION)
     private String description;
 }

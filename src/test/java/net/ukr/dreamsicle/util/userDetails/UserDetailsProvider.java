@@ -1,8 +1,9 @@
-package net.ukr.dreamsicle.util;
+package net.ukr.dreamsicle.util.userDetails;
 
-import net.ukr.dreamsicle.dto.UserDetailsDTO;
-import net.ukr.dreamsicle.model.User;
-import net.ukr.dreamsicle.model.UserDetails;
+import net.ukr.dreamsicle.dto.userDetails.UserDetailsDTO;
+import net.ukr.dreamsicle.model.user.User;
+import net.ukr.dreamsicle.model.userDetails.UserDetails;
+import net.ukr.dreamsicle.util.user.UserProvider;
 
 public class UserDetailsProvider {
     public static final String SURNAME = "ADMIN";

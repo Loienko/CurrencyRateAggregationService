@@ -1,7 +1,7 @@
-package net.ukr.dreamsicle.util;
+package net.ukr.dreamsicle.util.currency;
 
-import net.ukr.dreamsicle.dto.CurrencyDTO;
-import net.ukr.dreamsicle.model.Currency;
+import net.ukr.dreamsicle.dto.currency.CurrencyDTO;
+import net.ukr.dreamsicle.model.currency.Currency;
 
 public class CurrencyProvider {
     public static final long ID = 1;

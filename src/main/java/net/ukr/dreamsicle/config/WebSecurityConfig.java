@@ -2,7 +2,7 @@ package net.ukr.dreamsicle.config;
 
 import lombok.AllArgsConstructor;
 import lombok.Lombok;
-import net.ukr.dreamsicle.model.RoleType;
+import net.ukr.dreamsicle.model.user.RoleType;
 import net.ukr.dreamsicle.security.JwtUserDetailsService;
 import net.ukr.dreamsicle.security.jwt.AuthEntryPoint;
 import net.ukr.dreamsicle.security.jwt.JwtAuthTokenFilter;

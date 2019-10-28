@@ -1,7 +1,9 @@
 package net.ukr.dreamsicle.exception;
 
+import io.jsonwebtoken.JwtException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -75,21 +77,21 @@ public class ExceptionHandlerControllerAdvice {
         return new ExceptionResponse(exception.getMessage(), request.getRequestURI());
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
+    @ExceptionHandler({IllegalArgumentException.class, EmailExistsException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public @ResponseBody
-    ExceptionResponse notAllowEnum(final Exception exception,
+    ExceptionResponse notValidData(final Exception exception,
                                    final HttpServletRequest request) {
 
         return new ExceptionResponse(exception.getMessage(), request.getRequestURI());
     }
 
-    @ExceptionHandler(EmailExistsException.class)
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({JwtAuthenticationException.class, JwtException.class, AuthenticationException.class})
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
     public @ResponseBody
-    ExceptionResponse incorrectEmailHandle(final Exception exception,
-                                           final HttpServletRequest request) {
+    ExceptionResponse unauthorized(final MethodArgumentNotValidException ex,
+                                   final HttpServletRequest request) {
 
-        return new ExceptionResponse(exception.getMessage(), request.getRequestURI());
+        return new ExceptionResponse(ex.getMessage(), request.getRequestURI());
     }
 }

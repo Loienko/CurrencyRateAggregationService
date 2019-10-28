@@ -1,4 +1,4 @@
-package net.ukr.dreamsicle.validation;
+package net.ukr.dreamsicle.validation.currencyCode;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

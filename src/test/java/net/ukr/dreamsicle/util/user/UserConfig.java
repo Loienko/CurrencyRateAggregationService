@@ -1,4 +1,4 @@
-package net.ukr.dreamsicle.util;
+package net.ukr.dreamsicle.util.user;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,7 +1,7 @@
 package net.ukr.dreamsicle.repository;
 
-import net.ukr.dreamsicle.model.StatusType;
-import net.ukr.dreamsicle.model.User;
+import net.ukr.dreamsicle.model.user.StatusType;
+import net.ukr.dreamsicle.model.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

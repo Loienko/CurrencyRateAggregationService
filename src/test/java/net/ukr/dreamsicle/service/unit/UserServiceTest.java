@@ -1,14 +1,14 @@
 package net.ukr.dreamsicle.service.unit;
 
 import net.ukr.dreamsicle.config.ApplicationConfig;
-import net.ukr.dreamsicle.dto.UserDTO;
-import net.ukr.dreamsicle.dto.UserMapper;
-import net.ukr.dreamsicle.dto.UsernameAndPasswordDataDTO;
+import net.ukr.dreamsicle.dto.user.UserDTO;
+import net.ukr.dreamsicle.dto.user.UserMapper;
+import net.ukr.dreamsicle.dto.user.UsernameAndPasswordDataDTO;
 import net.ukr.dreamsicle.exception.CustomDataAlreadyExistsException;
 import net.ukr.dreamsicle.exception.ResourceNotFoundException;
-import net.ukr.dreamsicle.model.Role;
-import net.ukr.dreamsicle.model.StatusType;
-import net.ukr.dreamsicle.model.User;
+import net.ukr.dreamsicle.model.user.Role;
+import net.ukr.dreamsicle.model.user.StatusType;
+import net.ukr.dreamsicle.model.user.User;
 import net.ukr.dreamsicle.repository.RoleRepository;
 import net.ukr.dreamsicle.repository.UserRepository;
 import net.ukr.dreamsicle.security.jwt.JwtProvider;
@@ -31,7 +31,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
 
-import static net.ukr.dreamsicle.util.UserProvider.*;
+import static net.ukr.dreamsicle.util.user.UserProvider.*;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

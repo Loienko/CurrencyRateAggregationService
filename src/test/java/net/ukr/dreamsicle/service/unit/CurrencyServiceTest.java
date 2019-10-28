@@ -1,12 +1,12 @@
 package net.ukr.dreamsicle.service.unit;
 
-import net.ukr.dreamsicle.dto.CurrencyDTO;
-import net.ukr.dreamsicle.dto.CurrencyMapper;
+import net.ukr.dreamsicle.dto.currency.CurrencyDTO;
+import net.ukr.dreamsicle.dto.currency.CurrencyMapper;
 import net.ukr.dreamsicle.exception.ResourceNotFoundException;
-import net.ukr.dreamsicle.model.Currency;
+import net.ukr.dreamsicle.model.currency.Currency;
 import net.ukr.dreamsicle.repository.CurrencyRepository;
 import net.ukr.dreamsicle.service.CurrencyService;
-import net.ukr.dreamsicle.util.CurrencyProvider;
+import net.ukr.dreamsicle.util.currency.CurrencyProvider;
 import org.hibernate.TransactionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,8 +21,8 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
 
-import static net.ukr.dreamsicle.util.CurrencyProvider.ID;
-import static net.ukr.dreamsicle.util.CurrencyProvider.getCurrencyProvider;
+import static net.ukr.dreamsicle.util.currency.CurrencyProvider.ID;
+import static net.ukr.dreamsicle.util.currency.CurrencyProvider.getCurrencyProvider;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;

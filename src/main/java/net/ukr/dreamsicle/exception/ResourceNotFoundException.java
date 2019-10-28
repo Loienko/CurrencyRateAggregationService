@@ -1,5 +1,7 @@
 package net.ukr.dreamsicle.exception;
 
+import net.ukr.dreamsicle.util.Constants;
+
 /**
  * ResourceNotFoundException class that extends {@link RuntimeException}
  *
@@ -7,8 +9,9 @@ package net.ukr.dreamsicle.exception;
  * @version 1.0
  */
 public class ResourceNotFoundException extends RuntimeException{
+
     public ResourceNotFoundException() {
-        super("Resource not found");
+        super(Constants.RESOURCE_NOT_FOUND);
     }
 
     public ResourceNotFoundException(String message) {

@@ -1,4 +1,4 @@
-package net.ukr.dreamsicle.validation;
+package net.ukr.dreamsicle.validation.password;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

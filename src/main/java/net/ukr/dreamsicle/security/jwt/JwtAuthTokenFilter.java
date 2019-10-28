@@ -2,6 +2,7 @@ package net.ukr.dreamsicle.security.jwt;
 
 import lombok.AllArgsConstructor;
 import net.ukr.dreamsicle.security.JwtUserDetailsService;
+import net.ukr.dreamsicle.util.Constants;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -42,7 +43,7 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
-            logger.error("Can NOT set user authentication -> Message: {}", e);
+            logger.error(Constants.CAN_NOT_SET_USER_AUTHENTICATION_MESSAGE, e);
         }
         filterChain.doFilter(request, response);
     }

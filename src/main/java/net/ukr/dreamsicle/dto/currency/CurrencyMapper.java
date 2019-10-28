@@ -1,7 +1,7 @@
-package net.ukr.dreamsicle.dto;
+package net.ukr.dreamsicle.dto.currency;
 
 import lombok.Lombok;
-import net.ukr.dreamsicle.model.Currency;
+import net.ukr.dreamsicle.model.currency.Currency;
 import org.mapstruct.Mapper;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
