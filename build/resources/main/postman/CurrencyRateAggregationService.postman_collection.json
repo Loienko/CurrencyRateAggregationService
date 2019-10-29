@@ -1,0 +1,178 @@
+{
+	"info": {
+		"_postman_id": "6f29342d-9f47-4e36-a1bb-0754b60c6a88",
+		"name": "CurrencyRateAggregationService",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Find all currencies",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "user",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "2b92dc28-5c36-4b2a-8897-34a1d3205ae5",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/currencies?page=0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"currencies"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find currency By Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/currencies/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"currencies",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create currency",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VycnJycnIiLCJpYXQiOjE1NzA3ODAxODYsImV4cCI6MTU3MDc4MTk4Nn0.DOX7MW4AIFFKXpYQIrePdSURxPica8tdlicA_vSqAr-AxIl3vVpWgMUo4mqvxkFcVQQGg3phon97BQfaVPQcsw",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"bankName\": \"PrivatBank\",\n\t\"currencyCode\": \"USD\",\n\t\"purchaseCurrency\": \"45.02\",\n\t\"saleOfCurrency\": \"5.05\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/currencies",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"currencies"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update currency By Id",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VycnJycnIiLCJpYXQiOjE1NzA3ODAxODYsImV4cCI6MTU3MDc4MTk4Nn0.DOX7MW4AIFFKXpYQIrePdSURxPica8tdlicA_vSqAr-AxIl3vVpWgMUo4mqvxkFcVQQGg3phon97BQfaVPQcsw",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"bankName\": \"PrivatBank\",\n\t\"currencyCode\": \"USD\",\n\t\"purchaseCurrency\": \"25.10\",\n\t\"saleOfCurrency\": \"25.21\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/currencies/4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"currencies",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete currency By Id",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VycnJycnIiLCJpYXQiOjE1NzA3ODAxODYsImV4cCI6MTU3MDc4MTk4Nn0.DOX7MW4AIFFKXpYQIrePdSURxPica8tdlicA_vSqAr-AxIl3vVpWgMUo4mqvxkFcVQQGg3phon97BQfaVPQcsw",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/currencies/5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"currencies",
+						"5"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

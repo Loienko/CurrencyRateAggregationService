@@ -14,6 +14,7 @@ import net.ukr.dreamsicle.model.user.User;
 import net.ukr.dreamsicle.repository.RoleRepository;
 import net.ukr.dreamsicle.repository.UserRepository;
 import net.ukr.dreamsicle.security.jwt.JwtProvider;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Lock;
@@ -39,7 +40,7 @@ import static net.ukr.dreamsicle.util.Constants.*;
  * @author yurii.loienko
  * @version 1.0
  */
-@Service
+@Configuration
 @AllArgsConstructor
 public class UserService {
 
