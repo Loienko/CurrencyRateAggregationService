@@ -1,9 +1,6 @@
-package net.ukr.dreamsicle.model;
+package net.ukr.dreamsicle.model.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -11,6 +8,13 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Set;
 
+/**
+ * A simple Entity object that creates a 'users' table in a database.
+ * Used by {@link Lombok} to create template methods of an object like getters. setters, etc.
+ *
+ * @author yurii.loienko
+ * @version 1.0
+ */
 @Entity
 @Data
 @Builder

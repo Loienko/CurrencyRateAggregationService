@@ -1,7 +1,7 @@
 package net.ukr.dreamsicle.repository.impl;
 
 import net.ukr.dreamsicle.exception.ResourceNotFoundException;
-import net.ukr.dreamsicle.model.Currency;
+import net.ukr.dreamsicle.model.currency.Currency;
 import net.ukr.dreamsicle.repository.CurrencyRepositoryDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -15,6 +15,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
+ * Class for connection with DB uses Spring JDBCTemplate technology
+ *
+ * @author yurii.loienko
+ * @version 1.0
  * @deprecated
  */
 @Repository

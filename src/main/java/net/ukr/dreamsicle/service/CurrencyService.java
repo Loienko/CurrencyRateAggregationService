@@ -2,10 +2,10 @@ package net.ukr.dreamsicle.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.ukr.dreamsicle.dto.CurrencyDTO;
-import net.ukr.dreamsicle.dto.CurrencyMapper;
+import net.ukr.dreamsicle.dto.currency.CurrencyDTO;
+import net.ukr.dreamsicle.dto.currency.CurrencyMapper;
 import net.ukr.dreamsicle.exception.ResourceNotFoundException;
-import net.ukr.dreamsicle.model.Currency;
+import net.ukr.dreamsicle.model.currency.Currency;
 import net.ukr.dreamsicle.repository.CurrencyRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

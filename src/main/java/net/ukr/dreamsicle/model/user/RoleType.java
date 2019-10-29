@@ -1,8 +1,17 @@
-package net.ukr.dreamsicle.model;
+package net.ukr.dreamsicle.model.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Lombok;
+import net.ukr.dreamsicle.util.Constants;
 
+/**
+ * Simple POJO object that represents application user's role - ADMIN, USER.
+ * Used by {@link Lombok} to create template methods of an object like getters. setters, etc.
+ *
+ * @author yurii.loienko
+ * @version 1.0
+ */
 @AllArgsConstructor
 public enum RoleType {
     ADMIN("ADMIN"),
@@ -16,7 +25,7 @@ public enum RoleType {
             try {
                 return Enum.valueOf(RoleType.class, stringValue.trim().toUpperCase());
             } catch (IllegalArgumentException ex) {
-                throw new IllegalArgumentException("Role does not exist. Please choose the next items: " + RoleType.USER + "; " + RoleType.ADMIN);
+                throw new IllegalArgumentException(Constants.ROLE_DOES_NOT_EXIST_PLEASE_CHOOSE_THE_NEXT_ITEMS + RoleType.USER + ", " + RoleType.ADMIN);
             }
         }
         return null;

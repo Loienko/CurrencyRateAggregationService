@@ -2,7 +2,9 @@ package net.ukr.dreamsicle.security.jwt;
 
 import io.jsonwebtoken.*;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import net.ukr.dreamsicle.exception.JwtAuthenticationException;
+import net.ukr.dreamsicle.util.Constants;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -12,11 +14,19 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
 
+import static net.ukr.dreamsicle.util.Constants.BEARER;
+import static net.ukr.dreamsicle.util.Constants.JWT_TOKEN_IS_EXPIRED_OR_INVALID;
+
+/**
+ * Util class that provides methods for create, resolve, etc. of JWT token.
+ *
+ * @author yurii.loienko
+ * @version 1.0
+ */
+@Slf4j
 @Component
 public class JwtProvider {
 
-    private static final String AUTHORIZATION = "Authorization";
-    private static final String BEARER = "Bearer ";
     @Value("${app.jwtSecret}")
     private String secret;
 
@@ -47,7 +57,7 @@ public class JwtProvider {
     }
 
     String resolveToken(@NonNull HttpServletRequest request) {
-        String bearerToken = request.getHeader(AUTHORIZATION);
+        String bearerToken = request.getHeader(Constants.AUTHORIZATION);
         if (bearerToken != null && bearerToken.startsWith(BEARER)) {
             return bearerToken.replace(BEARER, "");
         }
@@ -58,8 +68,9 @@ public class JwtProvider {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
             return !claims.getBody().getExpiration().before(new Date());
-        } catch (JwtException | IllegalArgumentException e) {
-            throw new JwtAuthenticationException("JWT token is expired or invalid");
+        } catch (JwtException | IllegalArgumentException | JwtAuthenticationException e) {
+            log.info(JWT_TOKEN_IS_EXPIRED_OR_INVALID);
         }
+        return false;
     }
 }

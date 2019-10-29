@@ -1,12 +1,12 @@
 package net.ukr.dreamsicle.service;
 
 import lombok.AllArgsConstructor;
-import net.ukr.dreamsicle.dto.UserDetailsDTO;
-import net.ukr.dreamsicle.dto.UserMapper;
+import net.ukr.dreamsicle.dto.userDetails.UserDetailsDTO;
+import net.ukr.dreamsicle.dto.userDetails.UserDetailsMapper;
 import net.ukr.dreamsicle.exception.ResourceNotFoundException;
-import net.ukr.dreamsicle.model.StatusType;
-import net.ukr.dreamsicle.model.User;
-import net.ukr.dreamsicle.model.UserDetails;
+import net.ukr.dreamsicle.model.user.StatusType;
+import net.ukr.dreamsicle.model.user.User;
+import net.ukr.dreamsicle.model.userDetails.UserDetails;
 import net.ukr.dreamsicle.repository.UserDetailsRepository;
 import net.ukr.dreamsicle.repository.UserRepository;
 import org.springframework.data.jpa.repository.Lock;
@@ -26,7 +26,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserDetailsService {
 
-    private final UserMapper userMapper;
+    private final UserDetailsMapper userDetailsMapper;
     private final UserRepository userRepository;
     private final UserDetailsRepository userDetailsRepository;
 
@@ -43,7 +43,7 @@ public class UserDetailsService {
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     public UserDetailsDTO createUserDetails(long id, UserDetailsDTO userDetailsDTO) {
-        UserDetails userDetails = userMapper.userDetailsToUser(userDetailsDTO);
+        UserDetails userDetails = userDetailsMapper.userDetailsToUser(userDetailsDTO);
         User user = userRepository.findByIdAndStatus(id, StatusType.ACTIVE).orElseThrow(ResourceNotFoundException::new);
 
         Optional<UserDetails> userDetailsByUserId = userDetailsRepository.findUserDetailsByUserId(user.getId());
@@ -52,9 +52,9 @@ public class UserDetailsService {
             userDetailsByUserId.get().setSurname(userDetails.getSurname());
             userDetailsByUserId.get().setPhone(userDetails.getPhone());
             userDetailsByUserId.get().setDescription(userDetails.getDescription());
-            return userMapper.userToUserDetailsDTO(userDetailsRepository.saveAndFlush(userDetailsByUserId.get()));
+            return userDetailsMapper.userToUserDetailsDTO(userDetailsRepository.saveAndFlush(userDetailsByUserId.get()));
         } else {
-            return userMapper.userToUserDetailsDTO(userDetailsRepository.saveAndFlush(
+            return userDetailsMapper.userToUserDetailsDTO(userDetailsRepository.saveAndFlush(
                     UserDetails.builder()
                             .surname(userDetails.getSurname())
                             .phone(userDetails.getPhone())

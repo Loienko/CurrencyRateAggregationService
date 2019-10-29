@@ -1,4 +1,4 @@
-package net.ukr.dreamsicle.validation;
+package net.ukr.dreamsicle.validation.currencyCode;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -10,6 +10,12 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * ValidCurrencyCode interface for class {@link ValidCurrencyCodeValidator}.
+ *
+ * @author yurii.loienko
+ * @version 1.0
+ */
 @Target({FIELD, PARAMETER})
 @Retention(RUNTIME)
 @Constraint(validatedBy = ValidCurrencyCodeValidator.class)

@@ -2,15 +2,15 @@ package net.ukr.dreamsicle.service;
 
 import lombok.AllArgsConstructor;
 import net.ukr.dreamsicle.config.ApplicationConfig;
-import net.ukr.dreamsicle.dto.UserDTO;
-import net.ukr.dreamsicle.dto.UserMapper;
-import net.ukr.dreamsicle.dto.UsernameAndPasswordDataDTO;
+import net.ukr.dreamsicle.dto.user.UserDTO;
+import net.ukr.dreamsicle.dto.user.UserMapper;
+import net.ukr.dreamsicle.dto.user.UsernameAndPasswordDataDTO;
 import net.ukr.dreamsicle.exception.CustomDataAlreadyExistsException;
 import net.ukr.dreamsicle.exception.ResourceNotFoundException;
-import net.ukr.dreamsicle.model.Currency;
-import net.ukr.dreamsicle.model.Role;
-import net.ukr.dreamsicle.model.RoleType;
-import net.ukr.dreamsicle.model.User;
+import net.ukr.dreamsicle.model.currency.Currency;
+import net.ukr.dreamsicle.model.user.Role;
+import net.ukr.dreamsicle.model.user.RoleType;
+import net.ukr.dreamsicle.model.user.User;
 import net.ukr.dreamsicle.repository.RoleRepository;
 import net.ukr.dreamsicle.repository.UserRepository;
 import net.ukr.dreamsicle.security.jwt.JwtProvider;
@@ -29,8 +29,9 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static net.ukr.dreamsicle.model.StatusType.ACTIVE;
-import static net.ukr.dreamsicle.model.StatusType.DELETED;
+import static net.ukr.dreamsicle.model.user.StatusType.ACTIVE;
+import static net.ukr.dreamsicle.model.user.StatusType.DELETED;
+import static net.ukr.dreamsicle.util.Constants.*;
 
 /**
  * Business logic for user object of work with methods {@link Currency} data (findAllUsers, findUserById, createUser, updateUser, deleteUser, authenticateUser, assignPassword)
@@ -42,10 +43,6 @@ import static net.ukr.dreamsicle.model.StatusType.DELETED;
 @AllArgsConstructor
 public class UserService {
 
-    private static final String BEARER = "Bearer ";
-    private static final String SUCCESSFULLY_COMPLETED = "Successfully completed!";
-    private static final String PASSWORD = "Password1";
-    private static final String CAUTION = "\nPlease set your own password!!!";
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
@@ -65,11 +62,11 @@ public class UserService {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     public UserDTO createUser(UserDTO userDTO) {
         if (Boolean.TRUE.equals(userRepository.existsByUsername(userDTO.getUsername()))) {
-            throw new CustomDataAlreadyExistsException("Username is already in use!");
+            throw new CustomDataAlreadyExistsException(USERNAME_IS_ALREADY_IN_USE);
         }
 
         if (Boolean.TRUE.equals(userRepository.existsByEmail(userDTO.getEmail()))) {
-            throw new CustomDataAlreadyExistsException("Email is already in use!");
+            throw new CustomDataAlreadyExistsException(EMAIL_IS_ALREADY_IN_USE);
         }
 
         User user = User.builder()
@@ -106,7 +103,7 @@ public class UserService {
      * @throws ResourceNotFoundException if user {@code id} is not found
      * @throws ResourceNotFoundException if user {@code username} is not found
      */
-    public String authenticateUser(UsernameAndPasswordDataDTO usernameAndPasswordDataDTO) {
+    public String login(UsernameAndPasswordDataDTO usernameAndPasswordDataDTO) {
         User userByUsername = userRepository.findByUsername(usernameAndPasswordDataDTO.getUsername()).orElseThrow(ResourceNotFoundException::new);
         User user = userRepository.findByIdAndStatus(userByUsername.getId(), ACTIVE).orElseThrow(ResourceNotFoundException::new);
 
@@ -133,11 +130,11 @@ public class UserService {
         User userUpdateById = userRepository.findByIdAndStatus(id, ACTIVE).orElseThrow(ResourceNotFoundException::new);
 
         if (Boolean.TRUE.equals(userRepository.existsByUsername(userDTO.getUsername())) && !userUpdateById.getUsername().equals(userDTO.getUsername())) {
-            throw new CustomDataAlreadyExistsException("Username is already in use!");
+            throw new CustomDataAlreadyExistsException(USERNAME_IS_ALREADY_IN_USE);
         }
 
         if (Boolean.TRUE.equals(userRepository.existsByEmail(userDTO.getEmail())) && !userUpdateById.getEmail().equals(userDTO.getEmail())) {
-            throw new CustomDataAlreadyExistsException("Email is already in use!");
+            throw new CustomDataAlreadyExistsException(EMAIL_IS_ALREADY_IN_USE);
         }
 
         User actualUser = userMapper.userDtoToUser(userDTO);
