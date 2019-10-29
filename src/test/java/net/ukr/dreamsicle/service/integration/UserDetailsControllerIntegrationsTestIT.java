@@ -66,7 +66,7 @@ public class UserDetailsControllerIntegrationsTestIT {
     }
 
     @Test
-    public void createUserDetailsReturnStatus200OkForAdminRole() {
+    public void createUserDetailsReturnStatus202AcceptedForAdminRole() {
         User user = userRepository.saveAndFlush(getUserIntegrationTest("testOkForAdmin", "testOkForAdmin@email.net", ROLE_USER));
         UserDetails userDetails = UserDetailsProvider.getUserDetailsIntegrationProvider(user);
 
@@ -81,7 +81,7 @@ public class UserDetailsControllerIntegrationsTestIT {
     }
 
     @Test
-    public void createUserDetailsReturnStatus200OkForUserRole() {
+    public void createUserDetailsReturnStatus202AcceptedForUserRole() {
         User user = userRepository.saveAndFlush(getUserIntegrationTest("testOkForUser", "testOkForUser@email", ROLE_USER));
         UserDetails userDetails = UserDetailsProvider.getUserDetailsIntegrationProvider(user);
 
@@ -115,7 +115,7 @@ public class UserDetailsControllerIntegrationsTestIT {
     }
 
     @Test
-    public void createUserDetailsNotValidSurnameReturnStatus400OkBadRequest() {
+    public void createUserDetailsNotValidSurnameReturnStatus400BadRequest() {
         User user = userRepository.saveAndFlush(getUserIntegrationTest("testBadRequestNotValidSurname", "testBadRequestNotValidSurname@email", ROLE_USER));
         UserDetails userDetails = getUserDetailsNotValidDataIntegrationProvider("1", "1234567890", "test Bad Request", user);
 
@@ -127,7 +127,7 @@ public class UserDetailsControllerIntegrationsTestIT {
     }
 
     @Test
-    public void createUserDetailsNotValidPhoneReturnStatus400OkBadRequest() {
+    public void createUserDetailsNotValidPhoneReturnStatus400BadRequest() {
         User user = userRepository.saveAndFlush(getUserIntegrationTest("testBadRequestNotValidPhone", "testBadRequestNotValidPhone@email", ROLE_USER));
         UserDetails userDetails = getUserDetailsNotValidDataIntegrationProvider("testBadRequest", "tesdf", "test Bad Request", user);
 
@@ -139,7 +139,7 @@ public class UserDetailsControllerIntegrationsTestIT {
     }
 
     @Test
-    public void createUserDetailsNotValidDescriptionReturnStatus400OkBadRequest() {
+    public void createUserDetailsNotValidDescriptionReturnStatus400BadRequest() {
         User user = userRepository.saveAndFlush(getUserIntegrationTest("testBadRequestNotValidDescription", "testBadRequestNotValidDescription@email", ROLE_USER));
         UserDetails userDetails = getUserDetailsNotValidDataIntegrationProvider("testBadRequest", "1234567890", "123456", user);
 
@@ -151,7 +151,7 @@ public class UserDetailsControllerIntegrationsTestIT {
     }
 
     @Test
-    public void updateUserDetailsReturnStatus200OkForAdminRole() {
+    public void updateUserDetailsReturnStatus202AcceptedForAdminRole() {
         User user = userRepository.saveAndFlush(getUserIntegrationTest("testUpdateOkForAdmin", "testUpdateOkForAdmin@email", ROLE_USER));
         userDetailsRepository.saveAndFlush(UserDetailsProvider.getUserDetailsIntegrationProvider(user));
         UserDetails userDetailsUpdate = UserDetailsProvider.getUserDetailsIntegrationProvider(user);
