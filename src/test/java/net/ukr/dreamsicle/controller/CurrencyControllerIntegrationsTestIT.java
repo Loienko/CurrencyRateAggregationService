@@ -1,4 +1,4 @@
-package net.ukr.dreamsicle.service.integration;
+package net.ukr.dreamsicle.controller;
 
 import net.ukr.dreamsicle.dto.currency.CurrencyDTO;
 import net.ukr.dreamsicle.model.currency.Currency;

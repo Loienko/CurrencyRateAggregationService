@@ -1,4 +1,4 @@
-package net.ukr.dreamsicle.service.unit;
+package net.ukr.dreamsicle.service;
 
 import net.ukr.dreamsicle.dto.userDetails.UserDetailsDTO;
 import net.ukr.dreamsicle.dto.userDetails.UserDetailsMapper;

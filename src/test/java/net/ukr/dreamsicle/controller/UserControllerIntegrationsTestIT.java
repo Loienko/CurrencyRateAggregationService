@@ -1,4 +1,4 @@
-package net.ukr.dreamsicle.service.integration;
+package net.ukr.dreamsicle.controller;
 
 import net.ukr.dreamsicle.dto.user.UserDTO;
 import net.ukr.dreamsicle.dto.user.UsernameAndPasswordDataDTO;
