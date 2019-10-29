@@ -15,6 +15,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
@@ -23,8 +25,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Objects;
 
-import static net.ukr.dreamsicle.util.currency.CurrencyProvider.CURRENCIES;
 import static net.ukr.dreamsicle.util.HttpHeaderProvider.getHeader;
+import static net.ukr.dreamsicle.util.currency.CurrencyProvider.ID;
+import static net.ukr.dreamsicle.util.currency.CurrencyProvider.getCurrencyProvider;
 import static net.ukr.dreamsicle.util.user.UserProvider.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.HttpMethod.*;
@@ -64,11 +67,12 @@ public class UserControllerIntegrationsTestIT {
 
     @Test
     public void testGetAllUsersReturnStatus200Ok() {
-        ResponseEntity<RestPageImpl<UserDTO>> response = restTemplate.exchange(getRootUrl() + CURRENCIES, GET, null, new ParameterizedTypeReference<RestPageImpl<UserDTO>>() {
+        ResponseEntity<RestPageImpl<UserDTO>> response = restTemplate.exchange(getRootUrl() + USERS, GET, null, new ParameterizedTypeReference<RestPageImpl<UserDTO>>() {
         });
 
         assertNotNull(response.getBody());
-        assertNotNull(response.getBody().getContent().size());
+        assertNotNull(response.getBody().getSize());
+        assertEquals(userRepository.findAll(new PageRequest(0,10)).getContent().size(), response.getBody().getContent().size());
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 

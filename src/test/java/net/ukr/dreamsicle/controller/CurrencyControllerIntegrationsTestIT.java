@@ -25,9 +25,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Objects;
 
+import static net.ukr.dreamsicle.util.HttpHeaderProvider.getHeader;
 import static net.ukr.dreamsicle.util.currency.CurrencyProvider.ID;
 import static net.ukr.dreamsicle.util.currency.CurrencyProvider.*;
-import static net.ukr.dreamsicle.util.HttpHeaderProvider.getHeader;
 import static net.ukr.dreamsicle.util.user.UserProvider.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.HttpMethod.*;
@@ -76,6 +76,7 @@ public class CurrencyControllerIntegrationsTestIT {
 
         assertNotNull(response.getBody());
         assertNotNull(response.getBody().getContent().size());
+        assertEquals(ID, response.getBody().getContent().size());
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
