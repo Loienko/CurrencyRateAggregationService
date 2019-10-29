@@ -76,6 +76,7 @@ public class CurrencyControllerIntegrationsTestIT {
 
         assertNotNull(response.getBody());
         assertNotNull(response.getBody().getContent().size());
+        assertEquals(ID, response.getBody().getContent().size());
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
