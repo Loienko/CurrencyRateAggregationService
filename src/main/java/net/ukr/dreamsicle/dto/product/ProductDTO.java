@@ -1,16 +1,19 @@
 package net.ukr.dreamsicle.dto.product;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import net.ukr.dreamsicle.model.bank.Bank;
+
 import java.util.Set;
 
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductDTO {
 
     private Long id;
-
     private Set<String> products;
-
-    @NotBlank(message = "null")
-    @Pattern(regexp = "null", message = "null")
     private String description;
+    private Bank bank;
 }

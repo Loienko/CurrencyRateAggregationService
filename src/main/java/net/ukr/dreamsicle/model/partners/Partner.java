@@ -19,10 +19,9 @@ import java.util.List;
 @NoArgsConstructor
 @Document(collection = "partners")
 public class Partner {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
+    @Id
+    private String id;
     private List<Bank> bankList;
     private List<ATM> atmList;
 }

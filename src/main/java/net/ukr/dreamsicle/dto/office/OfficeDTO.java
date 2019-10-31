@@ -4,10 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.ukr.dreamsicle.validation.currencyCode.ValidCurrencyCode;
+import net.ukr.dreamsicle.model.bank.Bank;
+import net.ukr.dreamsicle.model.work.WorkTimes;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 import java.util.Set;
 
 @Data
@@ -15,19 +14,12 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OfficeDTO {
-    private Long id;
 
-    @NotBlank(message = "null")
-    @Pattern(regexp = "null", message = "null")
+    private String id;
+    private String name;
     private String city;
-
-    @NotBlank(message = "null")
-    @ValidCurrencyCode(message = "null")
     private String state;
-
-    @NotBlank(message = "null")
-    @Pattern(regexp = "null", message = "null")
     private String street;
-
-    private Set<String> workTimes;
+    private Set<WorkTimes> workTimes;
+    private Bank bank;
 }

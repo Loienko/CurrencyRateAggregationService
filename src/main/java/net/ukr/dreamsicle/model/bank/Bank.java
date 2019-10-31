@@ -5,14 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.ukr.dreamsicle.model.atm.ATM;
-import net.ukr.dreamsicle.model.product.Product;
 import net.ukr.dreamsicle.model.office.Office;
 import net.ukr.dreamsicle.model.partners.Partner;
+import net.ukr.dreamsicle.model.product.Product;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.List;
 
@@ -24,21 +22,13 @@ import java.util.List;
 public class Bank {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    private String id;
     private String bankName;
-
     private String bankCode;
-
     private String iban;
-
     private String state;
-
     private String city;
-
     private String street;
-
     private List<Partner> partners;
     @DBRef
     private List<Product> products;

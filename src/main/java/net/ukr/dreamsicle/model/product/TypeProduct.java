@@ -3,6 +3,10 @@ package net.ukr.dreamsicle.model.product;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.Arrays;
+
+import static net.ukr.dreamsicle.util.Constants.DATA_IS_ALLOW_PLEASE_CHOOSE_THE_NEXT_ITEMS;
+
 @AllArgsConstructor
 public enum TypeProduct {
     CREDIT_CARD("Credit card"),
@@ -20,4 +24,16 @@ public enum TypeProduct {
 
     @Getter
     private String name;
+
+    public static TypeProduct getEnumFromString(String stringValue) {
+        if (stringValue != null) {
+            try {
+                return Enum.valueOf(TypeProduct.class, stringValue.trim().toUpperCase());
+            } catch (IllegalArgumentException ex) {
+                throw new IllegalArgumentException(DATA_IS_ALLOW_PLEASE_CHOOSE_THE_NEXT_ITEMS
+                        + Arrays.toString(values()));
+            }
+        }
+        return null;
+    }
 }
