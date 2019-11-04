@@ -24,16 +24,4 @@ public enum TypeProduct {
 
     @Getter
     private String name;
-
-    public static TypeProduct getEnumFromString(String stringValue) {
-        if (stringValue != null) {
-            try {
-                return Enum.valueOf(TypeProduct.class, stringValue.trim().toUpperCase());
-            } catch (IllegalArgumentException ex) {
-                throw new IllegalArgumentException(DATA_IS_ALLOW_PLEASE_CHOOSE_THE_NEXT_ITEMS
-                        + Arrays.toString(values()));
-            }
-        }
-        return null;
-    }
 }
