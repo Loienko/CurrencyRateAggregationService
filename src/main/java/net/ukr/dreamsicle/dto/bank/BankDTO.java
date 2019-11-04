@@ -18,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 public class BankDTO {
 
-    private Long id;
+    private String id;
     private String bankName;
     private String bankCode;
     private String iban;

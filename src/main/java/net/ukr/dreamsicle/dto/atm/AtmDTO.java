@@ -14,7 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AtmDTO {
-    private Long id;
+    private String id;
 
     private String name;
     private String city;

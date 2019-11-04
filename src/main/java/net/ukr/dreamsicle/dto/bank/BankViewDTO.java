@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BankViewDTO {
 
+    private String id;
     private String bankName;
     private String state;
     private String city;
