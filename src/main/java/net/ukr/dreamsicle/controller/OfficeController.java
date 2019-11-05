@@ -19,7 +19,7 @@ import javax.validation.constraints.Positive;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/office")
+@RequestMapping("/offices")
 public class OfficeController {
     private OfficeService officeService;
 

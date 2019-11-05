@@ -16,7 +16,7 @@ import javax.validation.constraints.Positive;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/partner")
+@RequestMapping("/partners")
 public class PartnerController {
 
     private PartnerService partnerService;

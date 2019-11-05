@@ -17,7 +17,7 @@ import javax.validation.constraints.Positive;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/bank")
+@RequestMapping("/banks")
 public class BankController {
 
     private BankService bankService;
