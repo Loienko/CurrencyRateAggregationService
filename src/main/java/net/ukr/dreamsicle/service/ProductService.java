@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import net.ukr.dreamsicle.dto.product.ProductDTO;
 import net.ukr.dreamsicle.dto.product.ProductMapper;
 import net.ukr.dreamsicle.exception.ResourceNotFoundException;
+import net.ukr.dreamsicle.model.bank.Bank;
 import net.ukr.dreamsicle.model.product.Product;
 import net.ukr.dreamsicle.repository.BankRepository;
 import net.ukr.dreamsicle.repository.ProductRepository;
@@ -40,9 +41,10 @@ public class ProductService {
 
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    public ProductDTO create(String bankName, ProductDTO productDTO) {
-        bankRepository.findById(bankName).orElseThrow(ResourceNotFoundException::new);
-        return productMapper.toProductDto(saveProduct(bankName, productMapper.toProduct(productDTO)));
+    public ProductDTO create(String bankCode, ProductDTO productDTO) {
+        Bank bank = bankRepository.findBankByBankCode(bankCode).orElseThrow(ResourceNotFoundException::new);
+
+        return productMapper.toProductDto(saveProduct(bank.getBankCode(), productMapper.toProduct(productDTO)));
     }
 
     private Product saveProduct(String bankCode, Product product) {

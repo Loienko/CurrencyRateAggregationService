@@ -19,27 +19,27 @@ import javax.validation.constraints.Positive;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/offices")
+@RequestMapping
 public class OfficeController {
     private OfficeService officeService;
 
-    @GetMapping
+    @GetMapping("/offices")
     public Page<OfficeDTO> findAll(@PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable page) {
         return officeService.getAll(page);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/offices/{id}")
     public OfficeDTO findById(@PathVariable @Min(1) @Positive String id) {
         return officeService.findById(id);
     }
 
-    @PostMapping("/{bankName}")
+    @PostMapping("/banks/{bankCode}/offices")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public OfficeDTO create(@PathVariable @Min(1) @Positive String bankName, @Validated @RequestBody OfficeDTO officeDTO) {
-        return officeService.create(bankName, officeDTO);
+    public OfficeDTO create(@PathVariable @Min(1) @Positive String bankCode, @Validated @RequestBody OfficeDTO officeDTO) {
+        return officeService.create(bankCode, officeDTO);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/offices/{id}")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
     public OfficeDTO update(@PathVariable @Min(1) @Positive String id, @Validated @RequestBody OfficeDTO officeDTO) {
         return officeService.update(id, officeDTO);

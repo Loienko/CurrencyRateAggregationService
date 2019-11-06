@@ -2,7 +2,7 @@ package net.ukr.dreamsicle.controller;
 
 import lombok.AllArgsConstructor;
 import net.ukr.dreamsicle.dto.bank.BankDTO;
-import net.ukr.dreamsicle.dto.bank.BankViewDTO;
+import net.ukr.dreamsicle.dto.bank.BankUpdateDTO;
 import net.ukr.dreamsicle.service.BankService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,10 +38,10 @@ public class BankController {
         return bankService.create(bankDTO);
     }
 
-    @PutMapping("/{bankName}")
+    @PutMapping("/{bankCode}")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public BankDTO update(@PathVariable @Min(1) @Positive String bankName, @Validated @RequestBody BankDTO bankDTO) {
-        return bankService.update(bankName, bankDTO);
+    public BankDTO update(@PathVariable @Min(1) @Positive String bankCode, @Validated @RequestBody BankUpdateDTO bankUpdateDTO) {
+        return bankService.update(bankCode, bankUpdateDTO);
     }
 
     //TODO

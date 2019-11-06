@@ -43,8 +43,8 @@ public class OfficeService {
 
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    public OfficeDTO create(String bankName, OfficeDTO officeDTO) {
-        Bank actualBank = bankRepository.findBankByBankName(bankName).orElseThrow(ResourceNotFoundException::new);
+    public OfficeDTO create(String bankCode, OfficeDTO officeDTO) {
+        Bank actualBank = bankRepository.findBankByBankCode(bankCode).orElseThrow(ResourceNotFoundException::new);
 
         return officeMapper.toOfficeDto(saveOffice(actualBank.getBankCode(), officeMapper.toOffice(officeDTO)));
     }

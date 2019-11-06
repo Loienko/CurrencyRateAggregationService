@@ -41,8 +41,8 @@ public class AtmService {
 
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    public AtmDTO create(String bankName, AtmDTO atmDTO) {
-        Bank bank = bankRepository.findBankByBankName(bankName).orElseThrow(ResourceNotFoundException::new);
+    public AtmDTO create(String bankCode, AtmDTO atmDTO) {
+        Bank bank = bankRepository.findBankByBankCode(bankCode).orElseThrow(ResourceNotFoundException::new);
 
         return atmMapper.toAtmDto(saveAtm(bank.getBankCode(), atmMapper.toAtm(atmDTO)));
     }

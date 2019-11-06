@@ -16,28 +16,28 @@ import javax.validation.constraints.Positive;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/products")
+@RequestMapping
 public class ProductController {
 
     private ProductService productService;
 
-    @GetMapping
+    @GetMapping("/products")
     public Page<ProductDTO> findAll(@PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable page) {
         return productService.getAll(page);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/products/{id}")
     public ProductDTO findById(@PathVariable @Min(1) @Positive String id) {
         return productService.findById(id);
     }
 
-    @PostMapping("/{bankName}")
+    @PostMapping("/banks/{bankCode}/products")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public ProductDTO create(@PathVariable @Min(1) @Positive String bankName, @Validated @RequestBody ProductDTO productDTO) {
-        return productService.create(bankName, productDTO);
+    public ProductDTO create(@PathVariable @Min(1) @Positive String bankCode, @Validated @RequestBody ProductDTO productDTO) {
+        return productService.create(bankCode, productDTO);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/products/{id}")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
     public ProductDTO update(@PathVariable @Min(1) @Positive String id, @Validated @RequestBody ProductDTO productDTO) {
         return productService.update(id, productDTO);

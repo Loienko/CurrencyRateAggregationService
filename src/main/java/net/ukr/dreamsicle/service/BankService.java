@@ -74,12 +74,10 @@ public class BankService {
     // Will implement later
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    public BankDTO update(String bankName, BankDTO bankDTO) {
-        Bank bank = bankRepository.findBankByBankName(bankName).orElseThrow(ResourceNotFoundException::new);
+    public BankDTO update(String bankCode, BankDTO bankDTO) {
+        Bank bank = bankRepository.findBankByBankCode(bankCode).orElseThrow(ResourceNotFoundException::new);
 
-        Bank actualBank = bankMapper.toBank(bankDTO);
-
-        bank.setBankName(actualBank.getBankName());
+        bank.setBankCode(bankMapper.toBank(bankDTO).getBankCode());
 
         return bankMapper.toBankDto(bankRepository.save(bank));
     }
