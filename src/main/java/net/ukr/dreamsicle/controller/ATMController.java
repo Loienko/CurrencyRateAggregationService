@@ -17,30 +17,30 @@ import javax.validation.constraints.Positive;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/atms")
+@RequestMapping
 public class ATMController {
 
     private AtmService atmService;
 
-    @GetMapping
+    @GetMapping("/atms")
     public Page<AtmDTO> findAll(@PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable page) {
         return atmService.getAll(page);
     }
 
-    @GetMapping("/{id}")
-    public AtmDTO findById(@PathVariable @Min(1) @Positive long id) {
+    @GetMapping("/atms/{id}")
+    public AtmDTO findById(@PathVariable @Min(1) @Positive String id) {
         return atmService.findById(id);
     }
 
-    @PostMapping
+    @PostMapping("/banks/{bankCode}/atms")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public AtmDTO create(@Validated @RequestBody AtmDTO atmDTO) {
-        return atmService.create(atmDTO);
+    public AtmDTO create(@PathVariable @Min(1) @Positive String bankCode, @Validated @RequestBody AtmDTO atmDTO) {
+        return atmService.create(bankCode, atmDTO);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/atms/{id}")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public AtmDTO update(@PathVariable @Min(1) @Positive long id, @Validated @RequestBody AtmDTO atmDTO) {
+    public AtmDTO update(@PathVariable @Min(1) @Positive String id, @Validated @RequestBody AtmDTO atmDTO) {
         return atmService.update(id, atmDTO);
     }
 }

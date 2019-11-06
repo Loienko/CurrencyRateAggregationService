@@ -16,30 +16,30 @@ import javax.validation.constraints.Positive;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/products")
+@RequestMapping
 public class ProductController {
 
     private ProductService productService;
 
-    @GetMapping
+    @GetMapping("/products")
     public Page<ProductDTO> findAll(@PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable page) {
         return productService.getAll(page);
     }
 
-    @GetMapping("/{id}")
-    public ProductDTO findById(@PathVariable @Min(1) @Positive long id) {
+    @GetMapping("/products/{id}")
+    public ProductDTO findById(@PathVariable @Min(1) @Positive String id) {
         return productService.findById(id);
     }
 
-    @PostMapping
+    @PostMapping("/banks/{bankCode}/products")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public ProductDTO create(@Validated @RequestBody ProductDTO productDTO) {
-        return productService.createBank(productDTO);
+    public ProductDTO create(@PathVariable @Min(1) @Positive String bankCode, @Validated @RequestBody ProductDTO productDTO) {
+        return productService.create(bankCode, productDTO);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/products/{id}")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public ProductDTO update(@PathVariable @Min(1) @Positive long id, @Validated @RequestBody ProductDTO productDTO) {
-        return productService.updateBank(id, productDTO);
+    public ProductDTO update(@PathVariable @Min(1) @Positive String id, @Validated @RequestBody ProductDTO productDTO) {
+        return productService.update(id, productDTO);
     }
 }

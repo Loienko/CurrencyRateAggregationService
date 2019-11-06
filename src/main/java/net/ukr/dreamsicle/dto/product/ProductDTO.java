@@ -2,18 +2,18 @@ package net.ukr.dreamsicle.dto.product;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.ukr.dreamsicle.model.bank.Bank;
+import net.ukr.dreamsicle.model.product.TypeProduct;
 
-import java.util.Set;
-
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductDTO {
 
-    private Long id;
-    private Set<String> products;
+    private String id;
+    private String bankCode;
+    private TypeProduct type;
     private String description;
-    private Bank bank;
 }

@@ -2,7 +2,7 @@ package net.ukr.dreamsicle.controller;
 
 import lombok.AllArgsConstructor;
 import net.ukr.dreamsicle.dto.bank.BankDTO;
-import net.ukr.dreamsicle.dto.bank.BankViewDTO;
+import net.ukr.dreamsicle.dto.bank.BankUpdateDTO;
 import net.ukr.dreamsicle.service.BankService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,24 +28,33 @@ public class BankController {
     }
 
     @GetMapping("/{id}")
-    public BankDTO findById(@PathVariable @Min(1) @Positive long id) {
+    public BankDTO findById(@PathVariable @Min(1) @Positive String id) {
         return bankService.findById(id);
     }
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public BankViewDTO create(@Validated @RequestBody BankViewDTO bankDTO) {
-        return bankService.createBank(bankDTO);
+    public BankDTO create(@Validated @RequestBody BankDTO bankDTO) {
+        return bankService.create(bankDTO);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{bankCode}")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public BankViewDTO update(@PathVariable @Min(1) @Positive long id, @Validated @RequestBody BankViewDTO bankViewDTO) {
-        return bankService.updateBank(id, bankViewDTO);
+    public BankDTO update(@PathVariable @Min(1) @Positive String bankCode, @Validated @RequestBody BankUpdateDTO bankUpdateDTO) {
+        return bankService.update(bankCode, bankUpdateDTO);
     }
 
-    @GetMapping("/search")
+    //TODO
+    // Will implement later
+    @GetMapping("search")
     public Page<BankDTO> search(@PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable page) {
         return bankService.search(page);
+    }
+
+    //TODO
+    // Just for test app
+    @DeleteMapping
+    public void delete() {
+        bankService.delete();
     }
 }

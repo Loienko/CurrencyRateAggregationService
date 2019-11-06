@@ -22,6 +22,12 @@ public class Partner {
 
     @Id
     private String id;
-    private List<Bank> bankList;
-    private List<ATM> atmList;
+    //TODO
+    // Will implement later
+//    private List<Bank> bankList;
+//    private List<ATM> atmList;
+    //TODO
+    // Just for test app
+    private String bankList;
+    private String atmList;
 }

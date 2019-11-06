@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.Optional;
 
 public interface BankRepository extends MongoRepository<Bank, String> {
-    Optional<Bank> findBankByBankName(String bankName);
+    Optional<Bank> findBankByBankCode(String bankCode);
 
     boolean existsBankByBankName(String bankName);
 }

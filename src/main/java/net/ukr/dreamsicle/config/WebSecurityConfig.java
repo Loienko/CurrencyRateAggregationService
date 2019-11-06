@@ -62,7 +62,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, "/users/password/**").hasAuthority(RoleType.USER.getName())
                 .antMatchers(HttpMethod.POST, "/user/id/details/**").hasAuthority(RoleType.USER.getName())
                 .antMatchers(HttpMethod.POST, "/user/id/details/**").hasAuthority(RoleType.ADMIN.getName())
-                .antMatchers("/bank/**").hasAuthority(RoleType.ADMIN.getName())
+                .antMatchers("/**").hasAuthority(RoleType.ADMIN.getName())
                 .antMatchers("/users/**").hasAuthority(RoleType.ADMIN.getName())
                 .antMatchers("/currencies/**").hasAuthority(RoleType.ADMIN.getName())
                 .anyRequest().authenticated().and()

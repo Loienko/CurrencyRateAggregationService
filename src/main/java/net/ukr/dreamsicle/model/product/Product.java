@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.ukr.dreamsicle.model.bank.Bank;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.EnumType;
@@ -20,9 +19,9 @@ public class Product {
 
     @Id
     private String id;
+    private String bankCode;
 
     @Enumerated(EnumType.STRING)
     private TypeProduct type;
     private String description;
-    private Bank bank;
 }

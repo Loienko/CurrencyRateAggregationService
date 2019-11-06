@@ -16,30 +16,30 @@ import javax.validation.constraints.Positive;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/partners")
+@RequestMapping
 public class PartnerController {
 
     private PartnerService partnerService;
 
-    @GetMapping
+    @GetMapping("/partners")
     public Page<PartnerDTO> findAll(@PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable page) {
         return partnerService.getAll(page);
     }
 
-    @GetMapping("/{id}")
-    public PartnerDTO findById(@PathVariable @Min(1) @Positive long id) {
+    @GetMapping("/partners/{id}")
+    public PartnerDTO findById(@PathVariable @Min(1) @Positive String id) {
         return partnerService.findById(id);
     }
 
-    @PostMapping
+    @PostMapping("/partners")
     @ResponseStatus(code = HttpStatus.CREATED)
     public PartnerDTO create(@Validated @RequestBody PartnerDTO partnerDTO) {
-        return partnerService.createBank(partnerDTO);
+        return partnerService.create(partnerDTO);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/partners/{id}")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public PartnerDTO update(@PathVariable @Min(1) @Positive long id, @Validated @RequestBody PartnerDTO partnerDTO) {
-        return partnerService.updateBank(id, partnerDTO);
+    public PartnerDTO update(@PathVariable @Min(1) @Positive String id, @Validated @RequestBody PartnerDTO partnerDTO) {
+        return partnerService.update(id, partnerDTO);
     }
 }
