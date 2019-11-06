@@ -29,19 +29,19 @@ public class OfficeController {
     }
 
     @GetMapping("/{id}")
-    public OfficeDTO findById(@PathVariable @Min(1) @Positive long id) {
+    public OfficeDTO findById(@PathVariable @Min(1) @Positive String id) {
         return officeService.findById(id);
     }
 
-    @PostMapping
+    @PostMapping("/{bankName}")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public OfficeDTO create(@Validated @RequestBody OfficeDTO officeDTO) {
-        return officeService.create(officeDTO);
+    public OfficeDTO create(@PathVariable @Min(1) @Positive String bankName, @Validated @RequestBody OfficeDTO officeDTO) {
+        return officeService.create(bankName, officeDTO);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public OfficeDTO update(@PathVariable @Min(1) @Positive long id, @Validated @RequestBody OfficeDTO officeDTO) {
+    public OfficeDTO update(@PathVariable @Min(1) @Positive String id, @Validated @RequestBody OfficeDTO officeDTO) {
         return officeService.update(id, officeDTO);
     }
 }

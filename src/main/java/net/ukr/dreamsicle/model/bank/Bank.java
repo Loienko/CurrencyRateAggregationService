@@ -8,7 +8,7 @@ import net.ukr.dreamsicle.model.atm.ATM;
 import net.ukr.dreamsicle.model.office.Office;
 import net.ukr.dreamsicle.model.partners.Partner;
 import net.ukr.dreamsicle.model.product.Product;
-import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
@@ -23,17 +23,18 @@ public class Bank {
 
     @Id
     private String id;
+
+    @Indexed(unique = true)
     private String bankName;
+
+    @Indexed(unique = true)
     private String bankCode;
     private String iban;
     private String state;
     private String city;
     private String street;
     private List<Partner> partners;
-    @DBRef
     private List<Product> products;
-    @DBRef
-    private List<Office> office;
-    @DBRef
-    private List<ATM> atm;
+    private List<Office> offices;
+    private List<ATM> atms;
 }

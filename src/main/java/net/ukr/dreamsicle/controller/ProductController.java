@@ -27,19 +27,19 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ProductDTO findById(@PathVariable @Min(1) @Positive long id) {
+    public ProductDTO findById(@PathVariable @Min(1) @Positive String id) {
         return productService.findById(id);
     }
 
-    @PostMapping
+    @PostMapping("/{bankName}")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public ProductDTO create(@Validated @RequestBody ProductDTO productDTO) {
-        return productService.createBank(productDTO);
+    public ProductDTO create(@PathVariable @Min(1) @Positive String bankName, @Validated @RequestBody ProductDTO productDTO) {
+        return productService.create(bankName, productDTO);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public ProductDTO update(@PathVariable @Min(1) @Positive long id, @Validated @RequestBody ProductDTO productDTO) {
-        return productService.updateBank(id, productDTO);
+    public ProductDTO update(@PathVariable @Min(1) @Positive String id, @Validated @RequestBody ProductDTO productDTO) {
+        return productService.update(id, productDTO);
     }
 }

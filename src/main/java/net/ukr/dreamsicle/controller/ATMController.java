@@ -28,19 +28,19 @@ public class ATMController {
     }
 
     @GetMapping("/{id}")
-    public AtmDTO findById(@PathVariable @Min(1) @Positive long id) {
+    public AtmDTO findById(@PathVariable @Min(1) @Positive String id) {
         return atmService.findById(id);
     }
 
-    @PostMapping
+    @PostMapping("/{bankName}")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public AtmDTO create(@Validated @RequestBody AtmDTO atmDTO) {
-        return atmService.create(atmDTO);
+    public AtmDTO create(@PathVariable @Min(1) @Positive String bankName, @Validated @RequestBody AtmDTO atmDTO) {
+        return atmService.create(bankName, atmDTO);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public AtmDTO update(@PathVariable @Min(1) @Positive long id, @Validated @RequestBody AtmDTO atmDTO) {
+    public AtmDTO update(@PathVariable @Min(1) @Positive String id, @Validated @RequestBody AtmDTO atmDTO) {
         return atmService.update(id, atmDTO);
     }
 }

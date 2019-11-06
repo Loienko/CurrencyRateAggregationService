@@ -28,24 +28,33 @@ public class BankController {
     }
 
     @GetMapping("/{id}")
-    public BankDTO findById(@PathVariable @Min(1) @Positive long id) {
+    public BankDTO findById(@PathVariable @Min(1) @Positive String id) {
         return bankService.findById(id);
     }
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public BankViewDTO create(@Validated @RequestBody BankViewDTO bankDTO) {
-        return bankService.createBank(bankDTO);
+    public BankDTO create(@Validated @RequestBody BankDTO bankDTO) {
+        return bankService.create(bankDTO);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{bankName}")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public BankViewDTO update(@PathVariable @Min(1) @Positive long id, @Validated @RequestBody BankViewDTO bankViewDTO) {
-        return bankService.updateBank(id, bankViewDTO);
+    public BankDTO update(@PathVariable @Min(1) @Positive String bankName, @Validated @RequestBody BankDTO bankDTO) {
+        return bankService.update(bankName, bankDTO);
     }
 
-    @GetMapping("/search")
+    //TODO
+    // Will implement later
+    @GetMapping("search")
     public Page<BankDTO> search(@PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable page) {
         return bankService.search(page);
+    }
+
+    //TODO
+    // Just for test app
+    @DeleteMapping
+    public void delete() {
+        bankService.delete();
     }
 }
