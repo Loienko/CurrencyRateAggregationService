@@ -3,10 +3,6 @@ package net.ukr.dreamsicle.model.product;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.Arrays;
-
-import static net.ukr.dreamsicle.util.Constants.DATA_IS_ALLOW_PLEASE_CHOOSE_THE_NEXT_ITEMS;
-
 @AllArgsConstructor
 public enum TypeProduct {
     CREDIT_CARD("Credit card"),
