@@ -50,11 +50,4 @@ public class BankController {
     public Page<BankDTO> search(@PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable page) {
         return bankService.search(page);
     }
-
-    //TODO
-    // Just for test app
-    @DeleteMapping
-    public void delete() {
-        bankService.delete();
-    }
 }

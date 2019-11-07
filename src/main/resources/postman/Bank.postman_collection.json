@@ -1,0 +1,130 @@
+{
+	"info": {
+		"_postman_id": "10627748-4f94-438c-bc3a-bd635636eca6",
+		"name": "Bank",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get all bank",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/bank",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"bank"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get bank By id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/bank/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"bank",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Bank",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bmlxdWUiLCJpYXQiOjE1NzMwNDk1MzgsImV4cCI6MTU3MzEzNTkzOH0.hPleobfOfDaoYBYe2XlL-plGWDiXCca8UqLeJf_L9pxau5HcZ-eszFCX5nZqoaWKHKpokQEv7xExM-2RnIiqqA",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"bankName\": \"testttttt\",\n\t\"state\": \"test\",\n\t\"city\": \"test\",\n\t\"street\": \"test\",\n\t\"partners\": [\n        {\n        \t\"bankList\": \"test\",\n            \"atmList\": \"test\"\n        },\n        {\n            \"bankList\": \"tests\",\n            \"atmList\": \"tests\"\n        }\n    ],\n    \"products\": [\n        {\n        \t\"type\": \"MONEY_TRANSFERS\",\n\t\t\t\"description\":\"descriptions\" \n        },\n        {\n            \"type\": \"FACTORING\",\n\t\t\t\"description\":\"descriptions\"\n        }\n    ],\n    \"offices\": [\n        {\n            \"name\": \"PrivatBank\",\n\t\t\t\"state\":\"testss\",\n\t\t\t\"city\":\"tests\",\n\t\t\t\"street\":\"tests\",\n\t\t\t\"workTimes\":[\n\t\t\t\t{\t\n\t\t\t\t\t\"dayOfWeek\":\"MONDAY\",\n\t\t\t\t\t\"startWork\": \"8 AM\",\n\t\t\t\t\t\"endWork\":\"9 PM\"\n\t\t\t\t}\n\t\t\t]\n        },\n        {\n            \"name\": \"PrivatBank\",\n\t\t\t\"state\":\"tests\",\n\t\t\t\"city\":\"tests\",\n\t\t\t\"street\":\"tests\",\n\t\t\t\"workTimes\":[\n\t\t\t\t{\t\n\t\t\t\t\t\"dayOfWeek\":\"MONDAY\",\n\t\t\t\t\t\"startWork\": \"8 AM\",\n\t\t\t\t\t\"endWork\":\"9 PM\"\n\t\t\t\t}\n\t\t\t]\n        }\n    ],\n    \"atms\": [\n        {\n            \"name\": \"Pumb\",\n\t\t\t\"state\":\"Ukraine\",\n\t\t\t\"city\":\"Kharkov\",\n\t\t\t\"street\":\"Ak.Proskuri\",\n\t\t\t\"workTimes\":[\n\t\t\t\t{\t\n\t\t\t\t\t\"dayOfWeek\":\"MONDAY\",\n\t\t\t\t\t\"startWork\": \"8 AM\",\n\t\t\t\t\t\"endWork\":\"9 PM\"\n\t\t\t\t}\n\t]\n        },\n        {\n            \"name\": \"Pumb\",\n\t\t\t\"state\":\"Ukraine\",\n\t\t\t\"city\":\"Kharkov\",\n\t\t\t\"street\":\"Ak.Proskuri\",\n\t\t\t\"workTimes\":[\n\t\t\t\t{\t\n\t\t\t\t\t\"dayOfWeek\":\"MONDAY\",\n\t\t\t\t\t\"startWork\": \"8 AM\",\n\t\t\t\t\t\"endWork\":\"9 PM\"\n\t\t\t\t}\n\t\t\t]\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/banks",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"banks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update bank",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bmlxdWUiLCJpYXQiOjE1NzMwNDk1MzgsImV4cCI6MTU3MzEzNTkzOH0.hPleobfOfDaoYBYe2XlL-plGWDiXCca8UqLeJf_L9pxau5HcZ-eszFCX5nZqoaWKHKpokQEv7xExM-2RnIiqqA",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"bankName\": \"update\",\n\t\"state\": \"update\",\n\t\"city\": \"update\",\n\t\"street\": \"update\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/banks/713795",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"banks",
+						"713795"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

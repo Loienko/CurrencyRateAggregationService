@@ -13,9 +13,7 @@ public interface BankMapper {
 
     Bank toBank(BankDTO bankDTO);
 
-    BankViewDTO toBankViewDto(Bank bank);
-
-    Bank toBank(BankViewDTO bankViewDTO);
+    Bank toBank(BankUpdateDTO bankUpdateDTO);
 
     default Page<BankDTO> toBankDTOs(Page<Bank> bankPage) {
         return bankPage.map(this::toBankDto);

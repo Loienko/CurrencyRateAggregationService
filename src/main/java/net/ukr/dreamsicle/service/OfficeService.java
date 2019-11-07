@@ -27,6 +27,7 @@ public class OfficeService {
     private final OfficeRepository officeRepository;
     private final OfficeMapper officeMapper;
     private final BankRepository bankRepository;
+    private final BankUpdateDataService bankUpdateDataService;
 
     @Lock(LockModeType.PESSIMISTIC_READ)
     public Page<OfficeDTO> getAll(Pageable pageable) {
@@ -46,7 +47,11 @@ public class OfficeService {
     public OfficeDTO create(String bankCode, OfficeDTO officeDTO) {
         Bank actualBank = bankRepository.findBankByBankCode(bankCode).orElseThrow(ResourceNotFoundException::new);
 
-        return officeMapper.toOfficeDto(saveOffice(actualBank.getBankCode(), officeMapper.toOffice(officeDTO)));
+        Office office = saveOffice(actualBank.getBankCode(), officeMapper.toOffice(officeDTO));
+
+        bankUpdateDataService.addDataToBank(bankCode, office);
+
+        return officeMapper.toOfficeDto(office);
     }
 
     private Office saveOffice(String bankCode, Office office) {
@@ -60,18 +65,19 @@ public class OfficeService {
                 .build());
     }
 
-    //TODO
-    // Will implement later
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     public OfficeDTO update(String id, OfficeDTO officeDTO) {
         Office officeById = officeRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         Office actualOffice = officeMapper.toOffice(officeDTO);
 
+        officeById.setName(actualOffice.getName());
         officeById.setCity(actualOffice.getCity());
         officeById.setState(actualOffice.getState());
         officeById.setStreet(actualOffice.getStreet());
         officeById.setWorkTimes(actualOffice.getWorkTimes());
+
+        bankUpdateDataService.updateDateToBank(id, officeById.getBankCode(), actualOffice);
 
         return officeMapper.toOfficeDto(officeRepository.save(officeById));
     }

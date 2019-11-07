@@ -1,8 +1,7 @@
 package net.ukr.dreamsicle.controller;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import net.ukr.dreamsicle.dto.atm.AtmDTO;
-import net.ukr.dreamsicle.dto.bank.BankDTO;
 import net.ukr.dreamsicle.service.AtmService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,11 +15,11 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping
 public class ATMController {
 
-    private AtmService atmService;
+    private final AtmService atmService;
 
     @GetMapping("/atms")
     public Page<AtmDTO> findAll(@PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable page) {

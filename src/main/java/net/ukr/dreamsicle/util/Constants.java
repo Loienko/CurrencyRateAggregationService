@@ -58,4 +58,7 @@ public class Constants {
     public static final String INPUT_VALID_DATA_FOR_CURRENCY_CODE = "Please input valid data for currency code";
     public static final String INPUT_VALID_DATA_FOR_PURCHASE_CURRENCY = "Please input valid data for purchase currency";
     public static final String INPUT_VALID_DATA_FOR_SALE_OF_CURRENCY = "Please input valid data for sale of currency";
+
+    //bank
+    public static final String BANK_IS_ALREADY_IN_USE = "Bank is already in use";
 }

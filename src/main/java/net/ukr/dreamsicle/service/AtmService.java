@@ -27,6 +27,7 @@ public class AtmService {
     private final AtmRepository atmRepository;
     private final AtmMapper atmMapper;
     private final BankRepository bankRepository;
+    private final BankUpdateDataService bankUpdateDataService;
 
     public Page<AtmDTO> getAll(Pageable pageable) {
         return atmMapper.toAtmDTOs(atmRepository.findAll(pageable));
@@ -43,8 +44,11 @@ public class AtmService {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     public AtmDTO create(String bankCode, AtmDTO atmDTO) {
         Bank bank = bankRepository.findBankByBankCode(bankCode).orElseThrow(ResourceNotFoundException::new);
+        ATM atm = saveAtm(bank.getBankCode(), atmMapper.toAtm(atmDTO));
 
-        return atmMapper.toAtmDto(saveAtm(bank.getBankCode(), atmMapper.toAtm(atmDTO)));
+        bankUpdateDataService.addDataToBank(bankCode, atm);
+
+        return atmMapper.toAtmDto(atm);
     }
 
     private ATM saveAtm(String bankCode, ATM atm) {
@@ -58,8 +62,6 @@ public class AtmService {
                 .build());
     }
 
-    //TODO
-    // Will implement later
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     public AtmDTO update(String id, AtmDTO atmDTO) {
@@ -72,6 +74,8 @@ public class AtmService {
         atmById.setState(actualAtm.getState());
         atmById.setStreet(actualAtm.getStreet());
         atmById.setWorkTimes(actualAtm.getWorkTimes());
+
+        bankUpdateDataService.updateDateToBank(id, atmById.getBankCode(), actualAtm);
 
         return atmMapper.toAtmDto(atmRepository.save(atmById));
     }

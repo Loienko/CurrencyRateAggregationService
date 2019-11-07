@@ -27,6 +27,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
     private final BankRepository bankRepository;
+    private final BankUpdateDataService bankUpdateDataService;
 
     public Page<ProductDTO> getAll(Pageable pageable) {
         return productMapper.toProductDTOs(productRepository.findAll(pageable));
@@ -44,7 +45,11 @@ public class ProductService {
     public ProductDTO create(String bankCode, ProductDTO productDTO) {
         Bank bank = bankRepository.findBankByBankCode(bankCode).orElseThrow(ResourceNotFoundException::new);
 
-        return productMapper.toProductDto(saveProduct(bank.getBankCode(), productMapper.toProduct(productDTO)));
+        Product product = saveProduct(bank.getBankCode(), productMapper.toProduct(productDTO));
+
+        bankUpdateDataService.addDataToBank(bankCode, product);
+
+        return productMapper.toProductDto(product);
     }
 
     private Product saveProduct(String bankCode, Product product) {
@@ -55,12 +60,17 @@ public class ProductService {
                 .build());
     }
 
-    //TODO
-    // Will implement later
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     public ProductDTO update(String id, ProductDTO productDTO) {
         Product productById = productRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        Product actualProduct = productMapper.toProduct(productDTO);
+
+        productById.setType(actualProduct.getType());
+        productById.setDescription(actualProduct.getDescription());
+
+        bankUpdateDataService.updateDateToBank(id, productById.getBankCode(), actualProduct);
+
         return productMapper.toProductDto(productRepository.save(productById));
     }
 
