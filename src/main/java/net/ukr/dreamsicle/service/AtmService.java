@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.LockModeType;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,7 +28,6 @@ public class AtmService {
     private final AtmRepository atmRepository;
     private final AtmMapper atmMapper;
     private final BankRepository bankRepository;
-    private final BankUpdateDataService bankUpdateDataService;
 
     public Page<AtmDTO> getAll(Pageable pageable) {
         return atmMapper.toAtmDTOs(atmRepository.findAll(pageable));
@@ -44,11 +44,12 @@ public class AtmService {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     public AtmDTO create(String bankCode, AtmDTO atmDTO) {
         Bank bank = bankRepository.findBankByBankCode(bankCode).orElseThrow(ResourceNotFoundException::new);
-        ATM atm = saveAtm(bank.getBankCode(), atmMapper.toAtm(atmDTO));
+        ATM atm = atmMapper.toAtm(atmDTO);
 
-        bankUpdateDataService.addDataToBank(bankCode, atm);
+        Objects.requireNonNull(bank.getAtms()).add(atm);
+        bankRepository.save(bank);
 
-        return atmMapper.toAtmDto(atm);
+        return atmMapper.toAtmDto(saveAtm(bank.getBankCode(), atm));
     }
 
     private ATM saveAtm(String bankCode, ATM atm) {
@@ -66,18 +67,22 @@ public class AtmService {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     public AtmDTO update(String id, AtmDTO atmDTO) {
         ATM atmById = atmRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
-
         ATM actualAtm = atmMapper.toAtm(atmDTO);
+        actualAtm.setId(id);
 
-        atmById.setName(actualAtm.getName());
-        atmById.setCity(actualAtm.getCity());
-        atmById.setState(actualAtm.getState());
-        atmById.setStreet(actualAtm.getStreet());
-        atmById.setWorkTimes(actualAtm.getWorkTimes());
+        Bank bank = bankRepository.findBankByBankCode(atmById.getBankCode()).orElseThrow(ResourceNotFoundException::new);
+        Objects.requireNonNull(bank.getAtms()).stream()
+                .filter(atm -> atm.getId().equals(id))
+                .forEach(atm -> {
+                    atm.setName(actualAtm.getName());
+                    atm.setState(actualAtm.getState());
+                    atm.setCity(actualAtm.getCity());
+                    atm.setStreet(actualAtm.getStreet());
+                    atm.setWorkTimes(actualAtm.getWorkTimes());
+                });
+        bankRepository.save(bank);
 
-        bankUpdateDataService.updateDateToBank(id, atmById.getBankCode(), actualAtm);
-
-        return atmMapper.toAtmDto(atmRepository.save(atmById));
+        return atmMapper.toAtmDto(atmRepository.save(actualAtm));
     }
 
     public List<ATM> createAtm(String bankCode, List<ATM> listAtm) {

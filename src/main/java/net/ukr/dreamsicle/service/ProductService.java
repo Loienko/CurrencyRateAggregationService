@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.LockModeType;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,7 +28,6 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
     private final BankRepository bankRepository;
-    private final BankUpdateDataService bankUpdateDataService;
 
     public Page<ProductDTO> getAll(Pageable pageable) {
         return productMapper.toProductDTOs(productRepository.findAll(pageable));
@@ -44,12 +44,12 @@ public class ProductService {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     public ProductDTO create(String bankCode, ProductDTO productDTO) {
         Bank bank = bankRepository.findBankByBankCode(bankCode).orElseThrow(ResourceNotFoundException::new);
+        Product product = productMapper.toProduct(productDTO);
 
-        Product product = saveProduct(bank.getBankCode(), productMapper.toProduct(productDTO));
+        Objects.requireNonNull(bank.getProducts()).add(product);
+        bankRepository.save(bank);
 
-        bankUpdateDataService.addDataToBank(bankCode, product);
-
-        return productMapper.toProductDto(product);
+        return productMapper.toProductDto(saveProduct(bank.getBankCode(), product));
     }
 
     private Product saveProduct(String bankCode, Product product) {
@@ -65,13 +65,18 @@ public class ProductService {
     public ProductDTO update(String id, ProductDTO productDTO) {
         Product productById = productRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         Product actualProduct = productMapper.toProduct(productDTO);
+        actualProduct.setId(id);
 
-        productById.setType(actualProduct.getType());
-        productById.setDescription(actualProduct.getDescription());
+        Bank bank = bankRepository.findBankByBankCode(productById.getBankCode()).orElseThrow(ResourceNotFoundException::new);
+        Objects.requireNonNull(bank.getProducts()).stream()
+                .filter(product -> product.getId().equals(id))
+                .forEach(product -> {
+                    product.setType(actualProduct.getType());
+                    product.setDescription(actualProduct.getDescription());
+                });
+        bankRepository.save(bank);
 
-        bankUpdateDataService.updateDateToBank(id, productById.getBankCode(), actualProduct);
-
-        return productMapper.toProductDto(productRepository.save(productById));
+        return productMapper.toProductDto(productRepository.save(actualProduct));
     }
 
     public List<Product> createProduct(String bankCode, List<Product> listProduct) {

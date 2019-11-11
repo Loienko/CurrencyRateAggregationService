@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.LockModeType;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,7 +28,6 @@ public class OfficeService {
     private final OfficeRepository officeRepository;
     private final OfficeMapper officeMapper;
     private final BankRepository bankRepository;
-    private final BankUpdateDataService bankUpdateDataService;
 
     @Lock(LockModeType.PESSIMISTIC_READ)
     public Page<OfficeDTO> getAll(Pageable pageable) {
@@ -45,13 +45,13 @@ public class OfficeService {
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     public OfficeDTO create(String bankCode, OfficeDTO officeDTO) {
-        Bank actualBank = bankRepository.findBankByBankCode(bankCode).orElseThrow(ResourceNotFoundException::new);
+        Bank bank = bankRepository.findBankByBankCode(bankCode).orElseThrow(ResourceNotFoundException::new);
+        Office office = officeMapper.toOffice(officeDTO);
 
-        Office office = saveOffice(actualBank.getBankCode(), officeMapper.toOffice(officeDTO));
+        Objects.requireNonNull(bank.getOffices()).add(office);
+        bankRepository.save(bank);
 
-        bankUpdateDataService.addDataToBank(bankCode, office);
-
-        return officeMapper.toOfficeDto(office);
+        return officeMapper.toOfficeDto(saveOffice(bank.getBankCode(), Objects.requireNonNull(office)));
     }
 
     private Office saveOffice(String bankCode, Office office) {
@@ -70,16 +70,21 @@ public class OfficeService {
     public OfficeDTO update(String id, OfficeDTO officeDTO) {
         Office officeById = officeRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         Office actualOffice = officeMapper.toOffice(officeDTO);
+        actualOffice.setId(id);
 
-        officeById.setName(actualOffice.getName());
-        officeById.setCity(actualOffice.getCity());
-        officeById.setState(actualOffice.getState());
-        officeById.setStreet(actualOffice.getStreet());
-        officeById.setWorkTimes(actualOffice.getWorkTimes());
+        Bank bank = bankRepository.findBankByBankCode(officeById.getBankCode()).orElseThrow(ResourceNotFoundException::new);
+        Objects.requireNonNull(bank.getOffices()).stream()
+                .filter(office -> office.getId().equals(id))
+                .forEach(office -> {
+                    office.setName(actualOffice.getName());
+                    office.setState(actualOffice.getState());
+                    office.setCity(actualOffice.getCity());
+                    office.setStreet(actualOffice.getStreet());
+                    office.setWorkTimes(actualOffice.getWorkTimes());
+                });
+        bankRepository.save(bank);
 
-        bankUpdateDataService.updateDateToBank(id, officeById.getBankCode(), actualOffice);
-
-        return officeMapper.toOfficeDto(officeRepository.save(officeById));
+        return officeMapper.toOfficeDto(officeRepository.save(actualOffice));
     }
 
     public List<Office> createOffice(String bankCode, List<Office> listOffice) {
