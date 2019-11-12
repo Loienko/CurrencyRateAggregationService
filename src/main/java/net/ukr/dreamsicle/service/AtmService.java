@@ -3,11 +3,13 @@ package net.ukr.dreamsicle.service;
 import lombok.RequiredArgsConstructor;
 import net.ukr.dreamsicle.dto.atm.AtmDTO;
 import net.ukr.dreamsicle.dto.atm.AtmMapper;
+import net.ukr.dreamsicle.exception.CollectionNotFoundException;
 import net.ukr.dreamsicle.exception.ResourceNotFoundException;
 import net.ukr.dreamsicle.model.atm.ATM;
 import net.ukr.dreamsicle.model.bank.Bank;
 import net.ukr.dreamsicle.repository.AtmRepository;
 import net.ukr.dreamsicle.repository.BankRepository;
+import net.ukr.dreamsicle.util.Constants;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Lock;
@@ -17,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.LockModeType;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,12 +46,15 @@ public class AtmService {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     public AtmDTO create(String bankCode, AtmDTO atmDTO) {
         Bank bank = bankRepository.findBankByBankCode(bankCode).orElseThrow(ResourceNotFoundException::new);
-        ATM atm = atmMapper.toAtm(atmDTO);
-
-        Objects.requireNonNull(bank.getAtms()).add(atm);
+        ATM actualAtm = saveAtm(bank.getBankCode(), atmMapper.toAtm(atmDTO));
+        checkAtmsFromBankNotNull(bank.getAtms()).add(actualAtm);
         bankRepository.save(bank);
 
-        return atmMapper.toAtmDto(saveAtm(bank.getBankCode(), atm));
+        return atmMapper.toAtmDto(actualAtm);
+    }
+
+    private List<ATM> checkAtmsFromBankNotNull(List<ATM> atms) {
+        return Optional.ofNullable(atms).orElseThrow(() -> new CollectionNotFoundException(Constants.ATMS_FROM_BANK_DATA_NOT_FOUND));
     }
 
     private ATM saveAtm(String bankCode, ATM atm) {
@@ -69,11 +74,14 @@ public class AtmService {
         ATM atmById = atmRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         ATM actualAtm = atmMapper.toAtm(atmDTO);
         actualAtm.setId(id);
+        actualAtm.setBankCode(atmById.getBankCode());
 
         Bank bank = bankRepository.findBankByBankCode(atmById.getBankCode()).orElseThrow(ResourceNotFoundException::new);
-        Objects.requireNonNull(bank.getAtms()).stream()
+
+        checkAtmsFromBankNotNull(bank.getAtms()).stream()
                 .filter(atm -> atm.getId().equals(id))
                 .forEach(atm -> {
+                    atm.setBankCode(actualAtm.getBankCode());
                     atm.setName(actualAtm.getName());
                     atm.setState(actualAtm.getState());
                     atm.setCity(actualAtm.getCity());

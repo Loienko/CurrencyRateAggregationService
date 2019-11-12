@@ -73,7 +73,8 @@ public class BankService {
     public BankDTO update(String bankCode, BankUpdateDTO bankUpdateDTO) {
         Bank bank = bankRepository.findBankByBankCode(bankCode).orElseThrow(ResourceNotFoundException::new);
 
-        if (Boolean.TRUE.equals(bankRepository.existsBankByBankName(bankUpdateDTO.getBankName())) && !bank.getBankName().equals(bankUpdateDTO.getBankName())) {
+        if (Boolean.TRUE.equals(bankRepository.existsBankByBankName(bankUpdateDTO.getBankName()))
+                && !bank.getBankName().equals(bankUpdateDTO.getBankName())) {
             throw new CustomDataAlreadyExistsException(Constants.BANK_IS_ALREADY_IN_USE);
         }
 
