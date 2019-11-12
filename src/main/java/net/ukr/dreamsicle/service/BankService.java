@@ -3,10 +3,12 @@ package net.ukr.dreamsicle.service;
 import lombok.RequiredArgsConstructor;
 import net.ukr.dreamsicle.dto.bank.BankDTO;
 import net.ukr.dreamsicle.dto.bank.BankMapper;
+import net.ukr.dreamsicle.dto.bank.BankUpdateDTO;
 import net.ukr.dreamsicle.exception.CustomDataAlreadyExistsException;
 import net.ukr.dreamsicle.exception.ResourceNotFoundException;
 import net.ukr.dreamsicle.model.bank.Bank;
-import net.ukr.dreamsicle.repository.*;
+import net.ukr.dreamsicle.repository.BankRepository;
+import net.ukr.dreamsicle.util.Constants;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Lock;
@@ -22,17 +24,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Transactional(isolation = Isolation.SERIALIZABLE)
 public class BankService {
-    private final BankRepository bankRepository;
-    private final AtmRepository atmRepository;
-    private final OfficeRepository officeRepository;
-    private final PartnerRepository partnerRepository;
-    private final ProductRepository productRepository;
-    private final BankMapper bankMapper;
 
+    private final BankRepository bankRepository;
     private final OfficeService officeService;
     private final AtmService atmService;
     private final ProductService productService;
     private final PartnerService partnerService;
+    private final BankMapper bankMapper;
 
     public Page<BankDTO> getAll(Pageable pageable) {
         return bankMapper.toBankDTOs(bankRepository.findAll(pageable));
@@ -50,11 +48,11 @@ public class BankService {
     public BankDTO create(BankDTO bankDTO) {
 
         if (Boolean.TRUE.equals(bankRepository.existsBankByBankName(bankDTO.getBankName()))) {
-            throw new CustomDataAlreadyExistsException("Bank is already in use");
+            throw new CustomDataAlreadyExistsException(Constants.BANK_IS_ALREADY_IN_USE);
         }
 
         Bank bank = bankMapper.toBank(bankDTO);
-        String bankCode = String.valueOf(new Random().nextInt(1000000));
+        String bankCode = String.valueOf(100000 + new Random().nextInt(900000));
 
         return bankMapper.toBankDto(bankRepository.save(Bank.builder()
                 .bankName(bank.getBankName())
@@ -70,14 +68,22 @@ public class BankService {
                 .build()));
     }
 
-    //TODO
-    // Will implement later
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    public BankDTO update(String bankCode, BankDTO bankDTO) {
+    public BankDTO update(String bankCode, BankUpdateDTO bankUpdateDTO) {
         Bank bank = bankRepository.findBankByBankCode(bankCode).orElseThrow(ResourceNotFoundException::new);
 
-        bank.setBankCode(bankMapper.toBank(bankDTO).getBankCode());
+        if (Boolean.TRUE.equals(bankRepository.existsBankByBankName(bankUpdateDTO.getBankName()))
+                && !bank.getBankName().equals(bankUpdateDTO.getBankName())) {
+            throw new CustomDataAlreadyExistsException(Constants.BANK_IS_ALREADY_IN_USE);
+        }
+
+        Bank actualBank = bankMapper.toBank(bankUpdateDTO);
+
+        bank.setBankName(actualBank.getBankName());
+        bank.setState(bankUpdateDTO.getState());
+        bank.setCity(actualBank.getCity());
+        bank.setStreet(bankUpdateDTO.getStreet());
 
         return bankMapper.toBankDto(bankRepository.save(bank));
     }
@@ -86,15 +92,5 @@ public class BankService {
     // Will implement later
     public Page<BankDTO> search(Pageable page) {
         return null;
-    }
-
-    //TODO
-    // Just for test app
-    public void delete() {
-        bankRepository.deleteAll();
-        atmRepository.deleteAll();
-        partnerRepository.deleteAll();
-        productRepository.deleteAll();
-        officeRepository.deleteAll();
     }
 }

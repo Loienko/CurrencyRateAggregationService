@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BankViewDTO {
+public class BankUpdateDTO {
 
     private String id;
     private String bankName;

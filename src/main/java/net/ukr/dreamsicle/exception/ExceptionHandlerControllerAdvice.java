@@ -100,6 +100,15 @@ public class ExceptionHandlerControllerAdvice {
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public @ResponseBody
     ExceptionResponse badCredential(final Exception ex,
+                                    final HttpServletRequest request) {
+
+        return new ExceptionResponse(ex.getMessage(), request.getRequestURI());
+    }
+
+    @ExceptionHandler(CollectionNotFoundException.class)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public @ResponseBody
+    ExceptionResponse collectionNotFound(final Exception ex,
                           final HttpServletRequest request) {
 
         return new ExceptionResponse(ex.getMessage(), request.getRequestURI());

@@ -1,0 +1,133 @@
+{
+	"info": {
+		"_postman_id": "2071faa1-e8c4-4ecc-869d-5e1b23422ba4",
+		"name": "Office",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get all office",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/offices",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"offices"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get office by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/banks/offices/5dbc3fa942913f4a8cce14f7",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"banks",
+						"offices",
+						"5dbc3fa942913f4a8cce14f7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create office",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bmlxdWUiLCJpYXQiOjE1NzMwNDk1MzgsImV4cCI6MTU3MzEzNTkzOH0.hPleobfOfDaoYBYe2XlL-plGWDiXCca8UqLeJf_L9pxau5HcZ-eszFCX5nZqoaWKHKpokQEv7xExM-2RnIiqqA",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"update1\",\n\t\"state\":\"update1\",\n\t\"city\":\"update1\",\n\t\"street\":\"update1\",\n\t\"workTimes\":[\n\t\t{\t\n\t\t\t\"dayOfWeek\":\"MONDAY\",\n\t\t\t\"startWork\": \"8 AM\",\n\t\t\t\"endWork\":\"9 PM\"\n\t\t}\n\t]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/banks/479242/offices",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"banks",
+						"479242",
+						"offices"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update office",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bmlxdWUiLCJpYXQiOjE1NzMwNDk1MzgsImV4cCI6MTU3MzEzNTkzOH0.hPleobfOfDaoYBYe2XlL-plGWDiXCca8UqLeJf_L9pxau5HcZ-eszFCX5nZqoaWKHKpokQEv7xExM-2RnIiqqA",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"testssssssssssss\",\n\t\"state\":\"testssssssssssssssssssss\",\n\t\"city\":\"testssssssssssssssss\",\n\t\"street\":\"testssssssssssss\",\n\t\"workTimes\":[\n\t\t{\t\n\t\t\t\"dayOfWeek\":\"MONDAY\",\n\t\t\t\"startWork\": \"8 AM\",\n\t\t\t\"endWork\":\"9 PM\"\n\t\t},\n\t\t{\t\n\t\t\t\"dayOfWeek\":\"FRIDAY\",\n\t\t\t\"startWork\": \"8 AM\",\n\t\t\t\"endWork\":\"9 PM\"\n\t\t}\n\t]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/offices/5dc41a457fc4f83d0488696f",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"offices",
+						"5dc41a457fc4f83d0488696f"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
