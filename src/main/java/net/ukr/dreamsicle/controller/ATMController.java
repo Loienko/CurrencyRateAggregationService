@@ -3,6 +3,7 @@ package net.ukr.dreamsicle.controller;
 import lombok.RequiredArgsConstructor;
 import net.ukr.dreamsicle.dto.atm.AtmDTO;
 import net.ukr.dreamsicle.service.AtmService;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -27,7 +28,7 @@ public class ATMController {
     }
 
     @GetMapping("/atms/{id}")
-    public AtmDTO findById(@PathVariable @Min(1) @Positive String id) {
+    public AtmDTO findById(@PathVariable @Min(1) @Positive ObjectId id) {
         return atmService.findById(id);
     }
 
@@ -39,7 +40,7 @@ public class ATMController {
 
     @PutMapping("/atms/{id}")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public AtmDTO update(@PathVariable @Min(1) @Positive String id, @Validated @RequestBody AtmDTO atmDTO) {
+    public AtmDTO update(@PathVariable @Min(1) @Positive ObjectId id, @Validated @RequestBody AtmDTO atmDTO) {
         return atmService.update(id, atmDTO);
     }
 }

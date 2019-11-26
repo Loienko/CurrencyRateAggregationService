@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.ukr.dreamsicle.model.product.TypeProduct;
+import org.bson.types.ObjectId;
 
 import javax.validation.constraints.Pattern;
 
@@ -19,7 +20,7 @@ import static net.ukr.dreamsicle.util.ConstantsRegex.INPUT_STRING_VALUE_REGEX;
 @AllArgsConstructor
 public class ProductDTO {
 
-    private String id;
+    private ObjectId id;
 
     @Pattern(regexp = BANK_CODE_REGEX, message = VALID_DATA_FOR_BANK_CODE)
     private String bankCode;

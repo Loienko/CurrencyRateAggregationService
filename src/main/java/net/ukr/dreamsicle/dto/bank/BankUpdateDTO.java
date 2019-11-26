@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.ukr.dreamsicle.util.Constants;
 import net.ukr.dreamsicle.validation.country.CountryValidator;
+import org.bson.types.ObjectId;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -20,7 +21,7 @@ import static net.ukr.dreamsicle.util.ConstantsRegex.CITY_AND_STREET_REGEX;
 @AllArgsConstructor
 public class BankUpdateDTO {
 
-    private String id;
+    private ObjectId id;
 
     @NotBlank(message = FILL_NAME_OF_THE_BANK)
     @Pattern(regexp = INPUT_STRING_VALUE_REGEX, message = VALID_DATA_FOR_BANK_NAME)

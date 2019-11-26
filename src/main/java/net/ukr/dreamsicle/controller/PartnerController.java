@@ -3,6 +3,7 @@ package net.ukr.dreamsicle.controller;
 import lombok.AllArgsConstructor;
 import net.ukr.dreamsicle.dto.partner.PartnerDTO;
 import net.ukr.dreamsicle.service.PartnerService;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -27,7 +28,7 @@ public class PartnerController {
     }
 
     @GetMapping("/partners/{id}")
-    public PartnerDTO findById(@PathVariable @Min(1) @Positive String id) {
+    public PartnerDTO findById(@PathVariable @Min(1) @Positive ObjectId id) {
         return partnerService.findById(id);
     }
 
@@ -39,7 +40,7 @@ public class PartnerController {
 
     @PutMapping("/partners/{id}")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public PartnerDTO update(@PathVariable @Min(1) @Positive String id, @Validated @RequestBody PartnerDTO partnerDTO) {
+    public PartnerDTO update(@PathVariable @Min(1) @Positive ObjectId id, @Validated @RequestBody PartnerDTO partnerDTO) {
         return partnerService.update(id, partnerDTO);
     }
 }

@@ -13,6 +13,7 @@ import net.ukr.dreamsicle.modelQ.atm.QATM;
 import net.ukr.dreamsicle.repository.AtmRepository;
 import net.ukr.dreamsicle.repository.BankRepository;
 import net.ukr.dreamsicle.util.Constants;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Lock;
@@ -38,7 +39,7 @@ public class AtmService {
         return atmMapper.toAtmDTOs(atmRepository.findAll(pageable));
     }
 
-    public AtmDTO findById(String id) {
+    public AtmDTO findById(ObjectId id) {
         return atmRepository
                 .findById(id)
                 .map(atmMapper::toAtmDto)
@@ -73,7 +74,7 @@ public class AtmService {
 
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    public AtmDTO update(String id, AtmDTO atmDTO) {
+    public AtmDTO update(ObjectId id, AtmDTO atmDTO) {
         ATM atmById = atmRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         ATM actualAtm = atmMapper.toAtm(atmDTO);
         actualAtm.setId(id);

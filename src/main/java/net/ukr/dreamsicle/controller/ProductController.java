@@ -3,6 +3,7 @@ package net.ukr.dreamsicle.controller;
 import lombok.AllArgsConstructor;
 import net.ukr.dreamsicle.dto.product.ProductDTO;
 import net.ukr.dreamsicle.service.ProductService;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -27,7 +28,7 @@ public class ProductController {
     }
 
     @GetMapping("/products/{id}")
-    public ProductDTO findById(@PathVariable @Min(1) @Positive String id) {
+    public ProductDTO findById(@PathVariable @Min(1) @Positive ObjectId id) {
         return productService.findById(id);
     }
 
@@ -39,7 +40,7 @@ public class ProductController {
 
     @PutMapping("/products/{id}")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public ProductDTO update(@PathVariable @Min(1) @Positive String id, @Validated @RequestBody ProductDTO productDTO) {
+    public ProductDTO update(@PathVariable @Min(1) @Positive ObjectId id, @Validated @RequestBody ProductDTO productDTO) {
         return productService.update(id, productDTO);
     }
 }

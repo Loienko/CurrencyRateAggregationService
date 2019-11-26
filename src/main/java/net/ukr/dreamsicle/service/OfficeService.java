@@ -10,6 +10,7 @@ import net.ukr.dreamsicle.model.office.Office;
 import net.ukr.dreamsicle.repository.BankRepository;
 import net.ukr.dreamsicle.repository.OfficeRepository;
 import net.ukr.dreamsicle.util.Constants;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Lock;
@@ -39,7 +40,7 @@ public class OfficeService {
     }
 
     @Lock(LockModeType.PESSIMISTIC_READ)
-    public OfficeDTO findById(String id) {
+    public OfficeDTO findById(ObjectId id) {
         return officeRepository
                 .findById(id)
                 .map(officeMapper::toOfficeDto)
@@ -74,7 +75,7 @@ public class OfficeService {
 
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    public OfficeDTO update(String id, OfficeDTO officeDTO) {
+    public OfficeDTO update(ObjectId id, OfficeDTO officeDTO) {
         Office officeById = officeRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         Office actualOffice = officeMapper.toOffice(officeDTO);
         actualOffice.setId(id);

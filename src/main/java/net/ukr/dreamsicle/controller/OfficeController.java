@@ -3,6 +3,7 @@ package net.ukr.dreamsicle.controller;
 import lombok.RequiredArgsConstructor;
 import net.ukr.dreamsicle.dto.office.OfficeDTO;
 import net.ukr.dreamsicle.service.OfficeService;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,7 +27,7 @@ public class OfficeController {
     }
 
     @GetMapping("/offices/{id}")
-    public OfficeDTO findById(@PathVariable @Min(1) @Positive String id) {
+    public OfficeDTO findById(@PathVariable @Min(1) @Positive ObjectId id) {
         return officeService.findById(id);
     }
 
@@ -38,7 +39,7 @@ public class OfficeController {
 
     @PutMapping("/offices/{id}")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public OfficeDTO update(@PathVariable @Min(1) @Positive String id, @Validated @RequestBody OfficeDTO officeDTO) {
+    public OfficeDTO update(@PathVariable @Min(1) @Positive ObjectId id, @Validated @RequestBody OfficeDTO officeDTO) {
         return officeService.update(id, officeDTO);
     }
 }
