@@ -1,5 +1,7 @@
 package net.ukr.dreamsicle.service;
 
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import net.ukr.dreamsicle.dto.atm.AtmDTO;
 import net.ukr.dreamsicle.dto.atm.AtmMapper;
@@ -7,6 +9,7 @@ import net.ukr.dreamsicle.exception.CollectionNotFoundException;
 import net.ukr.dreamsicle.exception.ResourceNotFoundException;
 import net.ukr.dreamsicle.model.atm.ATM;
 import net.ukr.dreamsicle.model.bank.Bank;
+import net.ukr.dreamsicle.modelQ.atm.QATM;
 import net.ukr.dreamsicle.repository.AtmRepository;
 import net.ukr.dreamsicle.repository.BankRepository;
 import net.ukr.dreamsicle.util.Constants;
@@ -31,7 +34,7 @@ public class AtmService {
     private final AtmMapper atmMapper;
     private final BankRepository bankRepository;
 
-    public Page<AtmDTO> getAll(Pageable pageable) {
+    public Page<AtmDTO> findAll(Pageable pageable) {
         return atmMapper.toAtmDTOs(atmRepository.findAll(pageable));
     }
 
@@ -97,5 +100,28 @@ public class AtmService {
         return listAtm.stream()
                 .map(atm -> saveAtm(bankCode, atm))
                 .collect(Collectors.toList());
+    }
+
+    public Page<AtmDTO> search(String search, Pageable page) {
+        QATM atm = new QATM("atm");
+        Predicate predicate;
+
+        if (Optional.ofNullable(search).isPresent()) {
+            predicate = getPredicate(search, atm);
+        } else {
+            return findAll(page);
+        }
+
+        return atmMapper.toAtmDTOs(atmRepository.findAll(predicate, page));
+    }
+
+    private BooleanExpression getPredicate(String search, QATM atm) {
+        return atm.name.containsIgnoreCase(search)
+                .or(atm.state.containsIgnoreCase(search))
+                .or(atm.city.containsIgnoreCase(search))
+                .or(atm.street.containsIgnoreCase(search))
+                .or(atm.bankCode.containsIgnoreCase(search))
+                .or(atm.workTimes.any().startWork.containsIgnoreCase(search))
+                .or(atm.workTimes.any().endWork.containsIgnoreCase(search));
     }
 }
