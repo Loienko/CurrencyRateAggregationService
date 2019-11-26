@@ -317,6 +317,7 @@ class UserServiceTest {
     @Test
     void testAuthenticateUserByIdNotPresentUserInDb() {
         User user = getUserProvider(STATUS_TYPE_ACTIVE);
+
         UsernameAndPasswordDataDTO usernameAndPasswordDataDTO = getUsernameAndPasswordDataDTO();
         when(userRepository.findByUsername(usernameAndPasswordDataDTO.getUsername())).thenReturn(Optional.of(user));
         when(userRepository.findByIdAndStatus(user.getId(), STATUS_TYPE_ACTIVE)).thenThrow(ResourceNotFoundException.class);

@@ -58,6 +58,7 @@ class UserDetailsServiceTest {
         when(userDetailsRepository.saveAndFlush(userDetails)).thenReturn(userDetails);
         when(userDetailsMapper.userToUserDetailsDTO(userDetails)).thenReturn(userDetailsDto);
 
+
         UserDetailsDTO actualUser = userDetailsService.createUserDetails(ID, userDetailsDto);
 
         assertNotNull(actualUser);
@@ -68,10 +69,12 @@ class UserDetailsServiceTest {
 
     @Test
     void testCreateUserDetailsNewDataInDb() {
+
         User user = getUserProvider(STATUS_TYPE_ACTIVE);
         UserDetails userDetails = UserDetailsProvider.getUserDetailsProvider();
         UserDetailsDTO userDetailsDto = UserDetailsProvider.getUserDetailsDtoProvider();
         when(userDetailsMapper.userDetailsToUser(userDetailsDto)).thenReturn(userDetails);
+
         when(userRepository.findByIdAndStatus(ID, STATUS_TYPE_ACTIVE)).thenReturn(Optional.of(user));
         when(userDetailsRepository.findUserDetailsByUserId(user.getId())).thenReturn(Optional.empty());
         when(userDetailsRepository.saveAndFlush(any())).thenAnswer((Answer<UserDetails>) answer -> {
@@ -82,7 +85,9 @@ class UserDetailsServiceTest {
                 return null;
             }
         });
+
         when(userDetailsMapper.userToUserDetailsDTO(any())).thenAnswer((Answer<UserDetailsDTO>) answer -> {
+
             UserDetails argument = (UserDetails) answer.getArguments()[0];
             if (argument.getSurname().equals(UserDetailsProvider.SURNAME)) {
                 return userDetailsDto;
@@ -103,6 +108,7 @@ class UserDetailsServiceTest {
     void testCreateUserDetailsNotExistUserWithStatusActiveThrowResourceNotFoundException() {
         UserDetails userDetails = UserDetailsProvider.getUserDetailsProvider();
         UserDetailsDTO userDetailsDto = UserDetailsProvider.getUserDetailsDtoProvider();
+
         when(userDetailsMapper.userDetailsToUser(userDetailsDto)).thenReturn(userDetails);
         when(userRepository.findByIdAndStatus(ID, STATUS_TYPE_ACTIVE)).thenThrow(ResourceNotFoundException.class);
 
@@ -113,6 +119,7 @@ class UserDetailsServiceTest {
     void testCreateUserDetailsNotExistUserThrowResourceNotFoundException() {
         UserDetails userDetails = UserDetailsProvider.getUserDetailsProvider();
         UserDetailsDTO userDetailsDto = UserDetailsProvider.getUserDetailsDtoProvider();
+
         when(userDetailsMapper.userDetailsToUser(userDetailsDto)).thenReturn(userDetails);
         when(userRepository.findByIdAndStatus(ID, STATUS_TYPE_DELETED)).thenThrow(ResourceNotFoundException.class);
 
@@ -125,6 +132,7 @@ class UserDetailsServiceTest {
         UserDetails userDetails = UserDetailsProvider.getUserDetailsProvider();
         UserDetailsDTO userDetailsDto = UserDetailsProvider.getUserDetailsDtoProvider();
         when(userDetailsMapper.userDetailsToUser(userDetailsDto)).thenReturn(userDetails);
+
         when(userRepository.findByIdAndStatus(ID, STATUS_TYPE_ACTIVE)).thenReturn(Optional.of(user));
         when(userDetailsRepository.findUserDetailsByUserId(ID)).thenReturn(Optional.of(userDetails));
         when(userDetailsRepository.saveAndFlush(userDetails)).thenThrow(TransactionException.class);
