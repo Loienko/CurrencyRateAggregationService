@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.EnumType;
@@ -18,7 +19,7 @@ import javax.persistence.Id;
 public class Product {
 
     @Id
-    private String id;
+    private ObjectId id;
     private String bankCode;
 
     @Enumerated(EnumType.STRING)

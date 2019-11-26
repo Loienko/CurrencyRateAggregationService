@@ -10,6 +10,7 @@ import net.ukr.dreamsicle.model.product.Product;
 import net.ukr.dreamsicle.repository.BankRepository;
 import net.ukr.dreamsicle.repository.ProductRepository;
 import net.ukr.dreamsicle.util.Constants;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Lock;
@@ -35,7 +36,7 @@ public class ProductService {
         return productMapper.toProductDTOs(productRepository.findAll(pageable));
     }
 
-    public ProductDTO findById(String id) {
+    public ProductDTO findById(ObjectId id) {
         return productRepository
                 .findById(id)
                 .map(productMapper::toProductDto)
@@ -67,7 +68,7 @@ public class ProductService {
 
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    public ProductDTO update(String id, ProductDTO productDTO) {
+    public ProductDTO update(ObjectId id, ProductDTO productDTO) {
         Product productById = productRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         Product actualProduct = productMapper.toProduct(productDTO);
         actualProduct.setId(id);

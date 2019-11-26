@@ -9,6 +9,7 @@ import net.ukr.dreamsicle.dto.office.OfficeDTO;
 import net.ukr.dreamsicle.dto.product.ProductDTO;
 import net.ukr.dreamsicle.model.partners.Partner;
 import net.ukr.dreamsicle.validation.country.CountryValidator;
+import org.bson.types.ObjectId;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -24,7 +25,7 @@ import static net.ukr.dreamsicle.util.ConstantsRegex.*;
 @AllArgsConstructor
 public class BankDTO {
 
-    private String id;
+    private ObjectId id;
 
     @NotBlank(message = FILL_NAME_OF_THE_BANK)
     @Pattern(regexp = INPUT_STRING_VALUE_REGEX, message = VALID_DATA_FOR_BANK_NAME)

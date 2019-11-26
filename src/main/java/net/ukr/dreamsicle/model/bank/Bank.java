@@ -8,6 +8,7 @@ import net.ukr.dreamsicle.model.atm.ATM;
 import net.ukr.dreamsicle.model.office.Office;
 import net.ukr.dreamsicle.model.partners.Partner;
 import net.ukr.dreamsicle.model.product.Product;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -22,7 +23,7 @@ import java.util.List;
 public class Bank {
 
     @Id
-    private String id;
+    private ObjectId id;
 
     @Indexed(unique = true)
     private String bankName;

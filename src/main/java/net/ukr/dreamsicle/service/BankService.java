@@ -12,6 +12,7 @@ import net.ukr.dreamsicle.model.bank.Bank;
 import net.ukr.dreamsicle.modelQ.bank.QBank;
 import net.ukr.dreamsicle.repository.BankRepository;
 import net.ukr.dreamsicle.util.Constants;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Lock;
@@ -40,7 +41,7 @@ public class BankService {
         return bankMapper.toBankDTOs(bankRepository.findAll(pageable));
     }
 
-    public BankDTO findById(String id) {
+    public BankDTO findById(ObjectId id) {
         return bankRepository
                 .findById(id)
                 .map(bankMapper::toBankDto)

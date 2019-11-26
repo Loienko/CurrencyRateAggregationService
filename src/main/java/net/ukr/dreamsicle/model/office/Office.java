@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.ukr.dreamsicle.model.work.WorkTimes;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
@@ -18,7 +19,7 @@ import java.util.Set;
 public class Office {
 
     @Id
-    private String id;
+    private ObjectId id;
     private String bankCode;
     private String name;
     private String state;

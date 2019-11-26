@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.ukr.dreamsicle.model.work.WorkTimes;
 import net.ukr.dreamsicle.validation.country.CountryValidator;
+import org.bson.types.ObjectId;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -21,7 +22,7 @@ import static net.ukr.dreamsicle.util.ConstantsRegex.*;
 @AllArgsConstructor
 public class OfficeDTO {
 
-    private String id;
+    private ObjectId id;
 
     @Pattern(regexp = BANK_CODE_REGEX, message = VALID_DATA_FOR_BANK_CODE)
     private String bankCode;

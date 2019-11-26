@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import net.ukr.dreamsicle.dto.partner.PartnerDTO;
 import net.ukr.dreamsicle.model.partners.Partner;
 import net.ukr.dreamsicle.repository.PartnerRepository;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public class PartnerService {
 
     //TODO
     // Will implement later
-    public PartnerDTO findById(String id) {
+    public PartnerDTO findById(ObjectId id) {
         return null;
     }
 
@@ -40,7 +41,7 @@ public class PartnerService {
 
     //TODO
     // Will implement later
-    public PartnerDTO update(String id, PartnerDTO partnerDTO) {
+    public PartnerDTO update(ObjectId id, PartnerDTO partnerDTO) {
         return null;
     }
 

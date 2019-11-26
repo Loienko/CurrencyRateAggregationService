@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import net.ukr.dreamsicle.dto.bank.BankDTO;
 import net.ukr.dreamsicle.dto.bank.BankUpdateDTO;
 import net.ukr.dreamsicle.service.BankService;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -29,7 +30,7 @@ public class BankController {
     }
 
     @GetMapping("/{id}")
-    public BankDTO findById(@PathVariable @Min(1) @Positive String id) {
+    public BankDTO findById(@PathVariable @Min(1) @Positive ObjectId id) {
         return bankService.findById(id);
     }
 
