@@ -3,6 +3,7 @@ package net.ukr.dreamsicle.exception;
 import io.jsonwebtoken.JwtException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -89,8 +90,26 @@ public class ExceptionHandlerControllerAdvice {
     @ExceptionHandler({JwtAuthenticationException.class, JwtException.class, AuthenticationException.class})
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
     public @ResponseBody
-    ExceptionResponse unauthorized(final MethodArgumentNotValidException ex,
+    ExceptionResponse unauthorized(final Exception ex,
                                    final HttpServletRequest request) {
+
+        return new ExceptionResponse(ex.getMessage(), request.getRequestURI());
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public @ResponseBody
+    ExceptionResponse badCredential(final Exception ex,
+                                    final HttpServletRequest request) {
+
+        return new ExceptionResponse(ex.getMessage(), request.getRequestURI());
+    }
+
+    @ExceptionHandler(CollectionNotFoundException.class)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public @ResponseBody
+    ExceptionResponse collectionNotFound(final Exception ex,
+                          final HttpServletRequest request) {
 
         return new ExceptionResponse(ex.getMessage(), request.getRequestURI());
     }

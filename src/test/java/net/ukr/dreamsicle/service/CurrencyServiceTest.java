@@ -1,4 +1,4 @@
-package net.ukr.dreamsicle.service.unit;
+package net.ukr.dreamsicle.service;
 
 import net.ukr.dreamsicle.dto.currency.CurrencyDTO;
 import net.ukr.dreamsicle.dto.currency.CurrencyMapper;

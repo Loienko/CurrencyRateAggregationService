@@ -1,4 +1,4 @@
-package net.ukr.dreamsicle.service.integration;
+package net.ukr.dreamsicle.controller;
 
 import net.ukr.dreamsicle.dto.currency.CurrencyDTO;
 import net.ukr.dreamsicle.model.currency.Currency;
@@ -76,6 +76,7 @@ public class CurrencyControllerIntegrationsTestIT {
 
         assertNotNull(response.getBody());
         assertNotNull(response.getBody().getContent().size());
+        assertEquals(ID, response.getBody().getContent().size());
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
@@ -107,7 +108,7 @@ public class CurrencyControllerIntegrationsTestIT {
     }
 
     @Test
-    public void createCurrencyReturnStatus200Ok() {
+    public void createCurrencyReturnStatus201Created() {
         Currency currency = getCurrencyProvider();
 
         ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES, POST, getHeader(currency, TOKEN_ADMIN), Currency.class);
@@ -210,7 +211,7 @@ public class CurrencyControllerIntegrationsTestIT {
     }
 
     @Test
-    public void createCurrencyReturnStatus403AccessDenied() {
+    public void createCurrencyReturnStatus403Forbidden() {
         Currency currency = getCurrencyProvider();
 
         ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES, POST, getHeader(currency, TOKEN_USER), Currency.class);
@@ -219,7 +220,7 @@ public class CurrencyControllerIntegrationsTestIT {
     }
 
     @Test
-    public void updateCurrencyReturnStatus200Ok() {
+    public void updateCurrencyReturnStatus202Accepted() {
         Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider());
         Currency currencyForUpdate = getCurrencyProvider();
 
@@ -236,7 +237,7 @@ public class CurrencyControllerIntegrationsTestIT {
     }
 
     @Test
-    public void updateCurrencyNotInputBankNameReturnStatus400OkBadRequest() {
+    public void updateCurrencyNotInputBankNameReturnStatus400BadRequest() {
         Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider());
         Currency currencyForUpdate = getCurrencyNotValidDataProvider(null, CURRENCY_CODE, PURCHASE_CURRENCY, SALE_OF_CURRENCY);
 
@@ -248,7 +249,7 @@ public class CurrencyControllerIntegrationsTestIT {
     }
 
     @Test
-    public void updateCurrencyNotValidBankNameReturnStatus400OkBadRequest() {
+    public void updateCurrencyNotValidBankNameReturnStatus400BadRequest() {
         Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider());
         Currency currencyForUpdate = getCurrencyNotValidDataProvider("1", CURRENCY_CODE, PURCHASE_CURRENCY, SALE_OF_CURRENCY);
 
@@ -260,7 +261,7 @@ public class CurrencyControllerIntegrationsTestIT {
     }
 
     @Test
-    public void updateCurrencyNotValidCurrencyCodeReturnStatus400OkBadRequest() {
+    public void updateCurrencyNotValidCurrencyCodeReturnStatus400BadRequest() {
         Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider());
         Currency currencyForUpdate = getCurrencyNotValidDataProvider(BANK_NAME, "US1", PURCHASE_CURRENCY, SALE_OF_CURRENCY);
 
@@ -272,7 +273,7 @@ public class CurrencyControllerIntegrationsTestIT {
     }
 
     @Test
-    public void updateCurrencyNotValidPurchaseCurrencyReturnStatus400OkBadRequest() {
+    public void updateCurrencyNotValidPurchaseCurrencyReturnStatus400BadRequest() {
         Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider());
         Currency currencyForUpdate = getCurrencyNotValidDataProvider(BANK_NAME, CURRENCY_CODE, ".00", SALE_OF_CURRENCY);
 
@@ -284,7 +285,7 @@ public class CurrencyControllerIntegrationsTestIT {
     }
 
     @Test
-    public void updateCurrencyNotInputPurchaseCurrencyReturnStatus400OkBadRequest() {
+    public void updateCurrencyNotInputPurchaseCurrencyReturnStatus400BadRequest() {
         Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider());
         Currency currencyForUpdate = getCurrencyNotValidDataProvider(BANK_NAME, CURRENCY_CODE, null, SALE_OF_CURRENCY);
 
@@ -296,7 +297,7 @@ public class CurrencyControllerIntegrationsTestIT {
     }
 
     @Test
-    public void updateCurrencyNotValidSaleOfCurrencyReturnStatus400OkBadRequest() {
+    public void updateCurrencyNotValidSaleOfCurrencyReturnStatus400BadRequest() {
         Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider());
         Currency currencyForUpdate = getCurrencyNotValidDataProvider(BANK_NAME, CURRENCY_CODE, PURCHASE_CURRENCY, ".15");
 
@@ -308,7 +309,7 @@ public class CurrencyControllerIntegrationsTestIT {
     }
 
     @Test
-    public void updateCurrencyNotInputSaleOfCurrencyReturnStatus400OkBadRequest() {
+    public void updateCurrencyNotInputSaleOfCurrencyReturnStatus400BadRequest() {
         Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider());
         Currency currencyForUpdate = getCurrencyNotValidDataProvider(BANK_NAME, CURRENCY_CODE, PURCHASE_CURRENCY, null);
 
@@ -341,7 +342,7 @@ public class CurrencyControllerIntegrationsTestIT {
     }
 
     @Test
-    public void updateCurrencyReturnStatus403AccessDenied() {
+    public void updateCurrencyReturnStatus403Forbidden() {
         Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider());
         Currency currencyForUpdate = getCurrencyProvider();
 
@@ -378,7 +379,7 @@ public class CurrencyControllerIntegrationsTestIT {
     }
 
     @Test
-    public void deleteCurrencyReturnStatus403AccessDenied() {
+    public void deleteCurrencyReturnStatus403Forbidden() {
         Currency currency = currencyRepository.saveAndFlush(getCurrencyProvider());
 
         ResponseEntity<Currency> response = testRestTemplate.exchange(getRootUrl() + CURRENCIES + BY_ID, DELETE, getHeader(currency, TOKEN_USER), Currency.class, currency.getId());

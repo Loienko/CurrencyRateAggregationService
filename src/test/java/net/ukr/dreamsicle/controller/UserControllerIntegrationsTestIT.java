@@ -1,4 +1,4 @@
-package net.ukr.dreamsicle.service.integration;
+package net.ukr.dreamsicle.controller;
 
 import net.ukr.dreamsicle.dto.user.UserDTO;
 import net.ukr.dreamsicle.dto.user.UsernameAndPasswordDataDTO;
@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
@@ -23,7 +24,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Objects;
 
-import static net.ukr.dreamsicle.util.currency.CurrencyProvider.CURRENCIES;
 import static net.ukr.dreamsicle.util.HttpHeaderProvider.getHeader;
 import static net.ukr.dreamsicle.util.user.UserProvider.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -64,11 +64,12 @@ public class UserControllerIntegrationsTestIT {
 
     @Test
     public void testGetAllUsersReturnStatus200Ok() {
-        ResponseEntity<RestPageImpl<UserDTO>> response = restTemplate.exchange(getRootUrl() + CURRENCIES, GET, null, new ParameterizedTypeReference<RestPageImpl<UserDTO>>() {
+        ResponseEntity<RestPageImpl<UserDTO>> response = restTemplate.exchange(getRootUrl() + USERS, GET, null, new ParameterizedTypeReference<RestPageImpl<UserDTO>>() {
         });
 
         assertNotNull(response.getBody());
-        assertNotNull(response.getBody().getContent().size());
+        assertNotNull(response.getBody().getSize());
+        assertEquals(userRepository.findAll(PageRequest.of(0,10)).getContent().size(), response.getBody().getContent().size());
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
@@ -110,7 +111,7 @@ public class UserControllerIntegrationsTestIT {
     }
 
     @Test
-    public void updateUserNotValidNameReturnStatus400OkBadRequest() {
+    public void updateUserNotValidNameReturnStatus400BadRequest() {
         User user = userRepository.saveAndFlush(getUserProvider(STATUS_TYPE_ACTIVE));
         UserDTO userForUpdate = getUserWithInputDataProvider("1", "validUsername", "validEmail@ukr.net", ROLES_STRING_USER);
 
@@ -122,7 +123,7 @@ public class UserControllerIntegrationsTestIT {
     }
 
     @Test
-    public void updateUserNotInputUsernameReturnStatus400OkBadRequest() {
+    public void updateUserNotInputUsernameReturnStatus400BadRequest() {
         User user = userRepository.saveAndFlush(getUserProvider(STATUS_TYPE_ACTIVE));
         UserDTO userForUpdate = getUserWithInputDataProvider("validName", " ", "validEmail@ukr.net", ROLES_STRING_USER);
 
@@ -134,7 +135,7 @@ public class UserControllerIntegrationsTestIT {
     }
 
     @Test
-    public void updateUserNotValidUsernameReturnStatus400OkBadRequest() {
+    public void updateUserNotValidUsernameReturnStatus400BadRequest() {
         User user = userRepository.saveAndFlush(getUserProvider(STATUS_TYPE_ACTIVE));
         UserDTO userForUpdate = getUserWithInputDataProvider("validName", "1", "validEmail@ukr.net", ROLES_STRING_USER);
 
@@ -146,7 +147,7 @@ public class UserControllerIntegrationsTestIT {
     }
 
     @Test
-    public void updateUserNotUniqueUsernameReturnStatus400BadRequest() {
+    public void updateUserNotUniqueUsernameReturnStatus409Conflict() {
         userRepository.saveAndFlush(getUserProvider(STATUS_TYPE_ACTIVE));
         User user = userRepository.saveAndFlush(getUserIntegrationTestForCreateToken(ID + 1, USERNAME_USER, EMAIL_USER, ROLE_USER));
         UserDTO userForUpdate = getUserWithInputDataProvider("validNameConflict", USERNAME_ADMIN, EMAIL_ADMIN, ROLES_STRING_USER);
@@ -172,7 +173,7 @@ public class UserControllerIntegrationsTestIT {
     }
 
     @Test
-    public void updateUserNotInputEmailReturnStatus400OkBadRequest() {
+    public void updateUserNotInputEmailReturnStatus400BadRequest() {
         User user = userRepository.saveAndFlush(getUserProvider(STATUS_TYPE_ACTIVE));
         UserDTO userForUpdate = getUserWithInputDataProvider("validName", "validUsername", "", ROLES_STRING_USER);
 
@@ -184,7 +185,7 @@ public class UserControllerIntegrationsTestIT {
     }
 
     @Test
-    public void updateUserNotValidEmailReturnStatus400OkBadRequest() {
+    public void updateUserNotValidEmailReturnStatus400BadRequest() {
         User user = userRepository.saveAndFlush(getUserProvider(STATUS_TYPE_ACTIVE));
         UserDTO userForUpdate = getUserWithInputDataProvider("validName", "validUsername", "@ukr.net", ROLES_STRING_USER);
 
@@ -196,7 +197,7 @@ public class UserControllerIntegrationsTestIT {
     }
 
     @Test
-    public void updateUserNotValidRoleReturnStatus400OkBadRequest() {
+    public void updateUserNotValidRoleReturnStatus400BadRequest() {
         User user = userRepository.saveAndFlush(getUserProvider(STATUS_TYPE_ACTIVE));
         UserDTO userForUpdate = getUserWithInputDataProvider("validName", "validUsername", "validEmail@ukr.net", ROLES_STRING_EMPTY);
 
@@ -230,7 +231,7 @@ public class UserControllerIntegrationsTestIT {
     }
 
     @Test
-    public void updateUserReturnStatus403AccessDenied() {
+    public void updateUserReturnStatus403Forbidden() {
         UserDTO userForUpdate = getUserDtoProvider();
 
         ResponseEntity<UserDTO> response = testRestTemplate.exchange(getRootUrl() + USERS + BY_ID, PUT, getHeader(userForUpdate, TOKEN_USER), UserDTO.class, userForUpdate.getId());
@@ -267,7 +268,7 @@ public class UserControllerIntegrationsTestIT {
     }
 
     @Test
-    public void deleteUserReturnStatus403AccessDenied() {
+    public void deleteUserReturnStatus403Forbidden() {
         User user = userRepository.saveAndFlush(getUserProvider(STATUS_TYPE_ACTIVE));
 
         ResponseEntity<UserDTO> response = testRestTemplate.exchange(getRootUrl() + USERS + BY_ID, DELETE, getHeader(null, TOKEN_USER), UserDTO.class, user.getId());
@@ -438,7 +439,7 @@ public class UserControllerIntegrationsTestIT {
     }
 
     @Test
-    public void createUserWithRoleAdminReturnStatus202Accepted() {
+    public void createUserWithRoleAdminReturnStatus201Created() {
         UserDTO user = getUserWithInputDataProvider(NAME, "createUserRoleAdmin", "createUserRoleAdmin@ukr.net", ROLES_STRING_ADMIN);
 
         ResponseEntity<UserDTO> response = testRestTemplate.exchange(getRootUrl() + USERS, POST, getHeader(user, null), UserDTO.class);
@@ -452,7 +453,7 @@ public class UserControllerIntegrationsTestIT {
     }
 
     @Test
-    public void createUserWithRoleUserReturnStatus202Accepted() {
+    public void createUserWithRoleUserReturnStatus201Created() {
         UserDTO user = getUserWithInputDataProvider(NAME, "createUserRoleUser", "createUserRoleUser@ukr.net", ROLES_STRING_USER);
 
         ResponseEntity<UserDTO> response = testRestTemplate.exchange(getRootUrl() + USERS, POST, getHeader(user, null), UserDTO.class);

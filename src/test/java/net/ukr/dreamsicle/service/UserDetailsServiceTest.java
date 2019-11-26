@@ -1,13 +1,14 @@
 package net.ukr.dreamsicle.service;
 
-import net.ukr.dreamsicle.dto.UserDetailsDTO;
-import net.ukr.dreamsicle.dto.UserMapper;
+import net.ukr.dreamsicle.dto.userDetails.UserDetailsDTO;
+import net.ukr.dreamsicle.dto.userDetails.UserDetailsMapper;
 import net.ukr.dreamsicle.exception.ResourceNotFoundException;
-import net.ukr.dreamsicle.model.User;
-import net.ukr.dreamsicle.model.UserDetails;
+import net.ukr.dreamsicle.model.user.User;
+import net.ukr.dreamsicle.model.userDetails.UserDetails;
 import net.ukr.dreamsicle.repository.UserDetailsRepository;
 import net.ukr.dreamsicle.repository.UserRepository;
-import net.ukr.dreamsicle.util.UserDetailsProvider;
+import net.ukr.dreamsicle.service.UserDetailsService;
+import net.ukr.dreamsicle.util.userDetails.UserDetailsProvider;
 import org.hibernate.TransactionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
 
-import static net.ukr.dreamsicle.util.UserProvider.*;
+import static net.ukr.dreamsicle.util.user.UserProvider.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -37,7 +38,7 @@ class UserDetailsServiceTest {
     @Mock
     private UserRepository userRepository;
     @Mock
-    private UserMapper userMapper;
+    private UserDetailsMapper userDetailsMapper;
     @Mock
     private UserDetailsRepository userDetailsRepository;
 
@@ -48,14 +49,15 @@ class UserDetailsServiceTest {
 
     @Test
     void testCreateUserDetailsDataExistInDb() {
-        User user = getUserProvider(ID, STATUS_TYPE_ACTIVE);
+        User user = getUserProvider(STATUS_TYPE_ACTIVE);
         UserDetails userDetails = UserDetailsProvider.getUserDetailsProvider();
         UserDetailsDTO userDetailsDto = UserDetailsProvider.getUserDetailsDtoProvider();
-        when(userMapper.userDetailsToUser(userDetailsDto)).thenReturn(userDetails);
+        when(userDetailsMapper.userDetailsToUser(userDetailsDto)).thenReturn(userDetails);
         when(userRepository.findByIdAndStatus(ID, STATUS_TYPE_ACTIVE)).thenReturn(Optional.of(user));
         when(userDetailsRepository.findUserDetailsByUserId(user.getId())).thenReturn(Optional.of(userDetails));
         when(userDetailsRepository.saveAndFlush(userDetails)).thenReturn(userDetails);
-        when(userMapper.userToUserDetailsDTO(userDetails)).thenReturn(userDetailsDto);
+        when(userDetailsMapper.userToUserDetailsDTO(userDetails)).thenReturn(userDetailsDto);
+
 
         UserDetailsDTO actualUser = userDetailsService.createUserDetails(ID, userDetailsDto);
 
@@ -67,10 +69,12 @@ class UserDetailsServiceTest {
 
     @Test
     void testCreateUserDetailsNewDataInDb() {
-        User user = getUserProvider(ID, STATUS_TYPE_ACTIVE);
+
+        User user = getUserProvider(STATUS_TYPE_ACTIVE);
         UserDetails userDetails = UserDetailsProvider.getUserDetailsProvider();
         UserDetailsDTO userDetailsDto = UserDetailsProvider.getUserDetailsDtoProvider();
-        when(userMapper.userDetailsToUser(userDetailsDto)).thenReturn(userDetails);
+        when(userDetailsMapper.userDetailsToUser(userDetailsDto)).thenReturn(userDetails);
+
         when(userRepository.findByIdAndStatus(ID, STATUS_TYPE_ACTIVE)).thenReturn(Optional.of(user));
         when(userDetailsRepository.findUserDetailsByUserId(user.getId())).thenReturn(Optional.empty());
         when(userDetailsRepository.saveAndFlush(any())).thenAnswer((Answer<UserDetails>) answer -> {
@@ -81,7 +85,9 @@ class UserDetailsServiceTest {
                 return null;
             }
         });
-        when(userMapper.userToUserDetailsDTO(any())).thenAnswer((Answer<UserDetailsDTO>) answer -> {
+
+        when(userDetailsMapper.userToUserDetailsDTO(any())).thenAnswer((Answer<UserDetailsDTO>) answer -> {
+
             UserDetails argument = (UserDetails) answer.getArguments()[0];
             if (argument.getSurname().equals(UserDetailsProvider.SURNAME)) {
                 return userDetailsDto;
@@ -102,7 +108,8 @@ class UserDetailsServiceTest {
     void testCreateUserDetailsNotExistUserWithStatusActiveThrowResourceNotFoundException() {
         UserDetails userDetails = UserDetailsProvider.getUserDetailsProvider();
         UserDetailsDTO userDetailsDto = UserDetailsProvider.getUserDetailsDtoProvider();
-        when(userMapper.userDetailsToUser(userDetailsDto)).thenReturn(userDetails);
+
+        when(userDetailsMapper.userDetailsToUser(userDetailsDto)).thenReturn(userDetails);
         when(userRepository.findByIdAndStatus(ID, STATUS_TYPE_ACTIVE)).thenThrow(ResourceNotFoundException.class);
 
         assertThrows(ResourceNotFoundException.class, () -> userDetailsService.createUserDetails(ID, userDetailsDto));
@@ -112,7 +119,8 @@ class UserDetailsServiceTest {
     void testCreateUserDetailsNotExistUserThrowResourceNotFoundException() {
         UserDetails userDetails = UserDetailsProvider.getUserDetailsProvider();
         UserDetailsDTO userDetailsDto = UserDetailsProvider.getUserDetailsDtoProvider();
-        when(userMapper.userDetailsToUser(userDetailsDto)).thenReturn(userDetails);
+
+        when(userDetailsMapper.userDetailsToUser(userDetailsDto)).thenReturn(userDetails);
         when(userRepository.findByIdAndStatus(ID, STATUS_TYPE_DELETED)).thenThrow(ResourceNotFoundException.class);
 
         assertThrows(ResourceNotFoundException.class, () -> userDetailsService.createUserDetails(ID, userDetailsDto));
@@ -120,10 +128,11 @@ class UserDetailsServiceTest {
 
     @Test
     void testCreateUserDetailsDataExistInDbThrowTransactionException() {
-        User user = getUserProvider(ID, STATUS_TYPE_ACTIVE);
+        User user = getUserProvider(STATUS_TYPE_ACTIVE);
         UserDetails userDetails = UserDetailsProvider.getUserDetailsProvider();
         UserDetailsDTO userDetailsDto = UserDetailsProvider.getUserDetailsDtoProvider();
-        when(userMapper.userDetailsToUser(userDetailsDto)).thenReturn(userDetails);
+        when(userDetailsMapper.userDetailsToUser(userDetailsDto)).thenReturn(userDetails);
+
         when(userRepository.findByIdAndStatus(ID, STATUS_TYPE_ACTIVE)).thenReturn(Optional.of(user));
         when(userDetailsRepository.findUserDetailsByUserId(ID)).thenReturn(Optional.of(userDetails));
         when(userDetailsRepository.saveAndFlush(userDetails)).thenThrow(TransactionException.class);

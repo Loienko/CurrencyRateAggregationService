@@ -1,17 +1,18 @@
 package net.ukr.dreamsicle.service;
 
 import net.ukr.dreamsicle.config.ApplicationConfig;
-import net.ukr.dreamsicle.dto.UserDTO;
-import net.ukr.dreamsicle.dto.UserMapper;
-import net.ukr.dreamsicle.dto.UsernameAndPasswordDataDTO;
+import net.ukr.dreamsicle.dto.user.UserDTO;
+import net.ukr.dreamsicle.dto.user.UserMapper;
+import net.ukr.dreamsicle.dto.user.UsernameAndPasswordDataDTO;
 import net.ukr.dreamsicle.exception.CustomDataAlreadyExistsException;
 import net.ukr.dreamsicle.exception.ResourceNotFoundException;
-import net.ukr.dreamsicle.model.Role;
-import net.ukr.dreamsicle.model.StatusType;
-import net.ukr.dreamsicle.model.User;
+import net.ukr.dreamsicle.model.user.Role;
+import net.ukr.dreamsicle.model.user.StatusType;
+import net.ukr.dreamsicle.model.user.User;
 import net.ukr.dreamsicle.repository.RoleRepository;
 import net.ukr.dreamsicle.repository.UserRepository;
 import net.ukr.dreamsicle.security.jwt.JwtProvider;
+import net.ukr.dreamsicle.service.UserService;
 import org.hibernate.TransactionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
 
-import static net.ukr.dreamsicle.util.UserProvider.*;
+import static net.ukr.dreamsicle.util.user.UserProvider.*;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -88,7 +89,7 @@ class UserServiceTest {
 
     @Test
     void testFindUserById() {
-        User user = getUserProvider(ID, STATUS_TYPE_ACTIVE);
+        User user = getUserProvider(STATUS_TYPE_ACTIVE);
         UserDTO userDTO = getUserDtoProvider();
         when(userRepository.findByIdAndStatus(ID, STATUS_TYPE_ACTIVE)).thenReturn(Optional.of(user));
         when(userMapper.userToUserDto(user)).thenReturn(userDTO);
@@ -127,7 +128,7 @@ class UserServiceTest {
 
     @Test
     void testUpdateUser() {
-        User user = getUserProvider(ID + 1, STATUS_TYPE_ACTIVE);
+        User user = getUserProvider(STATUS_TYPE_ACTIVE);
         UserDTO userDTO = getUserDtoProvider();
         when(userRepository.findByIdAndStatus(ID, STATUS_TYPE_ACTIVE)).thenReturn(Optional.of(user));
         when(userRepository.existsByUsername(userDTO.getUsername())).thenReturn(Boolean.FALSE);
@@ -174,7 +175,7 @@ class UserServiceTest {
 
     @Test
     void testUpdateUserReturnedTransactionException() {
-        User user = getUserProvider(ID + 1, STATUS_TYPE_ACTIVE);
+        User user = getUserProvider(STATUS_TYPE_ACTIVE);
         UserDTO userDTO = getUserDtoProvider();
         when(userRepository.findByIdAndStatus(ID, STATUS_TYPE_ACTIVE)).thenReturn(Optional.of(user));
         when(userMapper.userDtoToUser(userDTO)).thenReturn(user);
@@ -186,7 +187,7 @@ class UserServiceTest {
 
     @Test
     void testUpdateUserIsUserNotUniqueInDB() {
-        User user = getUserProvider(ID + 1, STATUS_TYPE_ACTIVE);
+        User user = getUserProvider(STATUS_TYPE_ACTIVE);
         UserDTO userDTO = getUserDtoProvider();
         userDTO.setUsername("qwerty");
         when(userRepository.findByIdAndStatus(ID, STATUS_TYPE_ACTIVE)).thenReturn(Optional.of(user));
@@ -197,7 +198,7 @@ class UserServiceTest {
 
     @Test
     void testUpdateUserIsEmailNotUniqueInDB() {
-        User user = getUserProvider(ID + 1, STATUS_TYPE_ACTIVE);
+        User user = getUserProvider(STATUS_TYPE_ACTIVE);
         UserDTO userDTO = getUserDtoProvider();
         userDTO.setEmail("qwerty@gmail.com");
         when(userRepository.findByIdAndStatus(ID, STATUS_TYPE_ACTIVE)).thenReturn(Optional.of(user));
@@ -209,8 +210,8 @@ class UserServiceTest {
 
     @Test
     void testDeleteUser() {
-        User user = getUserProvider(ID, STATUS_TYPE_ACTIVE);
-        User userDeletedStatus = getUserProvider(ID, STATUS_TYPE_DELETED);
+        User user = getUserProvider(STATUS_TYPE_ACTIVE);
+        User userDeletedStatus = getUserProvider(STATUS_TYPE_DELETED);
         when(userRepository.findByIdAndStatus(ID, STATUS_TYPE_ACTIVE)).thenReturn(Optional.of(user));
         when(userRepository.saveAndFlush(userDeletedStatus)).thenReturn(userDeletedStatus);
 
@@ -242,7 +243,7 @@ class UserServiceTest {
 
     @Test
     void testCreateUser() {
-        User user = getUserProvider(ID, STATUS_TYPE_ACTIVE);
+        User user = getUserProvider(STATUS_TYPE_ACTIVE);
         UserDTO userDTO = getUserDtoProvider();
         when(userRepository.existsByUsername(userDTO.getUsername())).thenReturn(Boolean.FALSE);
         when(userRepository.existsByEmail(userDTO.getEmail())).thenReturn(Boolean.FALSE);
@@ -291,18 +292,18 @@ class UserServiceTest {
 
     @Test
     void testAuthenticateUser() {
-        User user = getUserProvider(ID, STATUS_TYPE_ACTIVE);
+        User user = getUserProvider(STATUS_TYPE_ACTIVE);
         UsernameAndPasswordDataDTO usernameAndPasswordDataDTO = getUsernameAndPasswordDataDTO();
         UsernamePasswordAuthenticationToken authenticationToken = getAuthenticationToken();
         when(userRepository.findByUsername(usernameAndPasswordDataDTO.getUsername())).thenReturn(Optional.of(user));
         when(userRepository.findByIdAndStatus(user.getId(), STATUS_TYPE_ACTIVE)).thenReturn(Optional.of(user));
         when(authenticationManager.authenticate(authenticationToken)).thenReturn(authentication);
-        when(tokenProvider.createToken(authentication)).thenReturn(TOKEN);
+        when(tokenProvider.createToken(authentication)).thenReturn(TOKEN_WITH_PASSED_DATE);
 
-        String actualToken = userService.authenticateUser(usernameAndPasswordDataDTO);
+        String actualToken = userService.login(usernameAndPasswordDataDTO);
 
         assertNotNull(actualToken);
-        assertEquals(BEARER + TOKEN + CAUTION, actualToken);
+        assertEquals(BEARER + TOKEN_WITH_PASSED_DATE + CAUTION, actualToken);
     }
 
     @Test
@@ -310,22 +311,23 @@ class UserServiceTest {
         UsernameAndPasswordDataDTO usernameAndPasswordDataDTO = getUsernameAndPasswordDataDTO();
         when(userRepository.findByUsername(usernameAndPasswordDataDTO.getUsername())).thenThrow(ResourceNotFoundException.class);
 
-        assertThrows(ResourceNotFoundException.class, () -> userService.authenticateUser(usernameAndPasswordDataDTO));
+        assertThrows(ResourceNotFoundException.class, () -> userService.login(usernameAndPasswordDataDTO));
     }
 
     @Test
     void testAuthenticateUserByIdNotPresentUserInDb() {
-        User user = getUserProvider(ID, STATUS_TYPE_ACTIVE);
+        User user = getUserProvider(STATUS_TYPE_ACTIVE);
+
         UsernameAndPasswordDataDTO usernameAndPasswordDataDTO = getUsernameAndPasswordDataDTO();
         when(userRepository.findByUsername(usernameAndPasswordDataDTO.getUsername())).thenReturn(Optional.of(user));
         when(userRepository.findByIdAndStatus(user.getId(), STATUS_TYPE_ACTIVE)).thenThrow(ResourceNotFoundException.class);
 
-        assertThrows(ResourceNotFoundException.class, () -> userService.authenticateUser(usernameAndPasswordDataDTO));
+        assertThrows(ResourceNotFoundException.class, () -> userService.login(usernameAndPasswordDataDTO));
     }
 
     @Test
     void testAssignPassword() {
-        User user = getUserProvider(ID, STATUS_TYPE_ACTIVE);
+        User user = getUserProvider(STATUS_TYPE_ACTIVE);
         UsernameAndPasswordDataDTO usernameAndPasswordDataDTO = getUsernameAndPasswordDataDTO();
         when(userRepository.findByUsername(usernameAndPasswordDataDTO.getUsername())).thenReturn(Optional.of(user));
         when(userMapper.usernameAndPasswordDataDTOToUser(usernameAndPasswordDataDTO)).thenReturn(user);
@@ -349,7 +351,7 @@ class UserServiceTest {
 
     @Test
     void testAssignPasswordReturnedTransactionException() {
-        User user = getUserProvider(ID, STATUS_TYPE_ACTIVE);
+        User user = getUserProvider(STATUS_TYPE_ACTIVE);
         UsernameAndPasswordDataDTO usernameAndPasswordDataDTO = getUsernameAndPasswordDataDTO();
         when(userRepository.findByUsername(usernameAndPasswordDataDTO.getUsername())).thenReturn(Optional.of(user));
         when(userMapper.usernameAndPasswordDataDTOToUser(usernameAndPasswordDataDTO)).thenReturn(user);
