@@ -92,19 +92,14 @@ public class BankService {
         return bankMapper.toBankDto(bankRepository.save(bank));
     }
 
-    public Page<BankDTO> search(String search, String except, Pageable page) {
+    public Page<BankDTO> search(String search, Pageable page) {
         QBank bank = new QBank("bank");
         Predicate predicate;
 
-        if (!Optional.ofNullable(except).isPresent()) {
-            if (Optional.ofNullable(search).isPresent()) {
-                predicate = getPredicate(search, bank);
-            } else {
-                return getAll(page);
-            }
+        if (Optional.ofNullable(search).isPresent()) {
+            predicate = getPredicate(search, bank);
         } else {
-            predicate = getPredicate(search, bank)
-                    .and(getSecondPredicate(except, bank));
+            return getAll(page);
         }
 
         return bankMapper.toBankDTOs(bankRepository.findAll(predicate, page));
@@ -133,15 +128,5 @@ public class BankService {
                 .or(bank.offices.any().workTimes.any().startWork.containsIgnoreCase(search))
                 .or(bank.offices.any().workTimes.any().endWork.containsIgnoreCase(search))
                 .or(bank.products.any().description.containsIgnoreCase(search));
-    }
-
-    private BooleanExpression getSecondPredicate(String except, QBank bank) {
-        return bank.bankName.containsIgnoreCase(except)
-                .or(bank.bankCode.containsIgnoreCase(except))
-                .or(bank.id.containsIgnoreCase(except))
-                .or(bank.iban.containsIgnoreCase(except))
-                .or(bank.state.containsIgnoreCase(except))
-                .or(bank.city.containsIgnoreCase(except))
-                .or(bank.street.containsIgnoreCase(except));
     }
 }

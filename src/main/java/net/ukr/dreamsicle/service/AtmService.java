@@ -102,19 +102,14 @@ public class AtmService {
                 .collect(Collectors.toList());
     }
 
-    public Page<AtmDTO> search(String first, String second, Pageable page) {
+    public Page<AtmDTO> search(String search, Pageable page) {
         QATM atm = new QATM("atm");
         Predicate predicate;
 
-        if (!Optional.ofNullable(second).isPresent()) {
-            if (Optional.ofNullable(first).isPresent()) {
-                predicate = getPredicate(first, atm);
-            } else {
-                return findAll(page);
-            }
+        if (Optional.ofNullable(search).isPresent()) {
+            predicate = getPredicate(search, atm);
         } else {
-            predicate = getPredicate(first, atm)
-                    .and(getPredicate(second, atm));
+            return findAll(page);
         }
 
         return atmMapper.toAtmDTOs(atmRepository.findAll(predicate, page));

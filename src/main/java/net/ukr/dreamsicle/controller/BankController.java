@@ -24,8 +24,8 @@ public class BankController {
     private BankService bankService;
 
     @GetMapping
-    public Page<BankDTO> findAll(String first, String second, @PageableDefault(sort = {"id"}, direction = Direction.ASC) Pageable page) {
-        return bankService.search(first, second, page);
+    public Page<BankDTO> findAll(String search, @PageableDefault(sort = {"id"}, direction = Direction.ASC) Pageable page) {
+        return bankService.search(search, page);
     }
 
     @GetMapping("/{id}")
