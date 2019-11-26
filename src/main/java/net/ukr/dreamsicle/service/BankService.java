@@ -21,6 +21,8 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.LockModeType;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
@@ -66,7 +68,6 @@ public class BankService {
                 .state(bank.getState())
                 .city(bank.getCity())
                 .street(bank.getStreet())
-                .partners(partnerService.createPartners(bank.getPartners()))
                 .products(productService.createProduct(bankCode, bank.getProducts()))
                 .offices(officeService.createOffice(bankCode, bank.getOffices()))
                 .atms(atmService.createAtm(bankCode, bank.getAtms()))
@@ -75,8 +76,8 @@ public class BankService {
 
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    public BankDTO update(String bankCode, BankUpdateDTO bankUpdateDTO) {
-        Bank bank = bankRepository.findBankByBankCode(bankCode).orElseThrow(ResourceNotFoundException::new);
+    public BankDTO update(@Min(1) @Positive ObjectId id, BankUpdateDTO bankUpdateDTO) {
+        Bank bank = bankRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
 
         if (Boolean.TRUE.equals(bankRepository.existsBankByBankName(bankUpdateDTO.getBankName()))
                 && !bank.getBankName().equals(bankUpdateDTO.getBankName())) {

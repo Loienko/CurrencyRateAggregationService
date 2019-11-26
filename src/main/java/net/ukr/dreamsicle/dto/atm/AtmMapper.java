@@ -9,9 +9,28 @@ import org.springframework.stereotype.Service;
 @Service
 public interface AtmMapper {
 
-    AtmDTO toAtmDto(ATM atm);
+    default AtmDTO toAtmDto(ATM atm) {
+        return AtmDTO.builder()
+                .id(atm.getId().toHexString())
+                .bankCode(atm.getBankCode())
+                .name(atm.getName())
+                .city(atm.getCity())
+                .state(atm.getState())
+                .street(atm.getStreet())
+                .workTimes(atm.getWorkTimes())
+                .build();
+    }
 
-    ATM toAtm(AtmDTO atmDTO);
+    default ATM toAtm(AtmDTO atmDTO) {
+        return ATM.builder()
+                .bankCode(atmDTO.getBankCode())
+                .name(atmDTO.getName())
+                .city(atmDTO.getCity())
+                .state(atmDTO.getState())
+                .street(atmDTO.getStreet())
+                .workTimes(atmDTO.getWorkTimes())
+                .build();
+    }
 
     default Page<AtmDTO> toAtmDTOs(Page<ATM> atmPage) {
         return atmPage.map(this::toAtmDto);

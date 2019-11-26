@@ -19,6 +19,8 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.LockModeType;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -45,8 +47,8 @@ public class ProductService {
 
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    public ProductDTO create(String bankCode, ProductDTO productDTO) {
-        Bank bank = bankRepository.findBankByBankCode(bankCode).orElseThrow(ResourceNotFoundException::new);
+    public ProductDTO create(@Min(1) @Positive ObjectId id, ProductDTO productDTO) {
+        Bank bank = bankRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         Product actualProduct = saveProduct(bank.getBankCode(), productMapper.toProduct(productDTO));
         checkProductsFromBankNotNull(bank.getProducts()).add(actualProduct);
         bankRepository.save(bank);
@@ -74,7 +76,7 @@ public class ProductService {
         actualProduct.setId(id);
         actualProduct.setBankCode(productById.getBankCode());
 
-        Bank bank = bankRepository.findBankByBankCode(productById.getBankCode()).orElseThrow(ResourceNotFoundException::new);
+        Bank bank = bankRepository.findById(productById.getId()).orElseThrow(ResourceNotFoundException::new);
         checkProductsFromBankNotNull(bank.getProducts()).stream()
                 .filter(product -> product.getId().equals(id))
                 .forEach(product -> {

@@ -19,9 +19,10 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.LockModeType;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -49,8 +50,8 @@ public class OfficeService {
 
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    public OfficeDTO create(String bankCode, OfficeDTO officeDTO) {
-        Bank bank = bankRepository.findBankByBankCode(bankCode).orElseThrow(ResourceNotFoundException::new);
+    public OfficeDTO create(@Min(1) @Positive ObjectId id, OfficeDTO officeDTO) {
+        Bank bank = bankRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         Office actualOffice = saveOffice(bank.getBankCode(), officeMapper.toOffice(officeDTO));
         checkOfficesFromBankNotNull(bank.getOffices()).add(actualOffice);
         bankRepository.save(bank);
@@ -81,7 +82,7 @@ public class OfficeService {
         actualOffice.setId(id);
         actualOffice.setBankCode(officeById.getBankCode());
 
-        Bank bank = bankRepository.findBankByBankCode(officeById.getBankCode()).orElseThrow(ResourceNotFoundException::new);
+        Bank bank = bankRepository.findById(officeById.getId()).orElseThrow(ResourceNotFoundException::new);
         checkOfficesFromBankNotNull(bank.getOffices()).stream()
                 .filter(office -> office.getId().equals(id))
                 .forEach(office -> {

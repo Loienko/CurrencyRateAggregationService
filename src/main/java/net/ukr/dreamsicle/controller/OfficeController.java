@@ -31,10 +31,10 @@ public class OfficeController {
         return officeService.findById(id);
     }
 
-    @PostMapping("/banks/{bankCode}/offices")
+    @PostMapping("/banks/{id}/offices")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public OfficeDTO create(@PathVariable @Min(1) @Positive String bankCode, @Validated @RequestBody OfficeDTO officeDTO) {
-        return officeService.create(bankCode, officeDTO);
+    public OfficeDTO create(@PathVariable @Min(1) @Positive ObjectId id, @Validated @RequestBody OfficeDTO officeDTO) {
+        return officeService.create(id, officeDTO);
     }
 
     @PutMapping("/offices/{id}")

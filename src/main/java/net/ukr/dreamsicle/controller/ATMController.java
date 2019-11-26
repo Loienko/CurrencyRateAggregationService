@@ -34,8 +34,8 @@ public class ATMController {
 
     @PostMapping("/banks/{bankCode}/atms")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public AtmDTO create(@PathVariable @Min(1) @Positive String bankCode, @Validated @RequestBody AtmDTO atmDTO) {
-        return atmService.create(bankCode, atmDTO);
+    public AtmDTO create(@PathVariable @Min(1) @Positive ObjectId id, @Validated @RequestBody AtmDTO atmDTO) {
+        return atmService.create(id, atmDTO);
     }
 
     @PutMapping("/atms/{id}")
