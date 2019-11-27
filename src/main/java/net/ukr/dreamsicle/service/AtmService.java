@@ -22,6 +22,8 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.LockModeType;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -48,8 +50,8 @@ public class AtmService {
 
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    public AtmDTO create(String bankCode, AtmDTO atmDTO) {
-        Bank bank = bankRepository.findBankByBankCode(bankCode).orElseThrow(ResourceNotFoundException::new);
+    public AtmDTO create(@Min(1) @Positive ObjectId id, AtmDTO atmDTO) {
+        Bank bank = bankRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         ATM actualAtm = saveAtm(bank.getBankCode(), atmMapper.toAtm(atmDTO));
         checkAtmsFromBankNotNull(bank.getAtms()).add(actualAtm);
         bankRepository.save(bank);
@@ -80,7 +82,7 @@ public class AtmService {
         actualAtm.setId(id);
         actualAtm.setBankCode(atmById.getBankCode());
 
-        Bank bank = bankRepository.findBankByBankCode(atmById.getBankCode()).orElseThrow(ResourceNotFoundException::new);
+        Bank bank = bankRepository.findById(atmById.getId()).orElseThrow(ResourceNotFoundException::new);
 
         checkAtmsFromBankNotNull(bank.getAtms()).stream()
                 .filter(atm -> atm.getId().equals(id))

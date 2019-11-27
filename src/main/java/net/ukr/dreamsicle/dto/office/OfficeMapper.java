@@ -9,9 +9,28 @@ import org.springframework.stereotype.Service;
 @Service
 public interface OfficeMapper {
 
-    OfficeDTO toOfficeDto(Office office);
+    default OfficeDTO toOfficeDto(Office office) {
+        return OfficeDTO.builder()
+                .id(office.getId().toHexString())
+                .bankCode(office.getBankCode())
+                .name(office.getName())
+                .city(office.getCity())
+                .state(office.getState())
+                .street(office.getStreet())
+                .workTimes(office.getWorkTimes())
+                .build();
+    }
 
-    Office toOffice(OfficeDTO officeDTO);
+    default Office toOffice(OfficeDTO officeDTO) {
+        return Office.builder()
+                .bankCode(officeDTO.getBankCode())
+                .name(officeDTO.getName())
+                .city(officeDTO.getCity())
+                .state(officeDTO.getState())
+                .street(officeDTO.getStreet())
+                .workTimes(officeDTO.getWorkTimes())
+                .build();
+    }
 
     default Page<OfficeDTO> toOfficeDTOs(Page<Office> officePage) {
         return officePage.map(this::toOfficeDto);

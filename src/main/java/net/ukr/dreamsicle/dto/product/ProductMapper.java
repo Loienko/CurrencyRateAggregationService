@@ -9,9 +9,22 @@ import org.springframework.stereotype.Service;
 @Service
 public interface ProductMapper {
 
-    ProductDTO toProductDto(Product product);
+    default ProductDTO toProductDto(Product product) {
+        return ProductDTO.builder()
+                .id(product.getId().toHexString())
+                .bankCode(product.getBankCode())
+                .type(product.getType())
+                .description(product.getDescription())
+                .build();
+    }
 
-    Product toProduct(ProductDTO productDTO);
+    default Product toProduct(ProductDTO productDTO) {
+        return Product.builder()
+                .bankCode(productDTO.getBankCode())
+                .type(productDTO.getType())
+                .description(productDTO.getDescription())
+                .build();
+    }
 
     default Page<ProductDTO> toProductDTOs(Page<Product> productPage) {
         return productPage.map(this::toProductDto);

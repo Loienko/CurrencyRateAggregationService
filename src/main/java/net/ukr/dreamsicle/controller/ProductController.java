@@ -32,10 +32,10 @@ public class ProductController {
         return productService.findById(id);
     }
 
-    @PostMapping("/banks/{bankCode}/products")
+    @PostMapping("/banks/{id}/products")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public ProductDTO create(@PathVariable @Min(1) @Positive String bankCode, @Validated @RequestBody ProductDTO productDTO) {
-        return productService.create(bankCode, productDTO);
+    public ProductDTO create(@PathVariable @Min(1) @Positive ObjectId id, @Validated @RequestBody ProductDTO productDTO) {
+        return productService.create(id, productDTO);
     }
 
     @PutMapping("/products/{id}")

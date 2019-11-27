@@ -40,9 +40,9 @@ public class BankController {
         return bankService.create(bankDTO);
     }
 
-    @PutMapping("/{bankCode}")
+    @PutMapping("/{id}")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
-    public BankDTO update(@PathVariable @Min(1) @Positive String bankCode, @Validated @RequestBody BankUpdateDTO bankUpdateDTO) {
-        return bankService.update(bankCode, bankUpdateDTO);
+    public BankDTO update(@PathVariable @Min(1) @Positive ObjectId id, @Validated @RequestBody BankUpdateDTO bankUpdateDTO) {
+        return bankService.update(id, bankUpdateDTO);
     }
 }
