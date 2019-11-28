@@ -1,6 +1,7 @@
 package net.ukr.dreamsicle.dto.product;
 
 import net.ukr.dreamsicle.model.product.Product;
+import net.ukr.dreamsicle.model.product.TypeProduct;
 import org.mapstruct.Mapper;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,7 @@ public interface ProductMapper {
         return ProductDTO.builder()
                 .id(product.getId().toHexString())
                 .bankCode(product.getBankCode())
-                .type(product.getType())
+                .type(product.getType().getName())
                 .description(product.getDescription())
                 .build();
     }
@@ -21,7 +22,7 @@ public interface ProductMapper {
     default Product toProduct(ProductDTO productDTO) {
         return Product.builder()
                 .bankCode(productDTO.getBankCode())
-                .type(productDTO.getType())
+                .type(TypeProduct.getEnumFromString(productDTO.getType()))
                 .description(productDTO.getDescription())
                 .build();
     }

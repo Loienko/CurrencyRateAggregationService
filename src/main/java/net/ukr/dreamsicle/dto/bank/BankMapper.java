@@ -8,6 +8,7 @@ import net.ukr.dreamsicle.model.atm.ATM;
 import net.ukr.dreamsicle.model.bank.Bank;
 import net.ukr.dreamsicle.model.office.Office;
 import net.ukr.dreamsicle.model.product.Product;
+import net.ukr.dreamsicle.model.product.TypeProduct;
 import org.mapstruct.Mapper;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -39,7 +40,7 @@ public interface BankMapper {
         return ProductDTO.builder()
                 .id(product.getId().toHexString())
                 .bankCode(product.getBankCode())
-                .type(product.getType())
+                .type(product.getType().getName())
                 .description(product.getDescription())
                 .build();
     }
@@ -83,7 +84,7 @@ public interface BankMapper {
     default Product toProduct(ProductDTO productDTO) {
         return Product.builder()
                 .bankCode(productDTO.getBankCode())
-                .type(productDTO.getType())
+                .type(TypeProduct.getEnumFromString(productDTO.getType()))
                 .description(productDTO.getDescription())
                 .build();
     }

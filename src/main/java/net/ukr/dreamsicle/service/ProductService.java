@@ -7,6 +7,7 @@ import net.ukr.dreamsicle.exception.CollectionNotFoundException;
 import net.ukr.dreamsicle.exception.ResourceNotFoundException;
 import net.ukr.dreamsicle.model.bank.Bank;
 import net.ukr.dreamsicle.model.product.Product;
+import net.ukr.dreamsicle.model.product.TypeProduct;
 import net.ukr.dreamsicle.repository.BankRepository;
 import net.ukr.dreamsicle.repository.ProductRepository;
 import net.ukr.dreamsicle.util.Constants;
@@ -63,9 +64,13 @@ public class ProductService {
     private Product saveProduct(String bankCode, Product product) {
         return productRepository.save(Product.builder()
                 .bankCode(bankCode)
-                .type(product.getType())
+                .type(acquireProduct(product.getType()))
                 .description(product.getDescription())
                 .build());
+    }
+
+    private TypeProduct acquireProduct(TypeProduct type) {
+        return Optional.of(TypeProduct.getEnumFromString(type.toString())).orElseThrow(ResourceNotFoundException::new);
     }
 
     @Transactional
@@ -81,7 +86,7 @@ public class ProductService {
                 .filter(product -> product.getId().equals(id))
                 .forEach(product -> {
                     product.setBankCode(actualProduct.getBankCode());
-                    product.setType(actualProduct.getType());
+                    product.setType(acquireProduct(actualProduct.getType()));
                     product.setDescription(actualProduct.getDescription());
                 });
         bankRepository.save(bank);
