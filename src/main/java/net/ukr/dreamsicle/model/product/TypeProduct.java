@@ -24,7 +24,7 @@ public enum TypeProduct {
     @Getter
     private String name;
 
-    public static <T extends Enum<T>> TypeProduct getEnumFromString(String stringValue) {
+    public static <T extends Enum<?>> TypeProduct getEnumFromString(String stringValue) {
         if (stringValue != null) {
             try {
                 return Enum.valueOf(TypeProduct.class, stringValue.trim().toUpperCase());
