@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -26,7 +25,6 @@ import static net.ukr.dreamsicle.util.ConstantsRegex.*;
 public class UserDetailsDTO {
 
     @ApiModelProperty(notes = "User surname", example = "Surname", required = true)
-    @NotBlank(message = FILL_THE_SURNAME)
     @Pattern(regexp = INPUT_STRING_VALUE_REGEX, message = INPUT_VALID_DATA_FOR_SURNAME)
     private String surname;
 

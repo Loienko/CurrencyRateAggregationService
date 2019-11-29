@@ -63,4 +63,41 @@ public class UserDetailsService {
                             .build()));
         }
     }
+
+    /**
+     * Retrieves userDetails by its id.
+     *
+     * @param id
+     * @return the userDetails with the given id
+     * @throws ResourceNotFoundException if {@code id} is not found
+     */
+    @Lock(LockModeType.PESSIMISTIC_READ)
+    public UserDetailsDTO findById(Long id) {
+        return userDetailsRepository
+                .findUserDetailsByUserId(id)
+                .map(userDetailsMapper::userToUserDetailsDTO)
+                .orElseThrow(ResourceNotFoundException::new);
+    }
+
+    /**
+     * The method partial update user details by id{@code ACTIVE}
+     *
+     * @param id
+     * @param userDetailsDTO
+     * @return the partial updated user details
+     * @throws ResourceNotFoundException if {@code id} is not found
+     */
+    @Transactional
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    public UserDetailsDTO partialUpdate(long id, UserDetailsDTO userDetailsDTO) {
+        User user = userRepository.findByIdAndStatus(id, StatusType.ACTIVE).orElseThrow(ResourceNotFoundException::new);
+        return userDetailsMapper.userToUserDetailsDTO(
+                userDetailsRepository.saveAndFlush(
+                        userDetailsMapper.userDetailsToUserPartialUpdate(
+                                userDetailsDTO,
+                                userDetailsRepository.findUserDetailsByUserId(user.getId()).orElseThrow(ResourceNotFoundException::new)
+                        )
+                )
+        );
+    }
 }

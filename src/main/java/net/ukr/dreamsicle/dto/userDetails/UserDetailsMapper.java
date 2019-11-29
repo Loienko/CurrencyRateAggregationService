@@ -2,7 +2,10 @@ package net.ukr.dreamsicle.dto.userDetails;
 
 import lombok.Lombok;
 import net.ukr.dreamsicle.model.userDetails.UserDetails;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,4 +21,7 @@ public interface UserDetailsMapper {
     UserDetails userDetailsToUser(UserDetailsDTO userDetailsDTO);
 
     UserDetailsDTO userToUserDetailsDTO(UserDetails user);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    UserDetails userDetailsToUserPartialUpdate(UserDetailsDTO userDetailsDTO, @MappingTarget UserDetails userDetails);
 }

@@ -45,4 +45,15 @@ public class UserDetailsController {
     public UserDetailsDTO createUserDetails(@PathVariable @Min(1) @Positive long id, @Validated @RequestBody UserDetailsDTO userDetailsDTO) {
         return userDetailsService.createUserDetails(id, userDetailsDTO);
     }
+
+    @GetMapping("/{id}/details")
+    public UserDetailsDTO findById(@PathVariable @Min(1) @Positive long id) {
+        return userDetailsService.findById(id);
+    }
+
+    @PatchMapping("/{id}/details")
+    @ResponseStatus(code = HttpStatus.ACCEPTED)
+    public UserDetailsDTO updateUserDetails(@PathVariable @Min(1) @Positive long id, @Validated @RequestBody UserDetailsDTO userDetailsDTO) {
+        return userDetailsService.partialUpdate(id, userDetailsDTO);
+    }
 }
