@@ -4,15 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.ukr.dreamsicle.model.product.TypeProduct;
-import org.bson.types.ObjectId;
 
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
-import static net.ukr.dreamsicle.util.Constants.SHOULD_NOT_EXCEED_256_CHARACTERS;
-import static net.ukr.dreamsicle.util.Constants.VALID_DATA_FOR_BANK_CODE;
-import static net.ukr.dreamsicle.util.ConstantsRegex.BANK_CODE_REGEX;
-import static net.ukr.dreamsicle.util.ConstantsRegex.INPUT_STRING_VALUE_REGEX;
+import static net.ukr.dreamsicle.util.Constants.*;
+import static net.ukr.dreamsicle.util.ConstantsRegex.*;
 
 @Data
 @Builder
@@ -24,8 +21,9 @@ public class ProductDTO {
 
     @Pattern(regexp = BANK_CODE_REGEX, message = VALID_DATA_FOR_BANK_CODE)
     private String bankCode;
-    private TypeProduct type;
+    private String type;
 
-    @Pattern(regexp = INPUT_STRING_VALUE_REGEX, message = SHOULD_NOT_EXCEED_256_CHARACTERS)
+    @Size(max = 256)
+    @Pattern(regexp = DESCRIPTION_REGEX, message = INPUT_VALID_DATA_FOR_DESCRIPTION)
     private String description;
 }
