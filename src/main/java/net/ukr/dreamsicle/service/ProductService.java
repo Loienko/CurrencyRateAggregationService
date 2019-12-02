@@ -81,7 +81,7 @@ public class ProductService {
         actualProduct.setId(id);
         actualProduct.setBankCode(productById.getBankCode());
 
-        Bank bank = bankRepository.findById(productById.getId()).orElseThrow(ResourceNotFoundException::new);
+        Bank bank = bankRepository.findBankByBankCode(productById.getBankCode()).orElseThrow(ResourceNotFoundException::new);
         checkProductsFromBankNotNull(bank.getProducts()).stream()
                 .filter(product -> product.getId().equals(id))
                 .forEach(product -> {

@@ -82,7 +82,7 @@ public class OfficeService {
         actualOffice.setId(id);
         actualOffice.setBankCode(officeById.getBankCode());
 
-        Bank bank = bankRepository.findById(officeById.getId()).orElseThrow(ResourceNotFoundException::new);
+        Bank bank = bankRepository.findBankByBankCode(officeById.getBankCode()).orElseThrow(ResourceNotFoundException::new);
         checkOfficesFromBankNotNull(bank.getOffices()).stream()
                 .filter(office -> office.getId().equals(id))
                 .forEach(office -> {

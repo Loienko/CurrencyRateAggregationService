@@ -32,7 +32,7 @@ public class ATMController {
         return atmService.findById(id);
     }
 
-    @PostMapping("/banks/{bankCode}/atms")
+    @PostMapping("/banks/{id}/atms")
     @ResponseStatus(code = HttpStatus.CREATED)
     public AtmDTO create(@PathVariable @Min(1) @Positive ObjectId id, @Validated @RequestBody AtmDTO atmDTO) {
         return atmService.create(id, atmDTO);

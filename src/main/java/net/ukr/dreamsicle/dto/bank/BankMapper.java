@@ -72,6 +72,8 @@ public interface BankMapper {
     default Bank toBank(BankDTO bankDTO) {
         return Bank.builder()
                 .bankName(bankDTO.getBankName())
+                .bankCode(bankDTO.getBankCode())
+                .iban(bankDTO.getIban())
                 .state(bankDTO.getState())
                 .city(bankDTO.getCity())
                 .street(bankDTO.getStreet())
