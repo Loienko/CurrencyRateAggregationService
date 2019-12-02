@@ -61,6 +61,8 @@ public class Constants {
 
     //bank
     public static final String BANK_IS_ALREADY_IN_USE = "Bank is already in use";
+    public static final String BANK_CODE_IS_ALREADY_IN_USE = "Bank code already in use";
+    public static final String USER_IBAN_CODE_IS_ALREADY_IN_USE = "User iban code already in use";
 
     public static final String PRODUCTS_FROM_BANK_DATA_NOT_FOUND = "Sorry, Products from bank data not found";
     public static final String OFFICES_FROM_BANK_DATA_NOT_FOUND = "Sorry, Offices from bank data not found";

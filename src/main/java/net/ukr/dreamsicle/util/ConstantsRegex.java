@@ -19,6 +19,6 @@ public class ConstantsRegex {
 
     public static final String BANK_CODE_REGEX = "\\d{6}";
     public static final String CITY_AND_STREET_REGEX = "([a-zA-Z]+|[a-zA-Z]+\\\\s[a-zA-Z]+)";
-    public static final String IBAN_REGEX = "(\\d\\s){29}";
+    public static final String IBAN_REGEX = "(\\w){29}";
     public static final String DESCRIPTION_REGEX = "^[\\w_\\-' ]+$";
 }

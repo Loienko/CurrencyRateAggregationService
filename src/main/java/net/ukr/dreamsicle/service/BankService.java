@@ -24,8 +24,6 @@ import javax.persistence.LockModeType;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
 import java.util.Optional;
-import java.util.Random;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -58,19 +56,26 @@ public class BankService {
             throw new CustomDataAlreadyExistsException(Constants.BANK_IS_ALREADY_IN_USE);
         }
 
+        if (Boolean.TRUE.equals(bankRepository.existsBankByBankCode(bankDTO.getBankCode()))) {
+            throw new CustomDataAlreadyExistsException(Constants.BANK_CODE_IS_ALREADY_IN_USE);
+        }
+
+        if (Boolean.TRUE.equals(bankRepository.existsBankByIban(bankDTO.getIban()))) {
+            throw new CustomDataAlreadyExistsException(Constants.USER_IBAN_CODE_IS_ALREADY_IN_USE);
+        }
+
         Bank bank = bankMapper.toBank(bankDTO);
-        String bankCode = String.valueOf(100000 + new Random().nextInt(900000));
 
         return bankMapper.toBankDto(bankRepository.save(Bank.builder()
                 .bankName(bank.getBankName())
-                .bankCode(bankCode)
-                .iban(UUID.randomUUID().toString().substring(0, 29))
+                .bankCode(bank.getBankCode())
+                .iban(bank.getIban())
                 .state(bank.getState())
                 .city(bank.getCity())
                 .street(bank.getStreet())
-                .products(productService.createProduct(bankCode, bank.getProducts()))
-                .offices(officeService.createOffice(bankCode, bank.getOffices()))
-                .atms(atmService.createAtm(bankCode, bank.getAtms()))
+                .products(productService.createProduct(bank.getBankCode(), bank.getProducts()))
+                .offices(officeService.createOffice(bank.getBankCode(), bank.getOffices()))
+                .atms(atmService.createAtm(bank.getBankCode(), bank.getAtms()))
                 .build()));
     }
 

@@ -82,7 +82,7 @@ public class AtmService {
         actualAtm.setId(id);
         actualAtm.setBankCode(atmById.getBankCode());
 
-        Bank bank = bankRepository.findById(atmById.getId()).orElseThrow(ResourceNotFoundException::new);
+        Bank bank = bankRepository.findBankByBankCode(atmById.getBankCode()).orElseThrow(ResourceNotFoundException::new);
 
         checkAtmsFromBankNotNull(bank.getAtms()).stream()
                 .filter(atm -> atm.getId().equals(id))
