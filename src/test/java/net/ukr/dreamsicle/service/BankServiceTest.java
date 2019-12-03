@@ -1,5 +1,6 @@
 package net.ukr.dreamsicle.service;
 
+import com.querydsl.core.BooleanBuilder;
 import net.ukr.dreamsicle.dto.bank.BankDTO;
 import net.ukr.dreamsicle.dto.bank.BankMapper;
 import net.ukr.dreamsicle.dto.bank.BankUpdateDTO;
@@ -84,7 +85,7 @@ class BankServiceTest {
     }
 
     @Test
-    void testFindUserById() {
+    void testFindById() {
         Bank bank = getBankProvider();
         BankDTO bankDTO = getBankDtoProvider();
         when(bankRepository.findById(BankProvider.ID)).thenReturn(Optional.of(bank));
@@ -239,12 +240,49 @@ class BankServiceTest {
     }
 
     @Test
-    void createBankIsUserIbanCodeNotUniqueUnDB() {
+    void createBankIsIbanCodeNotUniqueInDB() {
         BankDTO bankDTO = getBankDtoProvider();
         when(bankRepository.existsBankByBankName(bankDTO.getBankName())).thenReturn(Boolean.FALSE);
         when(bankRepository.existsBankByBankCode(bankDTO.getBankCode())).thenReturn(Boolean.FALSE);
         when(bankRepository.existsBankByIban(bankDTO.getIban())).thenReturn(Boolean.TRUE).thenThrow(CustomDataAlreadyExistsException.class);
 
         assertThrows(CustomDataAlreadyExistsException.class, () -> bankService.create(bankDTO));
+    }
+
+    @Test
+    void search() {
+        BooleanBuilder searchPredicate = getSearchPredicate(SEARCH);
+        when(bankRepository.findAll(searchPredicate, pageable)).thenReturn(bankPage);
+        when(bankMapper.toBankDTOs(bankPage)).thenReturn(bankDTOPage);
+
+        Page<BankDTO> actualBank = bankService.search(SEARCH, pageable);
+
+        verify(bankRepository).findAll(searchPredicate, pageable);
+        assertNotNull(actualBank);
+        assertEquals(bankDTOPage, actualBank);
+    }
+
+    @Test
+    void searchEmptySearchExpression() {
+        when(bankRepository.findAll(pageable)).thenReturn(bankPage);
+        when(bankMapper.toBankDTOs(bankPage)).thenReturn(bankDTOPage);
+
+        Page<BankDTO> actualBank = bankService.search(SEARCH_EMPTY, pageable);
+
+        verify(bankRepository).findAll(pageable);
+        assertNotNull(actualBank);
+        assertEquals(bankDTOPage, actualBank);
+    }
+
+    @Test
+    void searchNullSearchExpression() {
+        when(bankRepository.findAll(pageable)).thenReturn(bankPage);
+        when(bankMapper.toBankDTOs(bankPage)).thenReturn(bankDTOPage);
+
+        Page<BankDTO> actualBank = bankService.search(SEARCH_NULL, pageable);
+
+        verify(bankRepository).findAll(pageable);
+        assertNotNull(actualBank);
+        assertEquals(bankDTOPage, actualBank);
     }
 }
