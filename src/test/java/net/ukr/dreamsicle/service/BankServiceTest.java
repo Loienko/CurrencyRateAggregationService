@@ -21,6 +21,8 @@ import net.ukr.dreamsicle.util.product.ProductProvider;
 import org.hibernate.TransactionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -262,24 +264,13 @@ class BankServiceTest {
         assertEquals(bankDTOPage, actualBank);
     }
 
-    @Test
-    void searchEmptySearchExpression() {
+    @ParameterizedTest
+    @NullAndEmptySource
+    void searchNullSearchExpression(String search) {
         when(bankRepository.findAll(pageable)).thenReturn(bankPage);
         when(bankMapper.toBankDTOs(bankPage)).thenReturn(bankDTOPage);
 
-        Page<BankDTO> actualBank = bankService.search(SEARCH_EMPTY, pageable);
-
-        verify(bankRepository).findAll(pageable);
-        assertNotNull(actualBank);
-        assertEquals(bankDTOPage, actualBank);
-    }
-
-    @Test
-    void searchNullSearchExpression() {
-        when(bankRepository.findAll(pageable)).thenReturn(bankPage);
-        when(bankMapper.toBankDTOs(bankPage)).thenReturn(bankDTOPage);
-
-        Page<BankDTO> actualBank = bankService.search(SEARCH_NULL, pageable);
+        Page<BankDTO> actualBank = bankService.search(search, pageable);
 
         verify(bankRepository).findAll(pageable);
         assertNotNull(actualBank);

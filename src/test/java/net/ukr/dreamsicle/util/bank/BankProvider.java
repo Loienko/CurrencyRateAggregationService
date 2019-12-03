@@ -21,8 +21,6 @@ import java.util.*;
 
 public class BankProvider {
     public static final String SEARCH = "Ukraine";
-    public static final String SEARCH_EMPTY = "";
-    public static final String SEARCH_NULL = null;
     public static final ObjectId ID = new ObjectId("5dde29e7c24a7c3eecef4918");
     public static final String BANK_NAME = "PUMB";
     public static final String BANK_CODE = "123456";
