@@ -1,5 +1,7 @@
 package net.ukr.dreamsicle.util.bank;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import net.ukr.dreamsicle.dto.atm.AtmDTO;
 import net.ukr.dreamsicle.dto.bank.BankDTO;
 import net.ukr.dreamsicle.dto.bank.BankUpdateDTO;
@@ -11,12 +13,14 @@ import net.ukr.dreamsicle.model.office.Office;
 import net.ukr.dreamsicle.model.product.Product;
 import net.ukr.dreamsicle.model.product.TypeProduct;
 import net.ukr.dreamsicle.model.work.WorkTimes;
+import net.ukr.dreamsicle.modelQ.bank.QBank;
 import org.bson.types.ObjectId;
 
 import java.time.DayOfWeek;
 import java.util.*;
 
 public class BankProvider {
+    public static final String SEARCH = "Ukraine";
     public static final ObjectId ID = new ObjectId("5dde29e7c24a7c3eecef4918");
     public static final String BANK_NAME = "PUMB";
     public static final String BANK_CODE = "123456";
@@ -120,5 +124,19 @@ public class BankProvider {
                 .offices(OFFICE_LIST_WITH_ID)
                 .atms(ATM_LIST_WITH_ID)
                 .build();
+    }
+
+    public static BooleanBuilder getSearchPredicate(String search) {
+        QBank bank = QBank.bank;
+
+        BooleanExpression id = bank.id.containsIgnoreCase(search);
+        BooleanExpression bankName = bank.bankName.containsIgnoreCase(search);
+        BooleanExpression bankCode = bank.bankCode.containsIgnoreCase(search);
+        BooleanExpression iban = bank.iban.containsIgnoreCase(search);
+        BooleanExpression state = bank.state.containsIgnoreCase(search);
+        BooleanExpression city = bank.city.containsIgnoreCase(search);
+        BooleanExpression street = bank.street.containsIgnoreCase(search);
+
+        return new BooleanBuilder().andAnyOf(id, bankName, bankCode, iban, state, city, street);
     }
 }

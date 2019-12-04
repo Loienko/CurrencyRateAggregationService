@@ -1,6 +1,7 @@
 package net.ukr.dreamsicle.service;
 
-import com.querydsl.core.types.Predicate;
+import com.google.common.base.Strings;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import net.ukr.dreamsicle.dto.bank.BankDTO;
@@ -100,40 +101,24 @@ public class BankService {
     }
 
     public Page<BankDTO> search(String search, Pageable page) {
-        QBank bank = new QBank("bank");
-        Predicate predicate;
-
-        if (Optional.ofNullable(search).isPresent()) {
-            predicate = getPredicate(search, bank);
+        if (Optional.ofNullable(Strings.emptyToNull(search)).isPresent()) {
+            return bankMapper.toBankDTOs(bankRepository.findAll(getSearchPredicate(search), page));
         } else {
             return getAll(page);
         }
-
-        return bankMapper.toBankDTOs(bankRepository.findAll(predicate, page));
     }
 
-    private BooleanExpression getPredicate(String search, QBank bank) {
-        return bank.bankName.containsIgnoreCase(search)
-                .or(bank.bankCode.containsIgnoreCase(search))
-                .or(bank.id.containsIgnoreCase(search))
-                .or(bank.iban.containsIgnoreCase(search))
-                .or(bank.state.containsIgnoreCase(search))
-                .or(bank.city.containsIgnoreCase(search))
-                .or(bank.street.containsIgnoreCase(search))
-                .or(bank.atms.any().id.containsIgnoreCase(search))
-                .or(bank.atms.any().name.containsIgnoreCase(search))
-                .or(bank.atms.any().state.containsIgnoreCase(search))
-                .or(bank.atms.any().city.containsIgnoreCase(search))
-                .or(bank.atms.any().street.containsIgnoreCase(search))
-                .or(bank.atms.any().workTimes.any().startWork.containsIgnoreCase(search))
-                .or(bank.atms.any().workTimes.any().endWork.containsIgnoreCase(search))
-                .or(bank.offices.any().id.containsIgnoreCase(search))
-                .or(bank.offices.any().name.containsIgnoreCase(search))
-                .or(bank.offices.any().state.containsIgnoreCase(search))
-                .or(bank.offices.any().city.containsIgnoreCase(search))
-                .or(bank.offices.any().street.containsIgnoreCase(search))
-                .or(bank.offices.any().workTimes.any().startWork.containsIgnoreCase(search))
-                .or(bank.offices.any().workTimes.any().endWork.containsIgnoreCase(search))
-                .or(bank.products.any().description.containsIgnoreCase(search));
+    private BooleanBuilder getSearchPredicate(String search) {
+        QBank bank = QBank.bank;
+
+        BooleanExpression id = bank.id.containsIgnoreCase(search);
+        BooleanExpression bankName = bank.bankName.containsIgnoreCase(search);
+        BooleanExpression bankCode = bank.bankCode.containsIgnoreCase(search);
+        BooleanExpression iban = bank.iban.containsIgnoreCase(search);
+        BooleanExpression state = bank.state.containsIgnoreCase(search);
+        BooleanExpression city = bank.city.containsIgnoreCase(search);
+        BooleanExpression street = bank.street.containsIgnoreCase(search);
+
+        return new BooleanBuilder().andAnyOf(id, bankName, bankCode, iban, state, city, street);
     }
 }
