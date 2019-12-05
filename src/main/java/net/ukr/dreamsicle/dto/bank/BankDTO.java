@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import net.ukr.dreamsicle.dto.atm.AtmDTO;
 import net.ukr.dreamsicle.dto.office.OfficeDTO;
 import net.ukr.dreamsicle.dto.product.ProductDTO;
+import net.ukr.dreamsicle.model.partners.Partner;
 import net.ukr.dreamsicle.validation.country.CountryValidator;
 
 import javax.validation.Valid;
@@ -46,6 +47,8 @@ public class BankDTO {
     @Pattern(regexp = CITY_AND_STREET_REGEX, message = VALID_DATA_FOR_STREET_OF_BANK)
     private String street;
 
+    @Valid
+    private List<Partner> partners;
     @Valid
     private List<ProductDTO> products;
     @Valid

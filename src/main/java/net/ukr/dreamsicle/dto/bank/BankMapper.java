@@ -125,13 +125,4 @@ public interface BankMapper {
     default Page<BankDTO> toBankDTOs(Page<Bank> bankPage) {
         return bankPage.map(this::toBankDto);
     }
-
-    default BankUpdateDTO toBankUpdateDTO(BankDTO bankDTO) {
-        return BankUpdateDTO.builder()
-                .bankName(bankDTO.getBankName())
-                .state(bankDTO.getState())
-                .city(bankDTO.getCity())
-                .street(bankDTO.getStreet())
-                .build();
-    }
 }
