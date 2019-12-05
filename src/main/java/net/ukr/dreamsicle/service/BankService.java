@@ -121,4 +121,8 @@ public class BankService {
 
         return new BooleanBuilder().andAnyOf(id, bankName, bankCode, iban, state, city, street);
     }
+
+    public Optional<Bank> bankDataByBankCode(BankDTO bankDTO) {
+        return bankRepository.findBankByBankCode(bankDTO.getBankCode());
+    }
 }

@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.ukr.dreamsicle.model.atm.ATM;
 import net.ukr.dreamsicle.model.office.Office;
-import net.ukr.dreamsicle.model.partners.Partner;
 import net.ukr.dreamsicle.model.product.Product;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -34,7 +33,6 @@ public class Bank {
     private String state;
     private String city;
     private String street;
-    private List<Partner> partners;
     private List<Product> products;
     private List<Office> offices;
     private List<ATM> atms;
