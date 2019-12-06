@@ -1,5 +1,6 @@
 package net.ukr.dreamsicle.exception;
 
+import com.mongodb.MongoWriteException;
 import io.jsonwebtoken.JwtException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import javax.jms.JMSException;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
 import java.util.Objects;
@@ -109,7 +111,25 @@ public class ExceptionHandlerControllerAdvice {
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public @ResponseBody
     ExceptionResponse collectionNotFound(final Exception ex,
-                          final HttpServletRequest request) {
+                                         final HttpServletRequest request) {
+
+        return new ExceptionResponse(ex.getMessage(), request.getRequestURI());
+    }
+
+    @ExceptionHandler(MongoWriteException.class)
+    @ResponseStatus(value = HttpStatus.CONFLICT)
+    public @ResponseBody
+    ExceptionResponse duplicateKey(final Exception ex,
+                                   final HttpServletRequest request) {
+
+        return new ExceptionResponse(ex.getMessage(), request.getRequestURI());
+    }
+
+    @ExceptionHandler(JMSException.class)
+    @ResponseStatus(value = HttpStatus.SERVICE_UNAVAILABLE)
+    public @ResponseBody
+    ExceptionResponse jmsHandle(final Exception ex,
+                                final HttpServletRequest request) {
 
         return new ExceptionResponse(ex.getMessage(), request.getRequestURI());
     }
