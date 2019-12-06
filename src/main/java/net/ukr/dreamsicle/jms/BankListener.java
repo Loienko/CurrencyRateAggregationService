@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import net.ukr.dreamsicle.dto.bank.BankDTO;
 import net.ukr.dreamsicle.dto.bank.BankMapper;
-import net.ukr.dreamsicle.dto.gbsr.BankData;
+import net.ukr.dreamsicle.dto.gbsr.BankDataDTO;
 import net.ukr.dreamsicle.dto.gbsr.BankDataMapper;
 import net.ukr.dreamsicle.service.BankService;
 import org.springframework.jms.annotation.JmsListener;
@@ -21,7 +21,7 @@ public class BankListener {
 
     @JmsListener(destination = "${app.bankQueueServer}")
     public void receive(String data) throws IOException {
-        BankDTO bankDTO = bankDataMapper.bankDataToBankDto(new ObjectMapper().readValue(data, BankData.class), BankDTO.builder().build());
+        BankDTO bankDTO = bankDataMapper.bankDataToBankDto(new ObjectMapper().readValue(data, BankDataDTO.class), BankDTO.builder().build());
         bankService.bankDataByBankCode(bankDTO).ifPresentOrElse(
                 bank -> bankService.update(bank.getId(), bankMapper.toBankUpdateDTO(bankDTO)),
                 () -> bankService.create(bankDTO)

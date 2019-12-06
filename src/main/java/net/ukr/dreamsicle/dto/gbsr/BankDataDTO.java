@@ -1,7 +1,6 @@
 package net.ukr.dreamsicle.dto.gbsr;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import net.ukr.dreamsicle.validation.country.CountryValidator;
 
 import javax.validation.constraints.NotBlank;
@@ -12,7 +11,9 @@ import static net.ukr.dreamsicle.util.ConstantsRegex.*;
 
 @Data
 @Builder
-public class BankData {
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class BankDataDTO {
 
     @NotBlank(message = FILL_NAME_OF_THE_BANK)
     @Pattern(regexp = INPUT_STRING_VALUE_REGEX, message = VALID_DATA_FOR_BANK_NAME)
