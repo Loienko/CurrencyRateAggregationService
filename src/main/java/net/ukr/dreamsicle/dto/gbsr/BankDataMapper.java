@@ -17,40 +17,38 @@ import java.util.HashSet;
 public interface BankDataMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    default BankDTO bankDataToBankDto(BankData bankData, BankDTO bankDTO) {
-        if (bankData == null) {
+    default BankDTO bankDataToBankDto(BankDataDTO bankDataDTO, BankDTO bankDTO) {
+        if (bankDataDTO == null) {
             return null;
         }
 
-        if (bankData.getBankName() != null) {
-            bankDTO.setBankName(bankData.getBankName());
-        }
-
-        if (bankData.getIban() != null) {
-            bankDTO.setIban(bankData.getIban());
-        }
-
-        if (bankData.getBankCode() != null) {
-            bankDTO.setBankCode(bankData.getBankCode());
-        } else {
+        if (bankDataDTO.getBankCode() == null) {
             return null;
         }
 
-        if (bankData.getCountryName() != null) {
-            bankDTO.setState(bankData.getCountryName());
+        if (bankDataDTO.getBankName() != null) {
+            bankDTO.setBankName(bankDataDTO.getBankName());
         }
 
-        if (bankData.getCityName() != null) {
-            bankDTO.setCity(bankData.getCityName());
+        if (bankDataDTO.getIban() != null) {
+            bankDTO.setIban(bankDataDTO.getIban());
         }
 
-        if (bankData.getStreetInformation() != null) {
-            bankDTO.setStreet(bankData.getStreetInformation());
+        if (bankDataDTO.getCountryName() != null) {
+            bankDTO.setState(bankDataDTO.getCountryName());
         }
 
-        bankDTO.setOffices(Arrays.asList(OfficeDTO.builder().bankCode(bankData.getBankCode()).state("").city("").street("").workTimes(new HashSet<>()).build()));
-        bankDTO.setProducts(Arrays.asList(ProductDTO.builder().bankCode(bankData.getBankCode()).type("").description("").build()));
-        bankDTO.setAtms(Arrays.asList(AtmDTO.builder().bankCode(bankData.getBankCode()).state("").city("").street("").workTimes(new HashSet<>()).build()));
+        if (bankDataDTO.getCityName() != null) {
+            bankDTO.setCity(bankDataDTO.getCityName());
+        }
+
+        if (bankDataDTO.getStreetInformation() != null) {
+            bankDTO.setStreet(bankDataDTO.getStreetInformation());
+        }
+
+        bankDTO.setOffices(Arrays.asList(OfficeDTO.builder().bankCode(bankDataDTO.getBankCode()).state("").city("").street("").workTimes(new HashSet<>()).build()));
+        bankDTO.setProducts(Arrays.asList(ProductDTO.builder().bankCode(bankDataDTO.getBankCode()).type("").description("").build()));
+        bankDTO.setAtms(Arrays.asList(AtmDTO.builder().bankCode(bankDataDTO.getBankCode()).state("").city("").street("").workTimes(new HashSet<>()).build()));
         return bankDTO;
     }
 }
