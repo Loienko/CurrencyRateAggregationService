@@ -23,8 +23,8 @@ public class ATMController {
     private final AtmService atmService;
 
     @GetMapping("/atms")
-    public Page<AtmDTO> findAll(String search, @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable page) {
-        return atmService.search(search, page);
+    public Page<AtmDTO> findAll(@PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable page) {
+        return atmService.findAll(page);
     }
 
     @GetMapping("/atms/{id}")

@@ -26,6 +26,8 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserDetailsService {
 
+    public static final String DETAILS_FOR_USER_BY_ID = "Details for user by id: '";
+    public static final String NOT_FOUND = "' not found";
     private final UserDetailsMapper userDetailsMapper;
     private final UserRepository userRepository;
     private final UserDetailsRepository userDetailsRepository;
@@ -44,7 +46,7 @@ public class UserDetailsService {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     public UserDetailsDTO createUserDetails(long id, UserDetailsDTO userDetailsDTO) {
         UserDetails userDetails = userDetailsMapper.userDetailsToUser(userDetailsDTO);
-        User user = userRepository.findByIdAndStatus(id, StatusType.ACTIVE).orElseThrow(ResourceNotFoundException::new);
+        User user = userRepository.findByIdAndStatus(id, StatusType.ACTIVE).orElseThrow(() -> new ResourceNotFoundException(DETAILS_FOR_USER_BY_ID + id + NOT_FOUND));
 
         Optional<UserDetails> userDetailsByUserId = userDetailsRepository.findUserDetailsByUserId(user.getId());
 
@@ -76,7 +78,7 @@ public class UserDetailsService {
         return userDetailsRepository
                 .findUserDetailsByUserId(id)
                 .map(userDetailsMapper::userToUserDetailsDTO)
-                .orElseThrow(ResourceNotFoundException::new);
+                .orElseThrow(() -> new ResourceNotFoundException(DETAILS_FOR_USER_BY_ID + id + NOT_FOUND));
     }
 
     /**
@@ -90,12 +92,12 @@ public class UserDetailsService {
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     public UserDetailsDTO partialUpdate(long id, UserDetailsDTO userDetailsDTO) {
-        User user = userRepository.findByIdAndStatus(id, StatusType.ACTIVE).orElseThrow(ResourceNotFoundException::new);
+        User user = userRepository.findByIdAndStatus(id, StatusType.ACTIVE).orElseThrow(() -> new ResourceNotFoundException(DETAILS_FOR_USER_BY_ID + id + NOT_FOUND));
         return userDetailsMapper.userToUserDetailsDTO(
                 userDetailsRepository.saveAndFlush(
                         userDetailsMapper.userDetailsToUserPartialUpdate(
                                 userDetailsDTO,
-                                userDetailsRepository.findUserDetailsByUserId(user.getId()).orElseThrow(ResourceNotFoundException::new)
+                                userDetailsRepository.findUserDetailsByUserId(user.getId()).orElseThrow(() -> new ResourceNotFoundException(DETAILS_FOR_USER_BY_ID + id + NOT_FOUND))
                         )
                 )
         );

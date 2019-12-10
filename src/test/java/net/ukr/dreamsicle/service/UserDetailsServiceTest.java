@@ -7,9 +7,9 @@ import net.ukr.dreamsicle.model.user.User;
 import net.ukr.dreamsicle.model.userDetails.UserDetails;
 import net.ukr.dreamsicle.repository.UserDetailsRepository;
 import net.ukr.dreamsicle.repository.UserRepository;
-import net.ukr.dreamsicle.service.UserDetailsService;
 import net.ukr.dreamsicle.util.userDetails.UserDetailsProvider;
 import org.hibernate.TransactionException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -138,5 +138,66 @@ class UserDetailsServiceTest {
         when(userDetailsRepository.saveAndFlush(userDetails)).thenThrow(TransactionException.class);
 
         assertThrows(TransactionException.class, () -> userDetailsService.createUserDetails(ID, userDetailsDto));
+    }
+
+    @Test
+    void testFindUserDetailsById() {
+        UserDetails userDetails = UserDetailsProvider.getUserDetailsProvider();
+        UserDetailsDTO userDetailsDto = UserDetailsProvider.getUserDetailsDtoProvider();
+        when(userDetailsRepository.findUserDetailsByUserId(ID)).thenReturn(Optional.of(userDetails));
+        when(userDetailsMapper.userToUserDetailsDTO(userDetails)).thenReturn(userDetailsDto);
+
+        UserDetailsDTO actualUserDetails = userDetailsService.findById(ID);
+
+        Assertions.assertEquals(userDetailsDto, actualUserDetails);
+        assertNotNull(actualUserDetails);
+        Assertions.assertEquals(userDetailsDto.getSurname(), actualUserDetails.getSurname());
+        Assertions.assertEquals(userDetailsDto.getPhone(), actualUserDetails.getPhone());
+        Assertions.assertEquals(userDetailsDto.getDescription(), actualUserDetails.getDescription());
+    }
+
+    @Test
+    void testFindUserDetailsByIdIsNotPresentInDb() {
+        when(userDetailsRepository.findUserDetailsByUserId(ID)).thenThrow(ResourceNotFoundException.class);
+
+        assertThrows(ResourceNotFoundException.class, () -> userDetailsService.findById(ID));
+    }
+
+    @Test
+    void testPartialUpdate() {
+        User user = getUserProvider(STATUS_TYPE_ACTIVE);
+        UserDetails userDetails = UserDetailsProvider.getUserDetailsProvider();
+        UserDetailsDTO userDetailsDto = UserDetailsProvider.getUserDetailsDtoProvider();
+        when(userRepository.findByIdAndStatus(ID, STATUS_TYPE_ACTIVE)).thenReturn(Optional.of(user));
+        when(userDetailsRepository.findUserDetailsByUserId(ID)).thenReturn(Optional.of(userDetails));
+        when(userDetailsMapper.userDetailsToUserPartialUpdate(userDetailsDto, userDetails)).thenReturn(userDetails);
+        when(userDetailsRepository.saveAndFlush(userDetails)).thenReturn(userDetails);
+        when(userDetailsMapper.userToUserDetailsDTO(userDetails)).thenReturn(userDetailsDto);
+
+        UserDetailsDTO actualUserDetails = userDetailsService.partialUpdate(ID, userDetailsDto);
+
+        Assertions.assertEquals(userDetailsDto, actualUserDetails);
+        assertNotNull(actualUserDetails);
+        Assertions.assertEquals(userDetailsDto.getSurname(), actualUserDetails.getSurname());
+        Assertions.assertEquals(userDetailsDto.getPhone(), actualUserDetails.getPhone());
+        Assertions.assertEquals(userDetailsDto.getDescription(), actualUserDetails.getDescription());
+    }
+
+    @Test
+    void testPartialUpdateUserIsNotPresentInDb() {
+        UserDetailsDTO userDetailsDto = UserDetailsProvider.getUserDetailsDtoProvider();
+        when(userRepository.findByIdAndStatus(ID, STATUS_TYPE_ACTIVE)).thenThrow(ResourceNotFoundException.class);
+
+        assertThrows(ResourceNotFoundException.class, () -> userDetailsService.partialUpdate(ID, userDetailsDto));
+    }
+
+    @Test
+    void testPartialUpdateUserDetailsIsNotPresentInDb() {
+        User user = getUserProvider(STATUS_TYPE_ACTIVE);
+        UserDetailsDTO userDetailsDto = UserDetailsProvider.getUserDetailsDtoProvider();
+        when(userRepository.findByIdAndStatus(ID, STATUS_TYPE_ACTIVE)).thenReturn(Optional.of(user));
+        when(userDetailsRepository.findUserDetailsByUserId(ID)).thenThrow(ResourceNotFoundException.class);
+
+        assertThrows(ResourceNotFoundException.class, () -> userDetailsService.partialUpdate(ID, userDetailsDto));
     }
 }
