@@ -276,4 +276,23 @@ class BankServiceTest {
         assertNotNull(actualBank);
         assertEquals(bankDTOPage, actualBank);
     }
+
+    @Test
+    void bankDataByBankCode() {
+        BankDTO bankDTO = getBankDtoProvider();
+        Bank bank = getBankProvider();
+        when(bankRepository.findBankByBankCode(bankDTO.getBankCode())).thenReturn(Optional.of(bank));
+
+        Optional<Bank> actualBank = bankService.bankDataByBankCode(bankDTO);
+
+        verify(bankRepository).findBankByBankCode(bankDTO.getBankCode());
+        assertNotNull(actualBank);
+        Bank bankTest = actualBank.get();
+        assertEquals(bankDTO.getBankName(), bankTest.getBankName());
+        assertEquals(bankDTO.getBankCode(), bankTest.getBankCode());
+        assertEquals(bankDTO.getIban(), bankTest.getIban());
+        assertEquals(bankDTO.getState(), bankTest.getState());
+        assertEquals(bankDTO.getCity(), bankTest.getCity());
+        assertEquals(bankDTO.getStreet(), bankTest.getStreet());
+    }
 }

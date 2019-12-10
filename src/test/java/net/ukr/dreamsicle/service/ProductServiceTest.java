@@ -18,11 +18,11 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 import static net.ukr.dreamsicle.util.atm.AtmProvider.ID;
-import static net.ukr.dreamsicle.util.bank.BankProvider.getBankProvider;
-import static net.ukr.dreamsicle.util.bank.BankProvider.getBankProviderWithIdForAtmAndOfficeAndProduct;
+import static net.ukr.dreamsicle.util.bank.BankProvider.*;
 import static net.ukr.dreamsicle.util.product.ProductProvider.getProductDTOProvider;
 import static net.ukr.dreamsicle.util.product.ProductProvider.getProductProvider;
 import static org.junit.Assert.assertNotNull;
@@ -182,5 +182,13 @@ class ProductServiceTest {
         when(bankRepository.findBankByBankCode(product.getBankCode())).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> productService.create(ID, productDTO));
+    }
+
+    @Test
+    void createProduct() {
+        List<Product> actualProduct = productService.createProduct(BANK_CODE, PRODUCT_LIST);
+
+        assertNotNull(actualProduct);
+        assertEquals(PRODUCT_LIST.size(), actualProduct.size());
     }
 }

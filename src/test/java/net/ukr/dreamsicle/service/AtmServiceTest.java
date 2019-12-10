@@ -18,11 +18,13 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
+import static net.ukr.dreamsicle.util.atm.AtmProvider.ID;
 import static net.ukr.dreamsicle.util.atm.AtmProvider.*;
-import static net.ukr.dreamsicle.util.bank.BankProvider.getBankProvider;
-import static net.ukr.dreamsicle.util.bank.BankProvider.getBankProviderWithIdForAtmAndOfficeAndProduct;
+import static net.ukr.dreamsicle.util.bank.BankProvider.BANK_CODE;
+import static net.ukr.dreamsicle.util.bank.BankProvider.*;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -189,5 +191,13 @@ class AtmServiceTest {
         when(bankRepository.findBankByBankCode(atm.getBankCode())).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> atmService.create(ID, getAtmDtoProvider()));
+    }
+
+    @Test
+    void createAtm() {
+        List<ATM> actualAtm = atmService.createAtm(BANK_CODE, ATM_LIST);
+
+        assertNotNull(actualAtm);
+        assertEquals(ATM_LIST.size(), actualAtm.size());
     }
 }

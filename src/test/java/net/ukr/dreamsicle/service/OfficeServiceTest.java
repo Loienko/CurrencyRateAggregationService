@@ -18,11 +18,11 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 import static net.ukr.dreamsicle.util.atm.AtmProvider.ID;
-import static net.ukr.dreamsicle.util.bank.BankProvider.getBankProvider;
-import static net.ukr.dreamsicle.util.bank.BankProvider.getBankProviderWithIdForAtmAndOfficeAndProduct;
+import static net.ukr.dreamsicle.util.bank.BankProvider.*;
 import static net.ukr.dreamsicle.util.office.OfficeProvider.getOfficeDTOProvider;
 import static net.ukr.dreamsicle.util.office.OfficeProvider.getOfficeProvider;
 import static org.junit.Assert.assertNotNull;
@@ -190,5 +190,13 @@ class OfficeServiceTest {
         when(bankRepository.findBankByBankCode(office.getBankCode())).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> officeService.create(ID, getOfficeDTOProvider()));
+    }
+
+    @Test
+    void createOffice() {
+        List<Office> actualOffice = officeService.createOffice(BANK_CODE, OFFICE_LIST);
+
+        assertNotNull(actualOffice);
+        assertEquals(OFFICE_LIST.size(), actualOffice.size());
     }
 }
