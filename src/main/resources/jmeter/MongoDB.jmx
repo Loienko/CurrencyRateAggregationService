@@ -1,0 +1,251 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1574859996576,18,FindAll MongoDB,200,,MongoDB 1-1,text,true,,10174,124,1,2,http://localhost:8080/banks,17,0,1
+1574859996577,19,FindAll,200,,Postgresql 2-1,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,19,0,0
+1574859996595,8,findById MongoDB,200,,MongoDB 1-1,text,true,,1271,149,1,2,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,7,0,0
+1574859996599,10,findById,200,,Postgresql 2-1,text,true,,425,131,1,2,http://localhost:8080/currencies/1,10,0,0
+1574859996610,20,FindAll,200,,Postgresql 2-1,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,20,0,0
+1574859996631,6,findById,200,,Postgresql 2-1,text,true,,425,131,1,2,http://localhost:8080/currencies/1,6,0,0
+1574859996605,183,findAll + search = Ukraine MongoDB,200,,MongoDB 1-1,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,182,0,0
+1574859996789,9,FindAll MongoDB,200,,MongoDB 1-1,text,true,,10174,124,1,1,http://localhost:8080/banks,8,0,0
+1574859996798,7,findById MongoDB,200,,MongoDB 1-1,text,true,,1271,149,1,1,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,7,0,0
+1574859996806,177,findAll + search = Ukraine MongoDB,200,,MongoDB 1-1,text,true,,10174,139,2,3,http://localhost:8080/banks?search=Ukraine,177,0,0
+1574859996975,11,FindAll MongoDB,200,,MongoDB 1-2,text,true,,10174,124,1,2,http://localhost:8080/banks,10,0,1
+1574859996988,9,findById MongoDB,200,,MongoDB 1-2,text,true,,1271,149,1,2,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,9,0,0
+1574859996977,20,FindAll,200,,Postgresql 2-2,text,true,,11735,145,1,2,http://localhost:8080/currencies?page=0&size=100,20,0,1
+1574859996999,8,findById,200,,Postgresql 2-2,text,true,,425,131,1,2,http://localhost:8080/currencies/1,8,0,0
+1574859997010,12,FindAll,200,,Postgresql 2-2,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,12,0,0
+1574859997023,7,findById,200,,Postgresql 2-2,text,true,,425,131,1,2,http://localhost:8080/currencies/1,6,0,0
+1574859996999,182,findAll + search = Ukraine MongoDB,200,,MongoDB 1-2,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,182,0,0
+1574859997184,10,FindAll MongoDB,200,,MongoDB 1-2,text,true,,10167,124,1,1,http://localhost:8080/banks,9,0,0
+1574859997195,7,findById MongoDB,200,,MongoDB 1-2,text,true,,1271,149,1,1,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,6,0,0
+1574859997203,174,findAll + search = Ukraine MongoDB,200,,MongoDB 1-2,text,true,,10174,139,2,3,http://localhost:8080/banks?search=Ukraine,173,0,0
+1574859997375,17,FindAll MongoDB,200,,MongoDB 1-3,text,true,,10167,124,1,2,http://localhost:8080/banks,17,0,1
+1574859997378,14,FindAll,200,,Postgresql 2-3,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,13,0,0
+1574859997393,7,findById MongoDB,200,,MongoDB 1-3,text,true,,1271,149,1,2,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,6,0,0
+1574859997393,7,findById,200,,Postgresql 2-3,text,true,,425,131,1,2,http://localhost:8080/currencies/1,6,0,0
+1574859997400,13,FindAll,200,,Postgresql 2-3,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,13,0,0
+1574859997414,7,findById,200,,Postgresql 2-3,text,true,,425,131,1,2,http://localhost:8080/currencies/1,6,0,0
+1574859997400,179,findAll + search = Ukraine MongoDB,200,,MongoDB 1-3,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,179,0,0
+1574859997581,9,FindAll MongoDB,200,,MongoDB 1-3,text,true,,10174,124,1,1,http://localhost:8080/banks,8,0,0
+1574859997591,6,findById MongoDB,200,,MongoDB 1-3,text,true,,1271,149,1,1,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,5,0,0
+1574859997598,172,findAll + search = Ukraine MongoDB,200,,MongoDB 1-3,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,171,0,0
+1574859997775,10,FindAll MongoDB,200,,MongoDB 1-4,text,true,,10174,124,1,2,http://localhost:8080/banks,9,0,1
+1574859997785,7,findById MongoDB,200,,MongoDB 1-4,text,true,,1271,149,1,2,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,6,0,0
+1574859997777,17,FindAll,200,,Postgresql 2-4,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,17,0,1
+1574859997795,7,findById,200,,Postgresql 2-4,text,true,,425,131,1,2,http://localhost:8080/currencies/1,7,0,0
+1574859997804,11,FindAll,200,,Postgresql 2-4,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,11,0,0
+1574859997816,6,findById,200,,Postgresql 2-4,text,true,,425,131,1,2,http://localhost:8080/currencies/1,6,0,0
+1574859997793,175,findAll + search = Ukraine MongoDB,200,,MongoDB 1-4,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,175,0,0
+1574859997969,9,FindAll MongoDB,200,,MongoDB 1-4,text,true,,10174,124,1,1,http://localhost:8080/banks,8,0,0
+1574859997978,8,findById MongoDB,200,,MongoDB 1-4,text,true,,1271,149,1,1,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,8,0,0
+1574859997987,176,findAll + search = Ukraine MongoDB,200,,MongoDB 1-4,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,176,0,0
+1574859998175,11,FindAll MongoDB,200,,MongoDB 1-5,text,true,,10174,124,1,2,http://localhost:8080/banks,11,0,1
+1574859998177,15,FindAll,200,,Postgresql 2-5,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,15,0,1
+1574859998187,8,findById MongoDB,200,,MongoDB 1-5,text,true,,1271,149,1,2,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,8,0,0
+1574859998193,9,findById,200,,Postgresql 2-5,text,true,,425,131,1,2,http://localhost:8080/currencies/1,8,0,0
+1574859998203,14,FindAll,200,,Postgresql 2-5,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,14,0,0
+1574859998218,7,findById,200,,Postgresql 2-5,text,true,,425,131,1,2,http://localhost:8080/currencies/1,7,0,0
+1574859998197,177,findAll + search = Ukraine MongoDB,200,,MongoDB 1-5,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,177,0,0
+1574859998376,8,FindAll MongoDB,200,,MongoDB 1-5,text,true,,10174,124,1,1,http://localhost:8080/banks,7,0,0
+1574859998385,6,findById MongoDB,200,,MongoDB 1-5,text,true,,1271,149,1,1,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,6,0,0
+1574859998392,169,findAll + search = Ukraine MongoDB,200,,MongoDB 1-5,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,169,0,0
+1574860006994,17,FindAll MongoDB,200,,MongoDB 1-1,text,true,,10174,124,1,2,http://localhost:8080/banks,16,0,1
+1574860006995,19,FindAll,200,,Postgresql 2-1,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,18,0,1
+1574860007012,11,findById MongoDB,200,,MongoDB 1-1,text,true,,1271,149,1,2,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,11,0,0
+1574860007017,12,findById,200,,Postgresql 2-1,text,true,,425,131,1,2,http://localhost:8080/currencies/1,12,0,0
+1574860007031,30,FindAll,200,,Postgresql 2-1,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,29,0,0
+1574860007062,6,findById,200,,Postgresql 2-1,text,true,,425,131,1,2,http://localhost:8080/currencies/1,6,0,0
+1574860007024,188,findAll + search = Ukraine MongoDB,200,,MongoDB 1-1,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,188,0,0
+1574860007213,9,FindAll MongoDB,200,,MongoDB 1-1,text,true,,10174,124,1,1,http://localhost:8080/banks,9,0,0
+1574860007223,6,findById MongoDB,200,,MongoDB 1-1,text,true,,1271,149,1,1,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,6,0,0
+1574860007230,172,findAll + search = Ukraine MongoDB,200,,MongoDB 1-1,text,true,,10174,139,2,3,http://localhost:8080/banks?search=Ukraine,172,0,0
+1574860007393,9,FindAll MongoDB,200,,MongoDB 1-2,text,true,,10167,124,2,3,http://localhost:8080/banks,9,0,0
+1574860007403,6,findById MongoDB,200,,MongoDB 1-2,text,true,,1271,149,1,2,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,6,0,0
+1574860007395,20,FindAll,200,,Postgresql 2-2,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,19,0,0
+1574860007416,9,findById,200,,Postgresql 2-2,text,true,,425,131,1,2,http://localhost:8080/currencies/1,8,0,0
+1574860007426,12,FindAll,200,,Postgresql 2-2,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,11,0,0
+1574860007439,6,findById,200,,Postgresql 2-2,text,true,,425,131,1,2,http://localhost:8080/currencies/1,6,0,0
+1574860007410,183,findAll + search = Ukraine MongoDB,200,,MongoDB 1-2,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,183,0,0
+1574860007594,8,FindAll MongoDB,200,,MongoDB 1-2,text,true,,10174,124,1,1,http://localhost:8080/banks,8,0,0
+1574860007604,6,findById MongoDB,200,,MongoDB 1-2,text,true,,1271,149,1,1,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,5,0,0
+1574860007610,172,findAll + search = Ukraine MongoDB,200,,MongoDB 1-2,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,172,0,0
+1574860007794,14,FindAll MongoDB,200,,MongoDB 1-3,text,true,,10174,124,1,2,http://localhost:8080/banks,14,0,0
+1574860007795,16,FindAll,200,,Postgresql 2-3,text,true,,11735,145,1,2,http://localhost:8080/currencies?page=0&size=100,15,0,1
+1574860007809,8,findById MongoDB,200,,MongoDB 1-3,text,true,,1271,149,1,2,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,7,0,0
+1574860007812,9,findById,200,,Postgresql 2-3,text,true,,425,131,1,2,http://localhost:8080/currencies/1,9,0,0
+1574860007822,14,FindAll,200,,Postgresql 2-3,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,13,0,0
+1574860007837,7,findById,200,,Postgresql 2-3,text,true,,425,131,1,2,http://localhost:8080/currencies/1,7,0,0
+1574860007818,180,findAll + search = Ukraine MongoDB,200,,MongoDB 1-3,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,180,0,0
+1574860007999,9,FindAll MongoDB,200,,MongoDB 1-3,text,true,,10174,124,1,1,http://localhost:8080/banks,8,0,0
+1574860008009,6,findById MongoDB,200,,MongoDB 1-3,text,true,,1271,149,1,1,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,6,0,0
+1574860008016,173,findAll + search = Ukraine MongoDB,200,,MongoDB 1-3,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,172,0,0
+1574860008194,13,FindAll MongoDB,200,,MongoDB 1-4,text,true,,10174,124,1,2,http://localhost:8080/banks,12,0,1
+1574860008195,17,FindAll,200,,Postgresql 2-4,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,16,0,1
+1574860008208,8,findById MongoDB,200,,MongoDB 1-4,text,true,,1271,149,1,2,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,8,0,0
+1574860008213,10,findById,200,,Postgresql 2-4,text,true,,425,131,1,2,http://localhost:8080/currencies/1,9,0,0
+1574860008224,14,FindAll,200,,Postgresql 2-4,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,13,0,0
+1574860008239,6,findById,200,,Postgresql 2-4,text,true,,425,131,1,2,http://localhost:8080/currencies/1,6,0,0
+1574860008217,187,findAll + search = Ukraine MongoDB,200,,MongoDB 1-4,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,187,0,0
+1574860008405,9,FindAll MongoDB,200,,MongoDB 1-4,text,true,,10174,124,1,1,http://localhost:8080/banks,8,0,0
+1574860008414,7,findById MongoDB,200,,MongoDB 1-4,text,true,,1271,149,1,1,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,6,0,0
+1574860008421,175,findAll + search = Ukraine MongoDB,200,,MongoDB 1-4,text,true,,10174,139,2,3,http://localhost:8080/banks?search=Ukraine,174,0,0
+1574860008594,12,FindAll MongoDB,200,,MongoDB 1-5,text,true,,10167,124,1,2,http://localhost:8080/banks,11,0,1
+1574860008595,16,FindAll,200,,Postgresql 2-5,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,15,0,1
+1574860008607,8,findById MongoDB,200,,MongoDB 1-5,text,true,,1271,149,1,2,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,7,0,0
+1574860008612,9,findById,200,,Postgresql 2-5,text,true,,425,131,1,2,http://localhost:8080/currencies/1,9,0,0
+1574860008622,14,FindAll,200,,Postgresql 2-5,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,14,0,0
+1574860008638,6,findById,200,,Postgresql 2-5,text,true,,425,131,1,2,http://localhost:8080/currencies/1,6,0,0
+1574860008616,192,findAll + search = Ukraine MongoDB,200,,MongoDB 1-5,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,192,0,0
+1574860008810,9,FindAll MongoDB,200,,MongoDB 1-5,text,true,,10174,124,1,1,http://localhost:8080/banks,8,0,0
+1574860008820,9,findById MongoDB,200,,MongoDB 1-5,text,true,,1271,149,1,1,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,8,0,0
+1574860008830,173,findAll + search = Ukraine MongoDB,200,,MongoDB 1-5,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,173,0,0
+1574860013391,12,FindAll MongoDB,200,,MongoDB 1-1,text,true,,10174,124,1,2,http://localhost:8080/banks,11,0,0
+1574860013393,17,FindAll,200,,Postgresql 2-1,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,17,0,0
+1574860013404,8,findById MongoDB,200,,MongoDB 1-1,text,true,,1271,149,1,2,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,7,0,0
+1574860013412,7,findById,200,,Postgresql 2-1,text,true,,425,131,1,2,http://localhost:8080/currencies/1,7,0,0
+1574860013420,14,FindAll,200,,Postgresql 2-1,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,14,0,0
+1574860013435,7,findById,200,,Postgresql 2-1,text,true,,425,131,1,2,http://localhost:8080/currencies/1,6,0,0
+1574860013412,183,findAll + search = Ukraine MongoDB,200,,MongoDB 1-1,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,183,0,0
+1574860013596,9,FindAll MongoDB,200,,MongoDB 1-1,text,true,,10174,124,1,1,http://localhost:8080/banks,8,0,0
+1574860013605,7,findById MongoDB,200,,MongoDB 1-1,text,true,,1271,149,1,1,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,6,0,0
+1574860013613,176,findAll + search = Ukraine MongoDB,200,,MongoDB 1-1,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,175,0,0
+1574860013790,10,FindAll MongoDB,200,,MongoDB 1-2,text,true,,10174,124,1,2,http://localhost:8080/banks,10,0,0
+1574860013801,7,findById MongoDB,200,,MongoDB 1-2,text,true,,1271,149,1,2,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,7,0,0
+1574860013794,15,FindAll,200,,Postgresql 2-2,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,15,0,0
+1574860013811,8,findById,200,,Postgresql 2-2,text,true,,425,131,1,2,http://localhost:8080/currencies/1,7,0,0
+1574860013820,15,FindAll,200,,Postgresql 2-2,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,14,0,0
+1574860013836,6,findById,200,,Postgresql 2-2,text,true,,425,131,1,2,http://localhost:8080/currencies/1,6,0,0
+1574860013809,194,findAll + search = Ukraine MongoDB,200,,MongoDB 1-2,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,193,0,0
+1574860014004,8,FindAll MongoDB,200,,MongoDB 1-2,text,true,,10174,124,1,1,http://localhost:8080/banks,8,0,0
+1574860014014,7,findById MongoDB,200,,MongoDB 1-2,text,true,,1271,149,1,1,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,6,0,0
+1574860014022,179,findAll + search = Ukraine MongoDB,200,,MongoDB 1-2,text,true,,10174,139,2,3,http://localhost:8080/banks?search=Ukraine,178,0,0
+1574860014191,10,FindAll MongoDB,200,,MongoDB 1-3,text,true,,10167,124,2,3,http://localhost:8080/banks,9,0,1
+1574860014202,8,findById MongoDB,200,,MongoDB 1-3,text,true,,1271,149,1,2,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,8,0,0
+1574860014193,18,FindAll,200,,Postgresql 2-3,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,18,0,1
+1574860014212,8,findById,200,,Postgresql 2-3,text,true,,425,131,1,2,http://localhost:8080/currencies/1,7,0,0
+1574860014221,12,FindAll,200,,Postgresql 2-3,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,12,0,0
+1574860014234,7,findById,200,,Postgresql 2-3,text,true,,425,131,1,2,http://localhost:8080/currencies/1,7,0,0
+1574860014211,184,findAll + search = Ukraine MongoDB,200,,MongoDB 1-3,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,184,0,0
+1574860014396,9,FindAll MongoDB,200,,MongoDB 1-3,text,true,,10174,124,1,1,http://localhost:8080/banks,9,0,0
+1574860014406,6,findById MongoDB,200,,MongoDB 1-3,text,true,,1271,149,1,1,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,6,0,0
+1574860014413,179,findAll + search = Ukraine MongoDB,200,,MongoDB 1-3,text,true,,10174,139,2,2,http://localhost:8080/banks?search=Ukraine,178,0,0
+1574860014592,10,FindAll MongoDB,200,,MongoDB 1-4,text,true,,10174,124,1,2,http://localhost:8080/banks,10,0,0
+1574860014604,6,findById MongoDB,200,,MongoDB 1-4,text,true,,1271,149,1,2,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,6,0,0
+1574860014594,18,FindAll,200,,Postgresql 2-4,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,17,0,1
+1574860014613,8,findById,200,,Postgresql 2-4,text,true,,425,131,1,2,http://localhost:8080/currencies/1,7,0,0
+1574860014623,11,FindAll,200,,Postgresql 2-4,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,11,0,0
+1574860014635,7,findById,200,,Postgresql 2-4,text,true,,425,131,1,2,http://localhost:8080/currencies/1,6,0,0
+1574860014611,196,findAll + search = Ukraine MongoDB,200,,MongoDB 1-4,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,196,0,0
+1574860014808,8,FindAll MongoDB,200,,MongoDB 1-4,text,true,,10174,124,1,1,http://localhost:8080/banks,8,0,0
+1574860014817,7,findById MongoDB,200,,MongoDB 1-4,text,true,,1271,149,1,1,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,6,0,0
+1574860014991,9,FindAll MongoDB,200,,MongoDB 1-5,text,true,,10174,124,2,3,http://localhost:8080/banks,9,0,1
+1574860015001,7,findById MongoDB,200,,MongoDB 1-5,text,true,,1271,149,2,3,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,7,0,0
+1574860014994,15,FindAll,200,,Postgresql 2-5,text,true,,11742,145,1,3,http://localhost:8080/currencies?page=0&size=100,15,0,1
+1574860014825,189,findAll + search = Ukraine MongoDB,200,,MongoDB 1-4,text,true,,10174,139,2,3,http://localhost:8080/banks?search=Ukraine,188,0,0
+1574860015010,8,findById,200,,Postgresql 2-5,text,true,,425,131,1,2,http://localhost:8080/currencies/1,8,0,0
+1574860015019,13,FindAll,200,,Postgresql 2-5,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,13,0,0
+1574860015033,7,findById,200,,Postgresql 2-5,text,true,,425,131,1,2,http://localhost:8080/currencies/1,6,0,0
+1574860015009,187,findAll + search = Ukraine MongoDB,200,,MongoDB 1-5,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,187,0,0
+1574860015197,7,FindAll MongoDB,200,,MongoDB 1-5,text,true,,10174,124,1,1,http://localhost:8080/banks,6,0,0
+1574860015205,6,findById MongoDB,200,,MongoDB 1-5,text,true,,1271,149,1,1,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,5,0,0
+1574860015212,178,findAll + search = Ukraine MongoDB,200,,MongoDB 1-5,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,177,0,0
+1574860020523,17,FindAll MongoDB,200,,MongoDB 1-1,text,true,,10174,124,1,2,http://localhost:8080/banks,16,0,1
+1574860020525,17,FindAll,200,,Postgresql 2-1,text,true,,11735,145,1,2,http://localhost:8080/currencies?page=0&size=100,17,0,1
+1574860020542,7,findById MongoDB,200,,MongoDB 1-1,text,true,,1271,149,1,2,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,7,0,0
+1574860020544,8,findById,200,,Postgresql 2-1,text,true,,425,131,1,2,http://localhost:8080/currencies/1,7,0,0
+1574860020553,16,FindAll,200,,Postgresql 2-1,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,15,0,0
+1574860020569,7,findById,200,,Postgresql 2-1,text,true,,425,131,1,2,http://localhost:8080/currencies/1,7,0,0
+1574860020550,184,findAll + search = Ukraine MongoDB,200,,MongoDB 1-1,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,184,0,0
+1574860020735,10,FindAll MongoDB,200,,MongoDB 1-1,text,true,,10174,124,1,1,http://localhost:8080/banks,9,0,0
+1574860020746,7,findById MongoDB,200,,MongoDB 1-1,text,true,,1271,149,1,1,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,6,0,0
+1574860020923,10,FindAll MongoDB,200,,MongoDB 1-2,text,true,,10174,124,2,3,http://localhost:8080/banks,9,0,0
+1574860020754,184,findAll + search = Ukraine MongoDB,200,,MongoDB 1-1,text,true,,10167,139,2,3,http://localhost:8080/banks?search=Ukraine,184,0,0
+1574860020934,8,findById MongoDB,200,,MongoDB 1-2,text,true,,1271,149,1,2,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,7,0,0
+1574860020926,16,FindAll,200,,Postgresql 2-2,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,16,0,0
+1574860020944,6,findById,200,,Postgresql 2-2,text,true,,425,131,1,2,http://localhost:8080/currencies/1,5,0,0
+1574860020951,24,FindAll,200,,Postgresql 2-2,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,24,0,0
+1574860020976,6,findById,200,,Postgresql 2-2,text,true,,425,131,1,2,http://localhost:8080/currencies/1,6,0,0
+1574860020943,190,findAll + search = Ukraine MongoDB,200,,MongoDB 1-2,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,190,0,0
+1574860021134,10,FindAll MongoDB,200,,MongoDB 1-2,text,true,,10174,124,1,1,http://localhost:8080/banks,9,0,0
+1574860021145,7,findById MongoDB,200,,MongoDB 1-2,text,true,,1271,149,1,1,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,6,0,0
+1574860021324,16,FindAll MongoDB,200,,MongoDB 1-3,text,true,,10174,124,2,3,http://localhost:8080/banks,16,0,0
+1574860021152,188,findAll + search = Ukraine MongoDB,200,,MongoDB 1-2,text,true,,10174,139,2,3,http://localhost:8080/banks?search=Ukraine,188,0,0
+1574860021326,18,FindAll,200,,Postgresql 2-3,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,17,0,0
+1574860021341,8,findById MongoDB,200,,MongoDB 1-3,text,true,,1271,149,1,2,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,7,0,0
+1574860021345,9,findById,200,,Postgresql 2-3,text,true,,425,131,1,2,http://localhost:8080/currencies/1,8,0,0
+1574860021355,19,FindAll,200,,Postgresql 2-3,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,18,0,0
+1574860021375,5,findById,200,,Postgresql 2-3,text,true,,425,131,1,2,http://localhost:8080/currencies/1,5,0,0
+1574860021350,186,findAll + search = Ukraine MongoDB,200,,MongoDB 1-3,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,186,0,0
+1574860021538,8,FindAll MongoDB,200,,MongoDB 1-3,text,true,,10174,124,1,1,http://localhost:8080/banks,8,0,0
+1574860021547,7,findById MongoDB,200,,MongoDB 1-3,text,true,,1271,149,1,1,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,6,0,0
+1574860021726,14,FindAll MongoDB,200,,MongoDB 1-4,text,true,,10174,124,2,3,http://localhost:8080/banks,14,0,0
+1574860021555,187,findAll + search = Ukraine MongoDB,200,,MongoDB 1-3,text,true,,10174,139,2,3,http://localhost:8080/banks?search=Ukraine,186,0,0
+1574860021728,16,FindAll,200,,Postgresql 2-4,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,15,0,0
+1574860021741,9,findById MongoDB,200,,MongoDB 1-4,text,true,,1271,149,1,2,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,8,0,0
+1574860021745,8,findById,200,,Postgresql 2-4,text,true,,425,131,1,2,http://localhost:8080/currencies/1,7,0,0
+1574860021754,15,FindAll,200,,Postgresql 2-4,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,15,0,0
+1574860021770,7,findById,200,,Postgresql 2-4,text,true,,425,131,1,2,http://localhost:8080/currencies/1,7,0,0
+1574860021751,182,findAll + search = Ukraine MongoDB,200,,MongoDB 1-4,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,181,0,0
+1574860021934,9,FindAll MongoDB,200,,MongoDB 1-4,text,true,,10174,124,1,1,http://localhost:8080/banks,9,0,0
+1574860021944,7,findById MongoDB,200,,MongoDB 1-4,text,true,,1271,149,1,1,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,6,0,0
+1574860021951,179,findAll + search = Ukraine MongoDB,200,,MongoDB 1-4,text,true,,10167,139,2,3,http://localhost:8080/banks?search=Ukraine,178,0,0
+1574860022126,16,FindAll MongoDB,200,,MongoDB 1-5,text,true,,10167,124,1,2,http://localhost:8080/banks,16,0,0
+1574860022126,16,FindAll,200,,Postgresql 2-5,text,true,,11735,145,1,2,http://localhost:8080/currencies?page=0&size=100,16,0,0
+1574860022143,15,findById MongoDB,200,,MongoDB 1-5,text,true,,1271,149,1,2,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,14,0,0
+1574860022143,15,findById,200,,Postgresql 2-5,text,true,,425,131,1,2,http://localhost:8080/currencies/1,15,0,0
+1574860022159,15,FindAll,200,,Postgresql 2-5,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,14,0,0
+1574860022175,7,findById,200,,Postgresql 2-5,text,true,,425,131,1,2,http://localhost:8080/currencies/1,6,0,0
+1574860022159,189,findAll + search = Ukraine MongoDB,200,,MongoDB 1-5,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,188,0,0
+1574860022349,8,FindAll MongoDB,200,,MongoDB 1-5,text,true,,10174,124,1,1,http://localhost:8080/banks,8,0,0
+1574860022358,6,findById MongoDB,200,,MongoDB 1-5,text,true,,1271,149,1,1,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,6,0,0
+1574860022365,180,findAll + search = Ukraine MongoDB,200,,MongoDB 1-5,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,180,0,0
+1574860035537,16,FindAll MongoDB,200,,MongoDB 1-1,text,true,,10174,124,1,2,http://localhost:8080/banks,16,0,1
+1574860035537,16,FindAll,200,,Postgresql 2-1,text,true,,11735,145,1,2,http://localhost:8080/currencies?page=0&size=100,16,0,1
+1574860035556,6,findById MongoDB,200,,MongoDB 1-1,text,true,,1271,149,1,2,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,6,0,0
+1574860035556,6,findById,200,,Postgresql 2-1,text,true,,425,131,1,2,http://localhost:8080/currencies/1,6,0,0
+1574860035563,22,FindAll,200,,Postgresql 2-1,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,22,0,0
+1574860035586,7,findById,200,,Postgresql 2-1,text,true,,425,131,1,2,http://localhost:8080/currencies/1,7,0,0
+1574860035563,182,findAll + search = Ukraine MongoDB,200,,MongoDB 1-1,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,182,0,0
+1574860035746,12,FindAll MongoDB,200,,MongoDB 1-1,text,true,,10174,124,1,1,http://localhost:8080/banks,11,0,0
+1574860035759,5,findById MongoDB,200,,MongoDB 1-1,text,true,,1271,149,1,1,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,5,0,0
+1574860035937,9,FindAll MongoDB,200,,MongoDB 1-2,text,true,,10174,124,2,3,http://localhost:8080/banks,9,0,1
+1574860035765,187,findAll + search = Ukraine MongoDB,200,,MongoDB 1-1,text,true,,10167,139,2,3,http://localhost:8080/banks?search=Ukraine,187,0,0
+1574860035938,15,FindAll,200,,Postgresql 2-2,text,true,,11735,145,1,2,http://localhost:8080/currencies?page=0&size=100,15,0,0
+1574860035948,10,findById MongoDB,200,,MongoDB 1-2,text,true,,1271,149,1,2,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,9,0,0
+1574860035955,8,findById,200,,Postgresql 2-2,text,true,,425,131,1,2,http://localhost:8080/currencies/1,7,0,0
+1574860035964,13,FindAll,200,,Postgresql 2-2,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,13,0,0
+1574860035978,5,findById,200,,Postgresql 2-2,text,true,,425,131,1,2,http://localhost:8080/currencies/1,5,0,0
+1574860035959,188,findAll + search = Ukraine MongoDB,200,,MongoDB 1-2,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,187,0,0
+1574860036147,9,FindAll MongoDB,200,,MongoDB 1-2,text,true,,10174,124,1,1,http://localhost:8080/banks,8,0,0
+1574860036156,6,findById MongoDB,200,,MongoDB 1-2,text,true,,1271,149,1,1,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,6,0,0
+1574860036163,182,findAll + search = Ukraine MongoDB,200,,MongoDB 1-2,text,true,,10167,139,2,3,http://localhost:8080/banks?search=Ukraine,182,0,0
+1574860036337,8,FindAll MongoDB,200,,MongoDB 1-3,text,true,,10167,124,2,3,http://localhost:8080/banks,8,0,1
+1574860036335,17,FindAll,200,,Postgresql 2-3,text,true,,11735,145,1,2,http://localhost:8080/currencies?page=0&size=100,17,0,0
+1574860036346,8,findById MongoDB,200,,MongoDB 1-3,text,true,,1271,149,1,2,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,8,0,0
+1574860036353,7,findById,200,,Postgresql 2-3,text,true,,425,131,1,2,http://localhost:8080/currencies/1,7,0,0
+1574860036362,13,FindAll,200,,Postgresql 2-3,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,12,0,0
+1574860036376,5,findById,200,,Postgresql 2-3,text,true,,425,131,1,2,http://localhost:8080/currencies/1,5,0,0
+1574860036355,182,findAll + search = Ukraine MongoDB,200,,MongoDB 1-3,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,181,0,0
+1574860036538,8,FindAll MongoDB,200,,MongoDB 1-3,text,true,,10174,124,1,1,http://localhost:8080/banks,8,0,0
+1574860036547,5,findById MongoDB,200,,MongoDB 1-3,text,true,,1271,149,1,1,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,5,0,0
+1574860036553,172,findAll + search = Ukraine MongoDB,200,,MongoDB 1-3,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,172,0,0
+1574860036737,10,FindAll MongoDB,200,,MongoDB 1-4,text,true,,10167,124,1,2,http://localhost:8080/banks,9,0,1
+1574860036738,14,FindAll,200,,Postgresql 2-4,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,13,0,1
+1574860036747,9,findById MongoDB,200,,MongoDB 1-4,text,true,,1271,149,1,2,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,9,0,0
+1574860036754,8,findById,200,,Postgresql 2-4,text,true,,425,131,1,2,http://localhost:8080/currencies/1,8,0,0
+1574860036763,15,FindAll,200,,Postgresql 2-4,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,14,0,0
+1574860036779,6,findById,200,,Postgresql 2-4,text,true,,425,131,1,2,http://localhost:8080/currencies/1,6,0,0
+1574860036757,179,findAll + search = Ukraine MongoDB,200,,MongoDB 1-4,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,178,0,0
+1574860036937,8,FindAll MongoDB,200,,MongoDB 1-4,text,true,,10174,124,1,1,http://localhost:8080/banks,8,0,0
+1574860036946,5,findById MongoDB,200,,MongoDB 1-4,text,true,,1271,149,1,1,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,5,0,0
+1574860036952,176,findAll + search = Ukraine MongoDB,200,,MongoDB 1-4,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,175,0,0
+1574860037137,10,FindAll MongoDB,200,,MongoDB 1-5,text,true,,10167,124,1,2,http://localhost:8080/banks,10,0,0
+1574860037139,14,FindAll,200,,Postgresql 2-5,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,13,0,0
+1574860037148,8,findById MongoDB,200,,MongoDB 1-5,text,true,,1271,149,1,2,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,8,0,0
+1574860037154,6,findById,200,,Postgresql 2-5,text,true,,425,131,1,2,http://localhost:8080/currencies/1,6,0,0
+1574860037161,12,FindAll,200,,Postgresql 2-5,text,true,,11742,145,1,2,http://localhost:8080/currencies?page=0&size=100,12,0,0
+1574860037174,6,findById,200,,Postgresql 2-5,text,true,,425,131,1,2,http://localhost:8080/currencies/1,6,0,0
+1574860037157,182,findAll + search = Ukraine MongoDB,200,,MongoDB 1-5,text,true,,10174,139,1,1,http://localhost:8080/banks?search=Ukraine,182,0,0
+1574860037340,7,FindAll MongoDB,200,,MongoDB 1-5,text,true,,10167,124,1,1,http://localhost:8080/banks,7,0,0
+1574860037348,6,findById MongoDB,200,,MongoDB 1-5,text,true,,1271,149,1,1,http://localhost:8080/banks/5dde2948c24a7c3bb4a96980,5,0,0
+1574860037355,187,findAll + search = Ukraine MongoDB,200,,MongoDB 1-5,text,true,,10167,139,1,1,http://localhost:8080/banks?search=Ukraine,187,0,0

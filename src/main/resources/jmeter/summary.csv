@@ -1,0 +1,7 @@
+Label,# Samples,Average,Min,Max,Std. Dev.,Error %,Throughput,Received KB/sec,Sent KB/sec,Avg. Bytes
+FindAll MongoDB,50,10,7,18,2.92,0.000%,1.22636,12.18,0.15,10172.6
+FindAll,50,15,11,30,3.40,0.000%,1.23165,14.12,0.17,11741.0
+findById MongoDB,50,7,5,15,1.65,0.000%,1.22672,1.52,0.18,1271.0
+findById,50,7,5,15,1.75,0.000%,1.23210,0.51,0.16,425.0
+findAll + search = Ukraine MongoDB,50,181,169,196,6.27,0.000%,1.22139,12.13,0.17,10173.3
+TOTAL,250,44,5,196,68.61,0.000%,6.10262,40.27,0.82,6756.6
